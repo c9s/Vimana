@@ -1,0 +1,30 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Vim::Get;
+
+my $vim = new Vim::Get;
+
+my $operation = shift;
+
+
+$vim->_init_index;
+
+# maybe do a indexer to search
+if( $operation eq 'search' ) {
+    $vim->search( keyword => 'snippet', type => 'type' );
+}
+
+#  $vim->get( 'package-name' );
+#  $vim->show( 'package-name' );
+#  
+#  
+#  
+#  # TODO: generate a installed list to check update
+#  $vim_index = new Vim::Get::Index;
+#  $vim_index->update(  ); 
+#  
+
+
