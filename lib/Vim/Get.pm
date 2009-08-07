@@ -23,25 +23,6 @@ our $VERSION = '0.01';
 
 =cut
 
-use URI;
-use Hash::Merge qw(merge);
-
-sub _build_search_uri {
-    my $self = shift;
-    my %param = @_;
-    my %args = (
-        keywords    => '',
-        script_type => '',
-        direction   => 'descending',
-        order_by    => 'rating',
-        search      => 'search',
-        %param ,
-    );
-
-    my $uri = URI->new("http://www.vim.org/scripts/script_search_results.php");
-    $uri->query_form( %args ); 
-    return $uri;
-}
 
 
 
