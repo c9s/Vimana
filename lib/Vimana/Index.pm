@@ -17,6 +17,16 @@ sub init {
     $self->cache( $cache );
 }
 
+sub find_package {
+    my ($self, $find ) = @_;
+    my $index = $self->get();
+
+    while( my ( $pkg_name , $info ) = each %$index ) {
+
+    }
+
+}
+
 
 sub update {
     my ($self, $results ) = @_;
