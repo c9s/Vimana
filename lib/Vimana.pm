@@ -1,4 +1,4 @@
-package Vim::Get;
+package Vimana;
 
 use warnings;
 use strict;
@@ -8,7 +8,7 @@ use vars qw($INDEX);
 
 =head1 NAME
 
-Vim::Get - The great new Vim::Get!
+Vimana - The great new Vimana!
 
 =head1 VERSION
 
@@ -25,10 +25,10 @@ our $VERSION = '0.01';
 
 =cut
 
-use Vim::Get::Index;
+use Vimana::Index;
 sub index {
     return $INDEX if $INDEX;
-    $INDEX ||= Vim::Get::Index->new;
+    $INDEX ||= Vimana::Index->new;
     $INDEX->init();
     return $INDEX;
 }
@@ -51,7 +51,7 @@ automatically be notified of progress on your bug as I make changes.
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc Vim::Get
+    perldoc Vimana
 
 
 You can also look for information at:
@@ -90,4 +90,4 @@ under the same terms as Perl itself.
 
 =cut
 
-1; # End of Vim::Get
+1; # End of Vimana

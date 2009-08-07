@@ -1,4 +1,4 @@
-package Vim::Get::VimOnline::Search;
+package Vimana::VimOnline::Search;
 use strict;
 use warnings;
 my $last_pos;
@@ -109,14 +109,14 @@ sub build_search_uri {
 }
 
 
-package Vim::Get::VimOnline::ScriptPage;
+package Vimana::VimOnline::ScriptPage;
 
 sub page_uri {
     
 }
 
 
-package Vim::Get::VimOnline::SearchResult;
+package Vimana::VimOnline::SearchResult;
 
 
 sub display {

@@ -1,4 +1,4 @@
-package Vim::Get::Command::Update;
+package Vimana::Command::Update;
 use warnings;
 use strict;
 
@@ -12,12 +12,12 @@ sub options {
 }
 
 
-require Vim::Get::VimOnline;
+require Vimana::VimOnline;
 sub run {
     my ($self, @args ) = @_;
-    my $index = Vim::Get->index();
+    my $index = Vimana->index();
 
-    my $results = Vim::Get::VimOnline::Search->run(
+    my $results = Vimana::VimOnline::Search->run(
         keyword => '',
         show_me => 3000,
         order_by => 'creation_date',

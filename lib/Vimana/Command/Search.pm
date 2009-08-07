@@ -1,9 +1,9 @@
-package Vim::Get::Command::Search;
+package Vimana::Command::Search;
 use warnings;
 use strict;
 use URI;
 require LWP::UserAgent;
-require Vim::Get::VimOnline;
+require Vimana::VimOnline;
 use base qw(App::CLI::Command);
 
 sub options {
@@ -24,13 +24,13 @@ sub run {
     }
 
     # Search from Index
-    my $results = Vim::Get::VimOnline::Search->run(
+    my $results = Vimana::VimOnline::Search->run(
         keyword => $keyword,
         ( $self->{script_type} ? ( script_type => $self->{script_type} ) : ()  ),
         ( $self->{order_by}    ? ( order_by => $self->{order_by} ) : () ),
     );
 
-    Vim::Get::VimOnline::SearchResult->display( $results );
+    Vimana::VimOnline::SearchResult->display( $results );
 }
 
 

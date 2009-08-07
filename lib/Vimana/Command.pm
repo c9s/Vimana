@@ -1,4 +1,4 @@
-package Vim::Get::Command;
+package Vimana::Command;
 use warnings;
 use strict;
 

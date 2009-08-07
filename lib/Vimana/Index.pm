@@ -1,4 +1,4 @@
-package Vim::Get::Index;
+package Vimana::Index;
 use warnings;
 use strict;
 

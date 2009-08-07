@@ -1,4 +1,4 @@
-package Vim::Get::AutoInstall;
+package Vimana::AutoInstall;
 
 use File::Copy::Recursive qw(fcopy rcopy dircopy fmove rmove dirmove);
 use File::Spec;
