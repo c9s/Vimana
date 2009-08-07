@@ -2,12 +2,12 @@
 use lib 'lib';
 use strict;
 use warnings;
-use Vim::Get;
+use Vimana;
 
-use Vim::Get::Command;
+use Vimana::Command;
 
 my $cmd = shift @ARGV;
-my $ret = Vim::Get::Command->invoke( $cmd, @ARGV );
+my $ret = Vimana::Command->invoke( $cmd, @ARGV );
 
 exit (defined $ret ? $ret : 1);
 
