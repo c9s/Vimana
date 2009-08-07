@@ -17,7 +17,12 @@ sub options {
 
 sub run {
     my ( $self, $keyword ) = @_;
-    use Data::Dumper; warn Dumper( \@_ );
+    # use Data::Dumper; warn Dumper( \@_ );
+
+    unless( $keyword ) {
+        warn "Please specify keyword";
+        exit 0; 
+    }
 
     my $uri = $self->build_search_uri(
         keyword => $keyword,
@@ -25,23 +30,20 @@ sub run {
         ( $self->{order_by}    ? ( order_by => $self->{order_by} ) : () ),
     );
     print $uri;
-    my $scraper = $self->scraper_schema();
+    # my $scraper = $self->scraper_schema();
 
-    my $res = $tweets->scrape( URI->new("http://twitter.com/miyagawa") );
+
+    require LWP::UserAgent;
+    require Vim::Get::VimOnline;
+
+    my $ua = LWP::UserAgent->new;
+    my $response = $ua->get( $uri );
+    my $c = $response->decoded_content;
+
+    my $results = Vim::Get::VimOnline::Search->parse( $c );
+    use Data::Dumper; warn Dumper( $results );
+
 }
-
-
-sub scraper_schema {
-    my $self = shift;
-    return scraper {
-        process "li.status", "tweets[]" => scraper {
-            process ".entry-content",    body => 'TEXT';
-            process ".entry-date",       when => 'TEXT';
-            process 'a[rel="bookmark"]', link => '@href';
-        };
-    };
-}
-
 
 
 
@@ -54,6 +56,8 @@ sub build_search_uri {
         direction   => 'descending',
         order_by    => 'rating',
         search      => 'search',
+        show_me     => 100,
+        result_ptr  => 0,
         %param ,
     );
 

@@ -1,4 +1,7 @@
 package Vim::Get::VimOnline::Search;
+use strict;
+use warnings;
+my $last_pos;
 
 sub parse_columns {
     my $c       = ${ $_[0] };
@@ -21,7 +24,8 @@ sub parse_rows {
     my $c = ${ $_[0] };
     my $column_names = $_[1];
     pos($c) = $last_pos;
-    my $rows = [];
+    # my $rows = [];
+    my $results = {};
 ROW_END:
     while ( $c =~ m{<tr>(.*?)</tr>}gsi ) {
         my $tr = $1;
@@ -29,10 +33,11 @@ ROW_END:
 
         my $col_index = 0;
         my $cols;
+        my $script_id;
         while ( $tr =~ m{<td.*?>(.*?)</td>}gsi ) {
             my $td = $1;
             if( my ( $link, $text ) = ( $td =~ m{<a href="(.+?)">(.+?)</a>}i )  ) {
-                $link = $base_uri . $link;
+                ($script_id) = ( $link =~ /script_id=(\d+)/ );
                 $cols->{ $column_names->[ $col_index ] } = { text => $text, link => $link };
             }
             else {
@@ -40,9 +45,11 @@ ROW_END:
             }
             $col_index++;
         }
-        push @$rows,$cols;
+        my $name ;
+        ( $name = lc $cols->{script}->{text} ) =~ s/\s+/-/g;
+        $results->{ $name } = $cols;
     }
-    return $rows;
+    return $results;
 }
 
 sub has_result {
