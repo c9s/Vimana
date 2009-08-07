@@ -25,6 +25,7 @@ our $VERSION = '0.01';
 
 =cut
 
+use Vim::Get::Index;
 sub index {
     return $INDEX if $INDEX;
     $INDEX ||= Vim::Get::Index->new;
