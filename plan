@@ -1,0 +1,23 @@
+
+/path/to/system/vim-get/portfile/syntax/
+                                /plugin/script-name
+                                /autoload/
+                                .... etc
+
+vim-get install script-name
+
+portfile:
+    id:
+    type: (syntax|plugin...)
+    url:
+    depends_on:
+        another-script-name
+    requires:
+    install: (optional)
+
+from git:
+
+vim-get search --option --option [keyword] [keyword2] ...
+vim-get install [script-name]
+vim-get install [url]
+vim-get show
