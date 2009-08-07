@@ -21,6 +21,7 @@ requires
     'File::Temp'            => 0,
     'Getopt::Long'          => 0,
     'LWP::UserAgent'        => 0,
+    'LWP::Simple'           => 0,
     'URI'                   => 0,
     'Class::Accessor::Fast' => 0;
 
