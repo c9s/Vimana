@@ -17,6 +17,8 @@ $| = 1;
 
 Vimna::AutoInstall
 
+=head1 DESCRIPTION
+
 =head1 FUNCTIONS
 
 =head2 can_autoinstall
@@ -35,6 +37,7 @@ sub can_autoinstall {
     elsif( is_text_file( $file ) ) {
         return 1 if $info->{type} eq 'color scheme';
                     or $info->{type} eq 'syntax';
+                    or $info->{type} eq 'indent';
         return 0;
     }
 }
@@ -61,10 +64,15 @@ sub install {
         $class->install_from_archive(  $file , $info , $page , $opt  );
     }
     elsif( is_text_file( $file ) ) {
+
         $class->install_to( $file , 'colors' )
             if $info->{type} eq 'color scheme' ;
+
         $class->install_to( $file , 'syntax' )
             if $info->{type} eq 'syntax' ;
+
+        $class->install_to( $file , 'indent' )
+            if $info->{type} eq 'indent' ;
 
     }
 }
@@ -209,5 +217,19 @@ sub find_runtime_node {
     return $nodes;
 }
 
+
+=head1 AUTHOR
+
+You-An Lin 林佑安 ( Cornelius / c9s ) C<< <cornelius.howl at gmail.com> >>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2007 You-An Lin ( Cornelius / c9s ), all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+
+=cut
 
 1;

@@ -62,7 +62,7 @@ sub index {
 
 =head1 AUTHOR
 
-You-An Lin 林佑安 ( Cornelius / c9s ) C<< <cornelius at cpan.org> >>
+You-An Lin 林佑安 ( Cornelius / c9s ) C<< <cornelius.howl at gmail.com> >>
 
 =head2 Vimana Git Repository 
 
@@ -112,7 +112,7 @@ L<http://search.cpan.org/dist/Vimana>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2007 Cornelius, all rights reserved.
+Copyright 2007 You-An Lin ( Cornelius / c9s ), all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
