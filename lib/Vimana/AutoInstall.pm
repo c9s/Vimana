@@ -127,8 +127,7 @@ sub install_from_archive {
     print join("\n" , keys %$nodes ) . "\n" if $cmd->{verbose};
 
     print "Installing...\n" if $cmd->{verbose};
-    $class->install_from_nodes( $nodes );
-
+    $class->install_from_nodes( $nodes , runtime_path() );
 
     return 1;
 }
@@ -190,9 +189,9 @@ sub init_vim_runtime {
 =cut
 
 sub install_from_nodes {
-    my ($class , $nodes) = @_;
+    my ($class , $nodes , $to ) = @_;
     for my $node  ( grep { $nodes->{ $_ } > 1 } keys %$nodes ) {
-        my (@ret) = dircopy($node, runtime_path );
+        my (@ret) = dircopy($node, $to );
     }
 }
 
