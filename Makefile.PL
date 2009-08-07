@@ -30,21 +30,4 @@ auto_install();
 auto_provides();
 WriteAll( sign => 0 );
 
-
-__END__
-
-use strict;
-use warnings;
-use ExtUtils::MakeMaker;
-
-WriteMakefile(
-    NAME          => 'Vimana',
-    AUTHOR        => 'Cornelius <cornelius@cpan.org>',
-    VERSION_FROM  => 'lib/Vimana.pm',
-    ABSTRACT_FROM => 'lib/Vimana.pm',
-    PL_FILES      => {},
-    PREREQ_PM     => {
-    },
-    dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean => { FILES    => 'Vimana-*' },
-);
+1;
