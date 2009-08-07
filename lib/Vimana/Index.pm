@@ -47,9 +47,9 @@ sub update {
 
 sub get {
     my $self = shift;
-    my $ret = Storable::thaw $self->cache->get( 'index' );
-    die unless $ret;
-    return $ret;
+    my $ret = $self->cache->get( 'index' );
+    return Storable::thaw $ret if $ret;
+    return undef;
 }
 
 

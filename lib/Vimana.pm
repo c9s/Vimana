@@ -31,6 +31,7 @@ sub index {
     $INDEX ||= Vimana::Index->new;
     $INDEX->init();
     unless ( $INDEX->get() ) {
+        require Vimana::Command::Update;
         my $index = Vimana::Command::Update->fetch_index();
         $INDEX->update( $index );
     }

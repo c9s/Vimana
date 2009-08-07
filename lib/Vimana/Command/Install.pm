@@ -4,6 +4,7 @@ use strict;
 use URI;
 require Vimana::VimOnline;
 use Vimana::AutoInstall;
+use Vimana::Logger;
 use base qw(App::CLI::Command);
 use LWP::Simple qw();
 use File::Temp qw(tempdir);

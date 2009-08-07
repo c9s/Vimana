@@ -17,13 +17,13 @@ $| = 1;
 sub can_autoinstall {
     my ( $class, $file, $info , $page ) = @_;
 
-    if( is_archive_file $file ) {
+    if( is_archive_file( $file ) ) {
         my $archive = Archive::Any->new($file);
         my @files = $archive->files;
         my $nodes = $class->find_runtime_node( \@files );
         return i_know_what_to_do( $nodes );
     }
-    elsif( is_text_file $file ) {
+    elsif( is_text_file( $file ) ) {
         # XXX: detect file type , colorscheme ? plugin ? 
         # inspect file content
 
@@ -33,10 +33,10 @@ sub can_autoinstall {
 sub install {
     my ( $class, $file, $info , $page , $opt ) = @_;
 
-    if( is_archive_file $file ) {
+    if( is_archive_file( $file ) ) {
         $class->install_from_archive(  $file , $info , $page , $opt  );
     }
-    elsif( is_text_file $file ) {
+    elsif( is_text_file( $file ) ) {
         if( $info->{type} eq 'color scheme' ) {
             $class->install_to( $file , 'colors' );
         }
