@@ -8,7 +8,7 @@ use vars qw($INDEX);
 
 =head1 NAME
 
-Vimana - Package manager for Vim
+Vimana - Vim script manager.
 
 =head1 VERSION
 
