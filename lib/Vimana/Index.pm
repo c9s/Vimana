@@ -18,13 +18,20 @@ sub init {
 }
 
 sub find_package {
-    my ($self, $find ) = @_;
+    my ($self, $findname ) = @_;
+
+    use Vimana::Util;
+
     my $index = $self->get();
+    my $cname = canonical_script_name( $findname );
+
+    return $index->{ $cname } if  defined $index->{ $cname }  ;
 
     while( my ( $pkg_name , $info ) = each %$index ) {
-
+        return $info if $info->{script}->{text} =~ $findname ;
     }
 
+    return undef;
 }
 
 
