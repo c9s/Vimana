@@ -2,10 +2,10 @@ package Vimana::Command::Install;
 use warnings;
 use strict;
 use URI;
-require LWP::UserAgent;
-# require Vimana::VimOnline;
+require Vimana::VimOnline;
 use base qw(App::CLI::Command);
-
+use LWP::Simple qw();
+use File::Temp qw(tempdir);
 
 sub options {
     (
@@ -14,30 +14,29 @@ sub options {
     );
 }
 
+use Vimana::AutoInstall;
+
 sub run {
     my ( $self, $package ) = @_;
 
-#    my $ua = LWP::UserAgent->new;
-#    my $response = $ua->get( $script_uri );
-    require Vimana::VimOnline::ScriptPage;
 
     my $index = Vimana->index();
     my $info = $index->find_package( $package );
-    use Data::Dumper; warn Dumper( $info );
 
-    my $script_info = Vimana::VimOnline::ScriptPage->fetch( $info->{script_id} ) ;
-    use Data::Dumper; warn Dumper( $script_info );
+    my $page = Vimana::VimOnline::ScriptPage->fetch( $info->{script_id} ) ;
 
+    my $dir = '/tmp' || tempdir( DIR => '/tmp' );
 
+    my $url = $page->{DOWNLOAD};
+    my $filename = $page->{FILENAME};
+    my $target = File::Spec->join( $dir , $filename );
 
+    print "Download as $target\n";
+    LWP::Simple::getstore( $url , $target  );
 
-    
-    # get script filename 
-    # get download url
-
-    # downlaod as 
-
-
+    if( Vimana::AutoInstall->can_autoinstall( $target , $info , $page ) ) {
+        my $ret = Vimana::AutoInstall->install( $target , $info , $page );
+    }
 }
 
 
