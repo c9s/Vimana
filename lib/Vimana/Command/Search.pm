@@ -24,7 +24,7 @@ sub run {
     }
 
     # Search from Index
-    my $results = Vimana::VimOnline::Search->run(
+    my $results = Vimana::VimOnline::Search->fetch(
         keyword => $keyword,
         ( $self->{script_type} ? ( script_type => $self->{script_type} ) : ()  ),
         ( $self->{order_by}    ? ( order_by => $self->{order_by} ) : () ),

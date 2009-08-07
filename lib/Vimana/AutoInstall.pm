@@ -10,8 +10,8 @@ use File::Temp qw(tempdir);
 
 $| = 1;
 
-sub is_auto_installable {
-    my $file = shift;
+sub can_autoinstall {
+    my ( $class, $file, $info ) = @_;
 
     if( is_archive_file $file ) {
         my $archive = Archive::Any->new($archive_file);
@@ -26,6 +26,11 @@ sub is_auto_installable {
     }
 
 
+}
+
+sub runtime_path {
+    return 'vim2';  # XXX:
+    return File::Spec->join( $ENV{HOME} , '.vim' );
 }
 
 sub is_archive_file {
@@ -85,10 +90,6 @@ sub extract_and_install {
     select $fho;
 }
 
-sub runtime_path {
-    return 'vim2';  # XXX:
-    return File::Spec->join( $ENV{HOME} , '.vim' );
-}
 
 sub init_vim_runtime {
     my $class = shift;
