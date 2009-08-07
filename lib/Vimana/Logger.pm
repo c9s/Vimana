@@ -71,6 +71,32 @@ BEGIN {
     *logcroak   = $croak;
 }
 
-
-
 1;
+__END__
+=head1 NAME
+
+Vimana::Logger - logging framework for Vimana
+
+=head1 SYNOPSIS
+
+  use Vimana::Logger;
+  
+  $logger->warn('foo');
+  $logger->info('bar');
+  
+or 
+
+  use Vimana::Logger '$foo';
+  
+  $foo->error('bad thingimajig');
+
+=head2 DESCRIPTION
+
+Vimana::Logger is a wrapper around Log::Log4perl. When using the module, it
+imports into your namespace a variable called $logger (or you can pass a
+variable name to import to decide what the variable should be) with a
+category based on the name of the calling module.
+
+this class is from L<SVK::Logger>;
+
+=cut
