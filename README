@@ -1,14 +1,21 @@
-Vim-Get
+Vimana
 
 This module provide a command-line interface to search or download vim script
 from vim.org
 
 USAGE
 
-    $ vim-get search 'keyword' -t syntax
+to update index
 
-    $ vim-get get 'package name'
+    $ vimana update 
 
+to search jifty script
+
+    $ vimana search jifty
+
+to install rails.vim package:
+
+    $ vimana install rails.vim
 
 INSTALLATION
 
@@ -24,7 +31,7 @@ SUPPORT AND DOCUMENTATION
 After installing, you can find documentation for this module with the
 perldoc command.
 
-    perldoc Vim::Get
+    perldoc Vimana
 
 You can also look for information at:
 
