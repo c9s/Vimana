@@ -6,7 +6,8 @@ require Vimana::VimOnline;
 use Vimana::AutoInstall;
 use Vimana::Logger;
 use base qw(App::CLI::Command);
-use LWP::Simple qw();
+# use LWP::Simple qw();
+use LWP::UserAgent;
 use File::Temp qw(tempdir);
 
 sub options {
@@ -19,7 +20,6 @@ sub options {
 
 sub run {
     my ( $self, $package ) = @_;
-
 
     my $index = Vimana->index();
     my $info = $index->find_package( $package );
@@ -35,8 +35,8 @@ sub run {
     print "Download as $target\n";
     LWP::Simple::getstore( $url , $target  );
 
-    if( Vimana::AutoInstall->can_autoinstall( $target , $info , $page ) ) {
-        my $ret = Vimana::AutoInstall->install( $target , $info , $page );
+    if( Vimana::AutoInstall->can_autoinstall( $self , $target , $info , $page ) ) {
+        my $ret = Vimana::AutoInstall->install( $self , $target , $info , $page );
     }
 }
 

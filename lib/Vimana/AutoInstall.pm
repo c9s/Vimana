@@ -26,7 +26,7 @@ Vimna::AutoInstall
 =cut
 
 sub can_autoinstall {
-    my ( $class, $file, $info , $page ) = @_;
+    my ( $class, $cmd , $file, $info , $page ) = @_;
 
     if( is_archive_file( $file ) ) {
         my $archive = Archive::Any->new($file);
@@ -35,9 +35,9 @@ sub can_autoinstall {
         return i_know_what_to_do( $nodes );
     }
     elsif( is_text_file( $file ) ) {
-        return 1 if $info->{type} eq 'color scheme';
-                    or $info->{type} eq 'syntax';
-                    or $info->{type} eq 'indent';
+        return 1 if $info->{type} eq 'color scheme'
+                        or $info->{type} eq 'syntax'
+                        or $info->{type} eq 'indent';
         return 0;
     }
 }
@@ -58,10 +58,10 @@ sub inspect_text_content {
 =cut
 
 sub install {
-    my ( $class, $file, $info , $page , $opt ) = @_;
+    my ( $class, $cmd, $file, $info, $page ) = @_;
 
     if( is_archive_file( $file ) ) {
-        $class->install_from_archive(  $file , $info , $page , $opt  );
+        $class->install_from_archive( $cmd, $file, $info, $page );
     }
     elsif( is_text_file( $file ) ) {
 
@@ -83,7 +83,7 @@ sub install {
 
 sub install_to {
     my ( $class , $file , $dir ) = @_;
-    fcopy( $file => File::Spec->join( runtime_path() , $dir ) );
+    fcopy( $file => File::Spec->join( runtime_path(), $dir ) );
 }
 
 =head2 install_from_archive 
@@ -91,39 +91,39 @@ sub install_to {
 =cut
 
 sub install_from_archive {
-    my ( $class , $file , $info , $opt ) = @_;
+    my ( $class , $cmd , $file , $info ) = @_;
 
     # XXX: make sure is archive file
     my $archive = Archive::Any->new( $file );
     my @files = $archive->files;
 
-    if( $opt->{verbose} ) {
+    if( $cmd->{verbose} ) {
         for (@files ) {
             print "FILE: $_ \n";
         }
     }
 
-    print "Creating temporary directory.\n" if $opt->{verbose};
+    print "Creating temporary directory.\n" if $cmd->{verbose};
 
     my $out = tempdir( CLEANUP => 1 );
     rmtree [ $out ] if -e $out;
     mkpath [ $out ];
 
-    print "Extracting...\n" if $opt->{verbose};
+    print "Extracting...\n" if $cmd->{verbose};
     $archive->extract( $out );  
 
     my @subdirs = File::Find::Rule->file->in(  $out );
 
     # XXX: check vim runtime path subdirs
-    print "Initializing vim runtime path...\n" if $opt->{verbose};
+    print "Initializing vim runtime path...\n" if $cmd->{verbose};
     $class->init_vim_runtime();
 
     my $nodes = $class->find_runtime_node( \@subdirs );
     
-    print "Runtime path in extracted directory\n" if $opt->{verbose};
-    print join("\n" , keys %$nodes ) . "\n" if $opt->{verbose};
+    print "Runtime path in extracted directory\n" if $cmd->{verbose};
+    print join("\n" , keys %$nodes ) . "\n" if $cmd->{verbose};
 
-    print "Installing...\n" if $opt->{verbose};
+    print "Installing...\n" if $cmd->{verbose};
     $class->install_from_nodes( $nodes );
 
     print "Done\n";
@@ -143,8 +143,8 @@ sub runtime_path {
 
 
 sub get_mine_type {
-    my $type = File::Type->new->checktype_filename($_[0]);
-    die "can not found file type: $type" unless $type;
+    my $type = File::Type->new->checktype_filename( $_[ 0 ] );
+    die "can not found file type from @{[ $_[0] ]}" unless $type;
     return $type;
 }
 
@@ -153,7 +153,7 @@ sub get_mine_type {
 =cut
 
 sub is_archive_file {
-    my $type = get_mine_type($_[0]);
+    my $type = get_mine_type( $_[ 0 ] );
     return 1 if $type =~ m{(x-bzip2|x-gzip|x-gtar|zip|rar|tar)};
     return 0;
 }
