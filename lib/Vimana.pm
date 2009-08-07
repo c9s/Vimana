@@ -8,7 +8,7 @@ use vars qw($INDEX);
 
 =head1 NAME
 
-Vimana - A Port manager for Vim
+Vimana - Package manager for Vim
 
 =head1 VERSION
 
@@ -20,11 +20,11 @@ our $VERSION = '0.04';
 
 =head1 DESCRIPTION
 
-Vimana , stands for ( Vim script Manager ) , is an easy to use system for
-searching , installing, and downloading vim script.
+Vimana is an easy to use system for searching , installing, and downloading vim
+script.
 
 Vimana provides a command-line interface such like C<aptitude> programe on
-Debian linux, for you to search , download , install scripts from
+Debian linux, for you to search , download , install , upgrade scripts from
 L<http://www.vim.org> (vimonline site).
 
 Vimana can install a vim script package to your vim runtime path automatically
@@ -34,10 +34,12 @@ should be installed to F<~/.vim/> directory.   if it's a vim color scheme ,
 then it should be put into F<~/.vim/colors/> and prompt for setting the
 installed colorscheme as default.
 
-We plan to provide port files on git repository, vimrc customization and
+We plan to provide port files via git repository, vimrc customization and
 internationalization in future.
 
 ( In some modern Indian languages, vimāna or vimān means "aircraft". )
+
+NOTE: Vimana only provides search,info,install commmands currently.
 
 =head1 FUNCTIONS
 
