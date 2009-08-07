@@ -126,7 +126,6 @@ sub install_from_archive {
     print "Installing...\n" if $cmd->{verbose};
     $class->install_from_nodes( $nodes );
 
-    print "Done\n";
 }
 
 =head2 runtime_path

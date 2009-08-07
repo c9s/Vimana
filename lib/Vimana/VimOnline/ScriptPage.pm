@@ -112,7 +112,7 @@ sub parse {
     map { $info{$_} = decode_entities( $info{$_} )  }  keys %info;
 
     $info{AUTHOR_URL} = $base_uri . $info{AUTHOR_URL};
-    $info{DOWNLOAD}   = $base_uri . '/' . $info{DOWNLOAD};
+    $info{DOWNLOAD}   = $base_uri . '/scripts/' . $info{DOWNLOAD};
 
     return \%info;
 
