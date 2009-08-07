@@ -42,15 +42,25 @@ sub run {
     print "Stored at: $target\n";
 
 
-    print "Check port file\n";
+    print "Check if we can install this package via port file\n";
+    # XXX:
+
 #    if( Vimana::PortInstall->has_portfile ) {
 #
 #    }
 
+    print "Check if this package contains Makefile\n";
+    # XXX:
+
     print "Check if we can auto install this package\n";
     if( Vimana::AutoInstall->can_autoinstall( $self , $target , $info , $page ) ) {
         print "Auto install $target\n";
-        my $ret = Vimana::AutoInstall->install( $self , $target , $info , $page );
+        my $ret = Vimana::AutoInstall->install( 
+                    command => $self , 
+                    target => $target ,
+                    info => $info ,
+                    page => $page );
+
         unless ( $ret ) {
             print "Auto install failed\n";
         }

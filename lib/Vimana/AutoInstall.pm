@@ -58,21 +58,22 @@ sub inspect_text_content {
 =cut
 
 sub install {
-    my ( $class, $cmd, $file, $info, $page ) = @_;
+    my ( $class , %args ) = @_;
+    # my ( $class, $cmd, $file, $info, $page ) = @_;
 
-    if( is_archive_file( $file ) ) {
-        $class->install_from_archive( $cmd, $file, $info, $page );
+    if( is_archive_file( $args{target} ) ) {
+        $class->install_from_archive( %args );
     }
-    elsif( is_text_file( $file ) ) {
+    elsif( is_text_file( $args{target} ) ) {
 
-        $class->install_to( $file , 'colors' )
-            if $info->{type} eq 'color scheme' ;
+        $class->install_to( $args{target} , 'colors' )
+            if $args{info}->{type} eq 'color scheme' ;
 
-        $class->install_to( $file , 'syntax' )
-            if $info->{type} eq 'syntax' ;
+        $class->install_to( $args{target} , 'syntax' )
+            if $args{info}->{type} eq 'syntax' ;
 
-        $class->install_to( $file , 'indent' )
-            if $info->{type} eq 'indent' ;
+        $class->install_to( $args{target} , 'indent' )
+            if $args{info}->{type} eq 'indent' ;
 
     }
 }
@@ -91,7 +92,9 @@ sub install_to {
 =cut
 
 sub install_from_archive {
-    my ( $class , $cmd , $file , $info ) = @_;
+    my ( $class , %args ) = @_;
+    my ( $cmd, $file, $info )
+        = ( $args{command}, $args{target}, $args{info} );
 
     # XXX: make sure is archive file
     my $archive = Archive::Any->new( $file );
