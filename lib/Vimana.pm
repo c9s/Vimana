@@ -8,19 +8,33 @@ use vars qw($INDEX);
 
 =head1 NAME
 
-Vimana - vim script port manager
+Vimana - A Port manager for Vim
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
-=head1 SYNOPSIS
+=head1 DESCRIPTION
 
+Vimana is an easy to use system for searching , installing, and downloading vim
+script.
 
+Vimana provides a command-line interface such like C<aptitude> programe on
+Debian linux.
+
+Vimana can install a vim script package to your vim runtime path automatically
+by inspecting the content of archive file or vim script. for example , if an
+archive file contains 'syntax','plugin','indent' directory , then these files
+should be installed to F<~/.vim/> directory.   if it's a vim color scheme ,
+then it should be put into F<~/.vim/colors/> and prompt for setting the
+installed colorscheme as default.
+
+We plan to provide port files on git repository, vimrc customization and
+internationalization in future.
 
 =head1 FUNCTIONS
 
@@ -43,7 +57,7 @@ sub index {
 
 Cornelius ( You-An Lin ) C<< <cornelius at cpan.org> >>
 
-=head2 Git Repository 
+=head2 Vimana Git Repository 
 
 C<http://github.com/c9s/Vimana/tree/master>
 
