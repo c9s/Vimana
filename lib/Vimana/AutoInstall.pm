@@ -13,6 +13,15 @@ use File::Temp qw(tempdir);
 
 $| = 1;
 
+=head1 NAME
+
+Vimna::AutoInstall
+
+=head1 FUNCTIONS
+
+=head2 can_autoinstall
+
+=cut
 
 sub can_autoinstall {
     my ( $class, $file, $info , $page ) = @_;
@@ -30,6 +39,10 @@ sub can_autoinstall {
     }
 }
 
+=head2 install
+
+=cut
+
 sub install {
     my ( $class, $file, $info , $page , $opt ) = @_;
 
@@ -43,10 +56,17 @@ sub install {
     }
 }
 
-sub install_to_colors {
+=head2 install_to 
+
+=cut
+
+sub install_to {
 
 }
 
+=head2 install_from_archive 
+
+=cut
 
 sub install_from_archive {
     my ( $class , $file , $info , $opt ) = @_;
@@ -87,10 +107,18 @@ sub install_from_archive {
     print "Done\n";
 }
 
+=head2 runtime_path
+
+=cut
+
 sub runtime_path {
     # return File::Spec->join( $ENV{HOME} , 'vim-test' );
     return $ENV{VIMANA_RUNTIME_PATH} || File::Spec->join( $ENV{HOME} , '.vim' );
 }
+
+=head2 is_archive_file
+
+=cut
 
 sub is_archive_file {
     my $file = shift;
@@ -103,6 +131,10 @@ sub is_archive_file {
     return 0;
 }
 
+=head2 is_text_file
+
+=cut
+
 sub is_text_file {
     my $file = shift;
     my $ft = File::Type->new();
@@ -111,6 +143,9 @@ sub is_text_file {
     return 0;
 }
 
+=head2 init_vim_runtime 
+
+=cut
 
 sub init_vim_runtime {
     my $class = shift;
@@ -121,12 +156,20 @@ sub init_vim_runtime {
     mkpath $paths;
 }
 
+=head2 install_from_nodes
+
+=cut
+
 sub install_from_nodes {
     my ($class , $nodes) = @_;
     for my $node  ( grep { $nodes->{ $_ } > 1 } keys %$nodes ) {
         my (@ret) = dircopy($node, runtime_path );
     }
 }
+
+=head2 i_know_what_to_do
+
+=cut
 
 sub i_know_what_to_do {
     my $nodes = shift;
@@ -135,6 +178,11 @@ sub i_know_what_to_do {
     }
     return 0;  # i am not sure
 }
+
+
+=head2 find_runtime_node 
+
+=cut
 
 sub find_runtime_node {
     my ( $class, $paths ) = @_;
