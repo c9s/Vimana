@@ -36,16 +36,16 @@ perldoc command.
 You can also look for information at:
 
     RT, CPAN's request tracker
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Vim-Get
+        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Vimana
 
     AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/Vim-Get
+        http://annocpan.org/dist/Vimana
 
     CPAN Ratings
-        http://cpanratings.perl.org/d/Vim-Get
+        http://cpanratings.perl.org/d/Vimana
 
     Search CPAN
-        http://search.cpan.org/dist/Vim-Get
+        http://search.cpan.org/dist/Vimana
 
 
 COPYRIGHT AND LICENCE

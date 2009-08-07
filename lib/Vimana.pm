@@ -2,7 +2,7 @@ package Vimana;
 
 use warnings;
 use strict;
-use LWP::UserAgent;
+use Vimana::Index;
 
 use vars qw($INDEX);
 
@@ -21,11 +21,11 @@ our $VERSION = '0.03';
 =head1 SYNOPSIS
 
 
+
 =head1 FUNCTIONS
 
 =cut
 
-use Vimana::Index;
 sub index {
     return $INDEX if $INDEX;
     $INDEX ||= Vimana::Index->new;
@@ -50,7 +50,7 @@ C<http://github.com/c9s/Vimana/tree/master>
 =head1 BUGS
 
 Please report any bugs or feature requests to C<bug-vim-get at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Vim-Get>.  I will be notified, and then you'll
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Vimana>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
 =head1 TODOS
@@ -70,19 +70,19 @@ You can also look for information at:
 
 =item * RT: CPAN's request tracker
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Vim-Get>
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Vimana>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
-L<http://annocpan.org/dist/Vim-Get>
+L<http://annocpan.org/dist/Vimana>
 
 =item * CPAN Ratings
 
-L<http://cpanratings.perl.org/d/Vim-Get>
+L<http://cpanratings.perl.org/d/Vimana>
 
 =item * Search CPAN
 
-L<http://search.cpan.org/dist/Vim-Get>
+L<http://search.cpan.org/dist/Vimana>
 
 =back
 
