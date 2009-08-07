@@ -138,17 +138,19 @@ sub runtime_path {
     return $ENV{VIMANA_RUNTIME_PATH} || File::Spec->join( $ENV{HOME} , '.vim' );
 }
 
+
+sub get_mine_type {
+    my $type = File::Type->new->checktype_filename($_[0]);
+    die "can not found file type: $type" unless $type;
+    return $type;
+}
+
 =head2 is_archive_file
 
 =cut
 
 sub is_archive_file {
-    my $file = shift;
-    my $ft = File::Type->new();
-    my $type = $ft->checktype_filename($file);
-
-    die "can not found file type: $type" unless $type;
-
+    my $type = get_mine_type($_[0]);
     return 1 if $type =~ m{(x-bzip2|x-gzip|x-gtar|zip|rar|tar)};
     return 0;
 }
@@ -158,9 +160,7 @@ sub is_archive_file {
 =cut
 
 sub is_text_file {
-    my $file = shift;
-    my $ft = File::Type->new();
-    my $type = $ft->checktype_filename($file);
+    my $type = get_mine_type( $_[ 0 ] );
     return 1 if $type =~ m{octet-stream};
     return 0;
 }
