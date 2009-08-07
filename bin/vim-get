@@ -1,10 +1,10 @@
 #!/usr/bin/perl
-
+use lib 'lib';
 use strict;
 use warnings;
 use Vim::Get;
 
-use Vim::Get::Commmand;
+use Vim::Get::Command;
 
 my $cmd = shift @ARGV;
 my $ret = Vim::Get::Command->invoke( $cmd, @ARGV );
