@@ -64,8 +64,22 @@ sub has_result {
     return (  $c =~ /Your search returned no results/ ) ? 0 : 1;
 }
 
+
+sub run {
+    my $class = shift;
+    my %param = @_;
+
+    my $uri = $class->build_search_uri( %param );
+
+    my $ua = LWP::UserAgent->new;
+    my $response = $ua->get( $uri );
+    my $c = $response->decoded_content;
+
+    return $class->parse( $c );
+}
+
 sub parse {
-    my ( $self , $c ) = @_;
+    my ( $class , $c ) = @_;
     if( has_result( \$c ) ) {
         my $columns = parse_columns( \$c );
         return parse_rows( \$c , $columns );
@@ -74,6 +88,27 @@ sub parse {
         return undef;
     }
 }
+
+sub build_search_uri {
+    my $class = shift;
+    my %param = @_;
+    my %args = (
+        keywords    => '',
+        script_type => '',
+        direction   => 'descending',
+        order_by    => 'rating',
+        search      => 'search',
+        #show_me     => 1000,
+        #result_ptr  => 0,
+        %param ,
+    );
+
+    my $uri = URI->new("http://www.vim.org/scripts/script_search_results.php");
+    $uri->query_form( %args ); 
+    print $uri;
+    return $uri;
+}
+
 
 package Vim::Get::VimOnline::SearchResult;
 
