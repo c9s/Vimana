@@ -33,10 +33,21 @@ sub can_autoinstall {
         return i_know_what_to_do( $nodes );
     }
     elsif( is_text_file( $file ) ) {
-        # XXX: detect file type , colorscheme ? plugin ? 
-        # inspect file content
-
+        return 1 if $info->{type} eq 'color scheme';
+                    or $info->{type} eq 'syntax';
+        return 0;
     }
+}
+
+sub inspect_text_content {
+    my $file = shift;
+    local $/;
+    open my $fh , "<" , $file;
+    my $content = <$fh>;
+    close $fh;
+
+    return 'colors' if $content =~ m/let\s+(g:)?colors_name\s*=/;
+    return undef;
 }
 
 =head2 install
@@ -50,9 +61,11 @@ sub install {
         $class->install_from_archive(  $file , $info , $page , $opt  );
     }
     elsif( is_text_file( $file ) ) {
-        if( $info->{type} eq 'color scheme' ) {
-            $class->install_to( $file , 'colors' );
-        }
+        $class->install_to( $file , 'colors' )
+            if $info->{type} eq 'color scheme' ;
+        $class->install_to( $file , 'syntax' )
+            if $info->{type} eq 'syntax' ;
+
     }
 }
 
@@ -61,7 +74,8 @@ sub install {
 =cut
 
 sub install_to {
-
+    my ( $class , $file , $dir ) = @_;
+    fcopy( $file => File::Spec->join( runtime_path() , $dir ) );
 }
 
 =head2 install_from_archive 

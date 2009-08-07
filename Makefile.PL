@@ -13,16 +13,16 @@ requires
     'App::CLI'              => 0.08,
     'File::Type'            => 0,
     'Archive::Any'          => 0,
-    'Cache::File'           => 0,
-    'File::Copy::Recursive' => 0,
-    'File::Find::Rule'      => 0,
-    'File::Path'            => 0,
+    'Cache::File'           => 2.04,
+    'File::Copy::Recursive' => 0.38,
+    'File::Find::Rule'      => 0.30,
+    'File::Path'            => 2.07,
     'File::Spec'            => 0,
     'File::Temp'            => 0,
     'Getopt::Long'          => 0,
     'LWP::UserAgent'        => 0,
     'LWP::Simple'           => 0,
-    'URI'                   => 0,
+    'URI'                   => 1.37,
     'Class::Accessor::Fast' => 0;
 
 include('ExtUtils::AutoInstall');

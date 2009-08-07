@@ -43,6 +43,8 @@ NOTE: Vimana only provides search,info,install commmands currently.
 
 =head1 FUNCTIONS
 
+=head2 index
+
 =cut
 
 sub index {
@@ -60,7 +62,7 @@ sub index {
 
 =head1 AUTHOR
 
-Cornelius ( You-An Lin ) C<< <cornelius at cpan.org> >>
+You-An Lin 林佑安 ( Cornelius / c9s ) C<< <cornelius at cpan.org> >>
 
 =head2 Vimana Git Repository 
 
@@ -81,7 +83,6 @@ automatically be notified of progress on your bug as I make changes.
 You can find documentation for this module with the perldoc command.
 
     perldoc Vimana
-
 
 You can also look for information at:
 
