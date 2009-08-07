@@ -5,11 +5,9 @@ my $last_pos;
 
 sub parse_columns {
     my $c       = ${ $_[0] };
-    warn $c;
     my $columns = [];
     if( $c =~ m{<tr class='tableheader'>(.*?)</tr>}gis ) {
         my $column_html = $1;
-        warn $1;
         while ( $column_html =~ m{<th.*?>(.*?)</th>}g ) {
             my $name = $1;
             $name =~ s{</?.+?>}{}g;
@@ -45,11 +43,20 @@ ROW_END:
             }
             $col_index++;
         }
-        my $name ;
-        ( $name = lc $cols->{script}->{text} ) =~ s/\s+/-/g;
+        my $name = canonical_name( $cols->{script}->{text} );
         $results->{ $name } = $cols;
     }
     return $results;
+}
+
+sub canonical_name {
+    my $name = shift;
+    $name = lc $name;
+    $name =~ s/\s+/-/g;
+    $name =~ s/-?\(.*\)$//;
+    $name =~ tr/_<>[],{/-/;
+    $name =~ s/-+/-/g;
+    $name;
 }
 
 sub has_result {
@@ -67,5 +74,16 @@ sub parse {
         return undef;
     }
 }
+
+package Vim::Get::VimOnline::SearchResult;
+
+
+sub display {
+    my ($class , $results ) = @_; 
+    while( my ( $script_name , $item ) = each %$results ) {
+        printf( "% 20s (%s) - %s -  %s\n" , $script_name , $item->{rating} , $item->{type} ,  $item->{summary}->{text} ); 
+    }
+}
+
 
 1;

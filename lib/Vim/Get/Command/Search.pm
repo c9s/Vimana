@@ -29,7 +29,6 @@ sub run {
         ( $self->{script_type} ? ( script_type => $self->{script_type} ) : ()  ),
         ( $self->{order_by}    ? ( order_by => $self->{order_by} ) : () ),
     );
-    print $uri;
     # my $scraper = $self->scraper_schema();
 
 
@@ -41,7 +40,7 @@ sub run {
     my $c = $response->decoded_content;
 
     my $results = Vim::Get::VimOnline::Search->parse( $c );
-    use Data::Dumper; warn Dumper( $results );
+    Vim::Get::VimOnline::SearchResult->display( $results );
 
 }
 
@@ -56,7 +55,7 @@ sub build_search_uri {
         direction   => 'descending',
         order_by    => 'rating',
         search      => 'search',
-        show_me     => 100,
+        show_me     => 1000,
         result_ptr  => 0,
         %param ,
     );
