@@ -20,6 +20,7 @@ sub parse_columns {
 
 
 use Vimana::Util;
+
 sub parse_rows {
     my $c = ${ $_[0] };
     my $column_names = $_[1];

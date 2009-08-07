@@ -16,8 +16,6 @@ sub run {
 
     my $script_info = Vimana::VimOnline::ScriptPage->fetch( $info->{script_id} ) ;
     Vimana::VimOnline::ScriptPage->display( $script_info );
-
-
 }
 
 

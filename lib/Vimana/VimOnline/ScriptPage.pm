@@ -41,18 +41,10 @@ my $base_uri = 'http://www.vim.org';
 sub display {
     my ( $class, $info ) = @_;
 
-
-
-
-
-#    my @urls = (
-#        find_urls( $info->{DESCRIPTION} ),
-#        find_urls( $info->{INSTALL_DETAILS} ),
-#    );
-
     print <<INFO;
 
- TITLE:           @{[ $info->{TITLE} ]}              
+ @{[ $info->{TITLE} ]}              
+
  TYPE:            @{[ $info->{TYPE} ]}
  VERSION:         @{[ $info->{VERSION} ]}
  VIM VERSION:     @{[ $info->{VIMVER} ]}
@@ -60,7 +52,7 @@ sub display {
  CREATE DATE:     @{[ $info->{DATE} ]}
 
  AUTHOR NAME:     @{[ $info->{AUTHOR_NAME} ]}
- AUTHOR PROFILE:  @{[ $base_uri . $info->{AUTHOR_URL} ]}
+ AUTHOR PROFILE:  @{[ $info->{AUTHOR_URL} ]}
 
  DESCRIPTION:
 
@@ -72,7 +64,7 @@ sub display {
 
  FILENAME:   @{ [ $info->{FILENAME} ] }
 
- DOWNLOAD:   @{ [ $base_uri . $info->{DOWNLOAD} ] }
+ DOWNLOAD:   @{ [ $info->{DOWNLOAD} ] }
 
 INFO
     
@@ -110,12 +102,17 @@ sub parse {
 \s*<td class="rowodd" valign="top"><i><a href="(?<AUTHOR_URL>.*?)">(?<AUTHOR_NAME>.*?)</a></i></td>}gsi;
     %info = ( %info , %- );
 
+
+
     map {
             $info{$_}->[0] =~ s{<br/?>}{\n}g;
             $info{$_}->[0] =~ s{</?.+?>}{}g;
             $info{$_} = $info{$_}->[0];
     }  keys %info;
     map { $info{$_} = decode_entities( $info{$_} )  }  keys %info;
+
+    $info{AUTHOR_URL} = $base_uri . $info{AUTHOR_URL};
+    $info{DOWNLOAD}   = $base_uri . '/' . $info{DOWNLOAD};
 
     return \%info;
 

@@ -2,8 +2,8 @@ package Vimana::Index;
 use warnings;
 use strict;
 
-
 use Cache::File;
+use Storable;
 use base qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors( qw(cache) );
 
@@ -38,7 +38,6 @@ sub find_package {
 }
 
 
-use Storable;
 sub update {
     my ($self, $results ) = @_;
     my $f = Storable::freeze( $results );
