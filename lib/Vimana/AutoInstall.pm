@@ -5,21 +5,50 @@ use File::Spec;
 use File::Path qw'mkpath rmtree';
 use Archive::Any;
 use File::Find::Rule;
+use File::Type;
 use File::Temp qw(tempdir);
 
 $| = 1;
 
-# XXX:
-sub install {
-    my $class = shift;
-    my $archive_file = shift;
-    my $opt = shift;
+sub is_auto_installable {
+    my $file = shift;
 
-    # my $archive_file = 'postmail.zip';
-    # my $archive_file = 'nerdtree.zip';
+    if( is_archive_file $file ) {
+        my $archive = Archive::Any->new($archive_file);
+        my @files = $archive->files;
+        my $nodes = $class->find_runtime_node( \@subdirs );
+        return ( i_know_what_to_do $nodes );
+    }
+    elsif( is_text_file $file ) {
+        # XXX: detect file type , colorscheme ? plugin ? 
+        # inspect file content
+
+    }
+
+
+}
+
+sub is_archive_file {
+    my $file = shift;
+    my $ft = File::Type->new();
+    my $type = $ft->checktype_filename($file);
+    return 1 if $type =~ m{/(?:x-bzip2|x-gzip|x-gtar|zip|rar|tar)$};
+    return 0;
+}
+
+sub is_text_file {
+    my $file = shift;
+    my $ft = File::Type->new();
+    my $type = $ft->checktype_filename($file);
+    return 1 if $type =~ m{octet-stream};
+    return 0;
+}
+
+sub extract_and_install {
+    my ( $class , $file , $opt ) = @_;
 
     # XXX: make sure is archive file
-    my $archive = Archive::Any->new($archive_file);
+    my $archive = Archive::Any->new( $file );
     my @files = $archive->files;
 
     if( $opt->{verbose} ) {
@@ -79,12 +108,20 @@ sub install_from_nodes {
     }
 }
 
+sub i_know_what_to_do {
+    my $nodes = shift;
+    for my $v ( values %$nodes ) {
+        return 1 if $v > 1;
+    }
+    return 0;  # i am not sure
+}
+
 sub find_runtime_node {
     my ($class,$paths) = @_;
     my $nodes = {};
     for my $p ( @$paths ) {
         if ( $p =~ m{^(.*?)/(plugin|doc|syntax|indent|colors|autoload|after|ftplugin)/.*?\.(vim|txt)$} ) {
-            $nodes->{ $1 } += 1;
+            $nodes->{ $1 } += 2;
         }
     }
     return $nodes;
