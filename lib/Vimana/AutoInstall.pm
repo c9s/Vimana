@@ -62,17 +62,17 @@ sub install {
     # my ( $class, $cmd, $file, $info, $page ) = @_;
 
     if( is_archive_file( $args{target} ) ) {
-        $class->install_from_archive( %args );
+        return $class->install_from_archive( %args );
     }
     elsif( is_text_file( $args{target} ) ) {
 
-        $class->install_to( $args{target} , 'colors' )
+        return $class->install_to( $args{target} , 'colors' )
             if $args{info}->{type} eq 'color scheme' ;
 
-        $class->install_to( $args{target} , 'syntax' )
+        return $class->install_to( $args{target} , 'syntax' )
             if $args{info}->{type} eq 'syntax' ;
 
-        $class->install_to( $args{target} , 'indent' )
+        return $class->install_to( $args{target} , 'indent' )
             if $args{info}->{type} eq 'indent' ;
 
     }
@@ -129,6 +129,8 @@ sub install_from_archive {
     print "Installing...\n" if $cmd->{verbose};
     $class->install_from_nodes( $nodes );
 
+
+    return 1;
 }
 
 =head2 runtime_path
