@@ -131,6 +131,9 @@ sub install_from_archive {
 
 =head2 runtime_path
 
+You can export enviroment variable VIMANA_RUNTIME_PATH to override default
+runtime path.
+
 =cut
 
 sub runtime_path {
