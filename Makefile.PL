@@ -22,6 +22,7 @@ requires
     'Getopt::Long'          => 0,
     'LWP::UserAgent'        => 0,
     'LWP::Simple'           => 0,
+    'Text::Table'           => 0,
     'URI'                   => 0,
     'Class::Accessor::Fast' => 0;
 

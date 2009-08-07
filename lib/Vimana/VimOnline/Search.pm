@@ -48,7 +48,6 @@ ROW_END:
         }
         my $name = canonical_script_name( $cols->{script}->{text} );
         # my $name = $script_id || $cols->{script}->{text};
-        # warn 'conflict:' . $name . " from @{[ $cols->{script}->{text} ]} " if( defined $results->{ $name  } );
         $cols->{script_id} = $script_id;
         $results->{ $name } = $cols;
     }
@@ -99,7 +98,6 @@ sub build_search_uri {
 
     my $uri = URI->new("http://www.vim.org/scripts/script_search_results.php");
     $uri->query_form( %args ); 
-    warn $uri;
     return $uri;
 }
 
