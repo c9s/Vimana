@@ -13,29 +13,6 @@ use File::Temp qw(tempdir);
 
 $| = 1;
 
-sub runtime_path {
-    return File::Spec->join( $ENV{HOME} , 'vim-test' );
-    return $ENV{VIMANA_RUNTIME_PATH} || File::Spec->join( $ENV{HOME} , '.vim' );
-}
-
-sub is_archive_file {
-    my $file = shift;
-    my $ft = File::Type->new();
-    my $type = $ft->checktype_filename($file);
-
-    die "can not found file type: $type" unless $type;
-
-    return 1 if $type =~ m{(x-bzip2|x-gzip|x-gtar|zip|rar|tar)};
-    return 0;
-}
-
-sub is_text_file {
-    my $file = shift;
-    my $ft = File::Type->new();
-    my $type = $ft->checktype_filename($file);
-    return 1 if $type =~ m{octet-stream};
-    return 0;
-}
 
 sub can_autoinstall {
     my ( $class, $file, $info , $page ) = @_;
@@ -108,6 +85,30 @@ sub install_from_archive {
     $class->install_from_nodes( $nodes );
 
     print "Done\n";
+}
+
+sub runtime_path {
+    # return File::Spec->join( $ENV{HOME} , 'vim-test' );
+    return $ENV{VIMANA_RUNTIME_PATH} || File::Spec->join( $ENV{HOME} , '.vim' );
+}
+
+sub is_archive_file {
+    my $file = shift;
+    my $ft = File::Type->new();
+    my $type = $ft->checktype_filename($file);
+
+    die "can not found file type: $type" unless $type;
+
+    return 1 if $type =~ m{(x-bzip2|x-gzip|x-gtar|zip|rar|tar)};
+    return 0;
+}
+
+sub is_text_file {
+    my $file = shift;
+    my $ft = File::Type->new();
+    my $type = $ft->checktype_filename($file);
+    return 1 if $type =~ m{octet-stream};
+    return 0;
 }
 
 
