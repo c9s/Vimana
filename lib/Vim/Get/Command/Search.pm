@@ -3,7 +3,6 @@ use warnings;
 use strict;
 use URI;
 use Hash::Merge qw(merge);
-use Web::Scraper;
 use base qw(App::CLI::Command);
 
 sub options {
@@ -41,10 +40,7 @@ sub run {
 
     my $results = Vim::Get::VimOnline::Search->parse( $c );
     Vim::Get::VimOnline::SearchResult->display( $results );
-
 }
-
-
 
 sub build_search_uri {
     my $self = shift;
@@ -55,13 +51,14 @@ sub build_search_uri {
         direction   => 'descending',
         order_by    => 'rating',
         search      => 'search',
-        show_me     => 1000,
-        result_ptr  => 0,
+        #show_me     => 1000,
+        #result_ptr  => 0,
         %param ,
     );
 
     my $uri = URI->new("http://www.vim.org/scripts/script_search_results.php");
     $uri->query_form( %args ); 
+    print $uri;
     return $uri;
 }
 

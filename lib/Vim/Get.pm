@@ -4,6 +4,8 @@ use warnings;
 use strict;
 use LWP::UserAgent;
 
+use vars qw($INDEX);
+
 =head1 NAME
 
 Vim::Get - The great new Vim::Get!
@@ -23,8 +25,12 @@ our $VERSION = '0.01';
 
 =cut
 
-
-
+sub index {
+    return $INDEX if $INDEX;
+    $INDEX ||= Vim::Get::Index->new;
+    $INDEX->init();
+    return $INDEX;
+}
 
 =head1 AUTHOR
 
