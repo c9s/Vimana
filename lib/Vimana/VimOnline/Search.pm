@@ -48,6 +48,7 @@ ROW_END:
         my $name = canonical_script_name( $cols->{script}->{text} );
         # my $name = $script_id || $cols->{script}->{text};
         # warn 'conflict:' . $name . " from @{[ $cols->{script}->{text} ]} " if( defined $results->{ $name  } );
+        $cols->{script_id} = $script_id;
         $results->{ $name } = $cols;
     }
     return $results;

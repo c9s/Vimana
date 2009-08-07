@@ -3,11 +3,18 @@ use warnings;
 use strict;
 use URI;
 use LWP::Simple qw();
+use Text::Table;
+use HTML::Entities;
+# use Lingua::ZH::Wrap qw(wrap $columns $overflow);
+use Text::Wrap qw(wrap $columns $huge);
 
+$columns  = 72;             # Change columns
+$huge = 'overflow';
+# $overflow = 1;              # Chinese char may occupy 76th col
 
 sub fetch {
     my ($class,$id) = @_;
-    my $uri = page_uri( $id )
+    my $uri = page_uri( $id );
     my $html = LWP::Simple::get( $uri );
     return $class->parse( $html );
 
@@ -20,49 +27,58 @@ sub page_uri {
     $uri;
 }
 
-=pod
-sub info {
-    my $class = shift;
-    my %args = @_;
+sub find_urls {
+    my $content = shift;
+    my @urls = ();
+    while ( my ( $url ) = ($content  =~ m{([htf]tps?://\S.*)}g ) ) {
+        push @urls , $url;
+    }
+    return @urls;
+}
 
-    my $url;
-    my $info = $class->_parse_info($c);
+my $base_uri = 'http://www.vim.org';
 
-    use Lingua::ZH::Wrap qw(wrap $columns $overflow);
-    use Text::Wrap qw(wrap $columns);
+sub display {
+    my ( $class, $info ) = @_;
 
-    $columns  = 75;             # Change columns
-    $overflow = 0;              # Chinese char may occupy 76th col
+
+
+
+
+#    my @urls = (
+#        find_urls( $info->{DESCRIPTION} ),
+#        find_urls( $info->{INSTALL_DETAILS} ),
+#    );
 
     print <<INFO;
 
-    TITLE:           @{[ $info->{TITLE} ]}              
-    TYPE:            @{[ $info->{TYPE} ]}
-    VERSION:         @{[ $info->{VERSION} ]}
-    VIM VERSION:     @{[ $info->{VIMVER} ]}
+ TITLE:           @{[ $info->{TITLE} ]}              
+ TYPE:            @{[ $info->{TYPE} ]}
+ VERSION:         @{[ $info->{VERSION} ]}
+ VIM VERSION:     @{[ $info->{VIMVER} ]}
 
-    CREATE DATE:     @{[ $info->{DATE} ]}
+ CREATE DATE:     @{[ $info->{DATE} ]}
 
-    AUTHOR NAME:     @{[ $info->{AUTHOR_NAME} ]}
-    AUTHOR PROFILE:  @{[ $base_uri . $info->{AUTHOR_URL} ]}
+ AUTHOR NAME:     @{[ $info->{AUTHOR_NAME} ]}
+ AUTHOR PROFILE:  @{[ $base_uri . $info->{AUTHOR_URL} ]}
 
-    DESCRIPTION:
+ DESCRIPTION:
 
-    @{ [ wrap( ' ' x 8, ' ' x 4, $info->{DESCRIPTION} ) ] }
+ @{ [ wrap( ' ' x 4, '  ', $info->{DESCRIPTION} ) ] }
 
-    INSTALL DETAILS:
+ INSTALL DETAILS:
 
-    @{ [ wrap( ' ' x 8, ' ' x 4, $info->{INSTALL_DETAILS} ) ] }
+ @{ [ wrap( ' ' x 4, '  ', $info->{INSTALL_DETAILS} ) ] }
 
-    FILENAME:   @{ [ $info->{FILENAME} ] }
+ FILENAME:   @{ [ $info->{FILENAME} ] }
 
-    DOWNLOAD:   @{ [ $base_uri . $info->{DOWNLOAD} ] }
+ DOWNLOAD:   @{ [ $base_uri . $info->{DOWNLOAD} ] }
 
 INFO
     
 }
-=cut
 
+# it's very dirty
 sub parse {
     my ( $class , $content ) = @_;
 
@@ -100,9 +116,6 @@ sub parse {
             $info{$_} = $info{$_}->[0];
     }  keys %info;
     map { $info{$_} = decode_entities( $info{$_} )  }  keys %info;
-
-    use Data::Dumper::Simple;
-    warn Dumper( %info );
 
     return \%info;
 

@@ -29,7 +29,7 @@ sub find_package {
 
     while( my ( $pkg_name , $info ) = each %$index ) {
         if ( $info->{script}->{text} =~ $findname  ) {
-            warn "it looks like '$findname'.\n" ;
+            warn " '@{[ $info->{script}->{text} ]}' looks like '$findname'.\n" ;
             return $info ;
         }
     }
