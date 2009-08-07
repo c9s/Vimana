@@ -8,15 +8,15 @@ use vars qw($INDEX);
 
 =head1 NAME
 
-Vimana - The great new Vimana!
+Vimana - vim script port manager
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
@@ -37,9 +37,14 @@ sub index {
     return $INDEX;
 }
 
+
 =head1 AUTHOR
 
-Cornelius, C<< <cornelius at cpan.org> >>
+Cornelius ( You-An Lin ) C<< <cornelius at cpan.org> >>
+
+=head2 Git Repository 
+
+C<http://github.com/c9s/Vimana/tree/master>
 
 =head1 BUGS
 
