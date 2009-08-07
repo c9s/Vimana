@@ -20,11 +20,12 @@ our $VERSION = '0.04';
 
 =head1 DESCRIPTION
 
-Vimana is an easy to use system for searching , installing, and downloading vim
-script.
+Vimana , stands for ( Vim script Manager ) , is an easy to use system for
+searching , installing, and downloading vim script.
 
 Vimana provides a command-line interface such like C<aptitude> programe on
-Debian linux.
+Debian linux, for you to search , download , install scripts from
+L<http://www.vim.org> (vimonline site).
 
 Vimana can install a vim script package to your vim runtime path automatically
 by inspecting the content of archive file or vim script. for example , if an
@@ -35,6 +36,8 @@ installed colorscheme as default.
 
 We plan to provide port files on git repository, vimrc customization and
 internationalization in future.
+
+( In some modern Indian languages, vimāna or vimān means "aircraft". )
 
 =head1 FUNCTIONS
 
