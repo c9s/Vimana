@@ -28,21 +28,29 @@ sub find_package {
     return $index->{ $cname } if  defined $index->{ $cname }  ;
 
     while( my ( $pkg_name , $info ) = each %$index ) {
-        return $info if $info->{script}->{text} =~ $findname ;
+        if ( $info->{script}->{text} =~ $findname  ) {
+            warn "it looks like '$findname'.\n" ;
+            return $info ;
+        }
     }
 
     return undef;
 }
 
 
+use Storable;
 sub update {
     my ($self, $results ) = @_;
-    $self->cache->set( 'index' , $results ); # hash ref
+    my $f = Storable::freeze( $results );
+    die unless $f;
+    $self->cache->set( 'index' , $f );
 }
 
 sub get {
     my $self = shift;
-    return $self->cache->get( 'index' );
+    my $ret = Storable::thaw $self->cache->get( 'index' );
+    die unless $ret;
+    return $ret;
 }
 
 
