@@ -1,0 +1,50 @@
+Vim-Get
+
+This module provide a command-line interface to search or download vim script
+from vim.org
+
+USAGE
+
+    $ vim-get search 'keyword' -t syntax
+
+    $ vim-get get 'package name'
+
+
+INSTALLATION
+
+To install this module, run the following commands:
+
+	perl Makefile.PL
+	make
+	make test
+	make install
+
+SUPPORT AND DOCUMENTATION
+
+After installing, you can find documentation for this module with the
+perldoc command.
+
+    perldoc Vim::Get
+
+You can also look for information at:
+
+    RT, CPAN's request tracker
+        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Vim-Get
+
+    AnnoCPAN, Annotated CPAN documentation
+        http://annocpan.org/dist/Vim-Get
+
+    CPAN Ratings
+        http://cpanratings.perl.org/d/Vim-Get
+
+    Search CPAN
+        http://search.cpan.org/dist/Vim-Get
+
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2007 Cornelius
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
