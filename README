@@ -1,7 +1,20 @@
 Vimana
 
-This module provide a command-line interface to search or download vim script
-from vim.org
+Vimana , stands for ( Vim script Manager )
+
+Vimana provide a command-line interface to search , download , install 
+vim script from vim.org.
+
+In some modern Indian languages, vimāna or vimān means "aircraft".
+
+INSTALLATION
+
+To install this module, run the following commands:
+
+	perl Makefile.PL
+	make
+	make test
+	make install
 
 USAGE
 
@@ -16,15 +29,6 @@ to search jifty script
 to install rails.vim package:
 
     $ vimana install rails.vim
-
-INSTALLATION
-
-To install this module, run the following commands:
-
-	perl Makefile.PL
-	make
-	make test
-	make install
 
 SUPPORT AND DOCUMENTATION
 
