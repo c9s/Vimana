@@ -108,7 +108,7 @@ sub install_from_archive {
     $pkg->archive->extract( $out );  
 
     if( $pkg->has_vimball() ) {
-        $logger->info( "I found vimball files inside the archive file , try to install vimballs");
+        $logger->info( "I found vimball files inside the archive file , trying to install vimballs");
         use Vimana::VimballInstall;
         my @vimballs = File::Find::Rule->file->name( "*.vba" )->in( $out );
         Vimana::VimballInstall->install_vimballs( @vimballs );

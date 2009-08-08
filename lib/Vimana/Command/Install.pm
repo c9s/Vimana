@@ -100,8 +100,9 @@ DONE:
         # look for makefile (archive)
         if ( $pkgfile->is_archive() ) {
             $logger->info("Check if this package contains 'Makefile' file");
-            if( my @makefile = $pkgfile->has_makefile() ) {
-
+            if( $pkgfile->has_makefile() ) {
+                
+                $pkgfile->makefile_install();
                 last DONE if 0;
             }
 
