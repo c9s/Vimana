@@ -59,29 +59,66 @@ sub run {
 
     $pkgfile->detect_filetype();
 
-    if( $pkgfile->is_archive() ) {
-        $logger->info("Check if this package contains 'Makefile' file");
+=pod
+    1. if it's vimball, install it
 
-        # list arhive file list
-        # find Makefile
+    2. look for port file (for any kind of package)
 
-    }
+    3. look for makefile (archive)
 
-    $logger->info("Check if we can install this package via port file");
-    if( $pkgfile->has_portfile ) {
+    4. look for vimball (archive)
+
+    4. guess what to do
+
+       if it's archive file:
+           * check directory structure
+           * others
+
+       if it's text file:
+           * inspect file content
+                - known format:
+                  * do install
+                - unknwon
+                   * check script_type 
+                 * for knwon script type , do install
+=cut
+DONE:
+    {
+        if( $pkgfile->is_text() and $pkgfile->is_vimball() ) {
+            my $ret = $pkgfile->vimball_install();
+            last DONE ;
+        }
+
+        $logger->info("Check if we can install this package via port file");
+        if( $pkgfile->has_portfile ) {
 
 
-    }
-    else {
-        $logger->info( "Can not found port file." );
-    }
+        }
+        else {
+            $logger->info( "Can not found port file." );
+        }
 
 
-    $logger->info( "Check if we can auto install this package" );
-    my $ret = $pkgfile->auto_install( verbose => $self->{verbose} );
-    unless ( $ret ) {
-        $logger->warn("Auto-install failed");
-        return 0;
+        # unknown 
+        if ( $pkgfile->is_archive() ) {
+            $logger->info("Check if this package contains 'Makefile' file");
+            if( my @makefile = $pkgfile->has_makefile() ) {
+
+                last DONE if 0;
+            }
+
+            if( my @vimball = $pkgfile->has_vimball() ) {
+
+                last DONE if 0;
+            }
+        }
+
+        $logger->info( "Check if we can auto install this package" );
+        my $ret = $pkgfile->auto_install( verbose => $self->{verbose} );
+        unless ( $ret ) {
+            $logger->warn("Auto-install failed");
+            return 0;
+        }
     }
 
 

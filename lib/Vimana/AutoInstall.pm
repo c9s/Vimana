@@ -40,21 +40,6 @@ sub inspect_text_content {
 
 =cut
 
-#    * if it's archive file:
-#        * if it contains makefile  (check outside of autoinstall)
-#        * if it contains vimball (x)   (check outside of autoinstall)
-#        * check directory structure
-#        * others
-#
-#    * if it's text file:
-#        * if it's vimball, install it
-#        * inspect file content
-#            - known format:
-#                * do install
-#
-#            - unknwon
-#                * check script_type 
-#                * for knwon script type , do install
 
 sub run {
     my ( $self ) = @_;
@@ -219,10 +204,6 @@ sub find_runtime_node {
     return $nodes;
 }
 
-sub find_vim {
-    use File::Which;
-    return $ENV{VIMPATH} || File::Which::which( 'vim' );
-}
 
 sub install_from_vimball {
     my $self = shift;

@@ -25,6 +25,7 @@ requires
     'LWP::Simple'           => 0,
     'URI'                   => 1.37,
     'Exporter::Lite'        => 0,
+    'File::Which' => 0,
     'Moose' => 0;
 
 include('ExtUtils::AutoInstall');

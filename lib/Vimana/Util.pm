@@ -20,4 +20,9 @@ sub get_mine_type {
     return $type;
 }
 
+use File::Which;
+sub find_vim {
+    return $ENV{VIMPATH} || File::Which::which( 'vim' );
+}
+
 1;

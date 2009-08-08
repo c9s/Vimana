@@ -82,7 +82,10 @@ sub has_vimball {
 }
 
 # vimball
-sub vba_install {
+sub vimball_install {
+    my $self = shift;
+    my $vimball = $self->file;
+
 
 }
 
@@ -93,6 +96,11 @@ sub auto_install {
     require Vimana::AutoInstall;
     my $auto = Vimana::AutoInstall->new( package => $self , options => \%args );
     return $auto->run();  # dry_run , verbose
+
+}
+
+
+sub makefile_install {
 
 }
 
