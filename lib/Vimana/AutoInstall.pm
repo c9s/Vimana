@@ -129,6 +129,9 @@ sub install_from_archive {
     print "Installing...\n" if $cmd->{verbose};
     $class->install_from_nodes( $nodes , runtime_path() );
 
+    print "Updating helptags\n" if $cmd->{verbose};
+    $class->update_vim_doc_tags();
+
     return 1;
 }
 
@@ -221,6 +224,12 @@ sub find_runtime_node {
         }
     }
     return $nodes;
+}
+
+
+sub update_vim_doc_tags {
+    my $dir = File::Spec->join( runtime_path() , 'doc' );
+    qx( vim -c ':helptags $dir'  -c q );
 }
 
 
