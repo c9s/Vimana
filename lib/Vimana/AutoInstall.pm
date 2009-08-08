@@ -11,6 +11,10 @@ use File::Find::Rule;
 use File::Type;
 use File::Temp qw(tempdir);
 use Vimana::Logger;
+use Moose;
+
+has 'cmd' => 
+    ( is => 'rw' , isa => 'Vimana::Command');
 
 $| = 1;
 
