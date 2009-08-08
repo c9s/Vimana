@@ -17,24 +17,26 @@ sub init {
     $self->cache( $cache );
 }
 
-sub find_package {
-    my ($self, $findname ) = @_;
 
-    use Vimana::Util;
-
+sub find_package_like {
+    my ( $self, $findname ) = @_;
     my $index = $self->get();
-    my $cname = canonical_script_name( $findname );
-
-    return $index->{ $cname } if  defined $index->{ $cname }  ;
-
     while( my ( $pkg_name , $info ) = each %$index ) {
         if ( $info->{script}->{text} =~ $findname  ) {
             warn " '@{[ $info->{script}->{text} ]}' looks like '$findname'.\n" ;
             return $info ;
         }
     }
-
     return undef;
+}
+
+use Vimana::Util;
+sub find_package {
+    my ($self, $findname ) = @_;
+
+    my $index = $self->get();
+    my $cname = canonical_script_name( $findname );
+    return defined $index->{ $cname }  ? $index->{ $cname } : undef;
 }
 
 
