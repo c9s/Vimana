@@ -13,11 +13,10 @@ $huge = 'overflow';
 # $overflow = 1;              # Chinese char may occupy 76th col
 
 sub fetch {
-    my ($class,$id) = @_;
-    my $uri = page_uri( $id );
-    my $html = LWP::Simple::get( $uri );
-    return $class->parse( $html );
-
+    my ( $class, $id ) = @_;
+    my $uri  = page_uri($id);
+    my $html = LWP::Simple::get($uri);
+    return $class->parse($html);
 }
 
 sub page_uri {
