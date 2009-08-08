@@ -40,6 +40,22 @@ sub inspect_text_content {
 
 =cut
 
+#    * if it's archive file:
+#        * check directory structure
+#        * if it contains makefile
+#        * if it contains vimball
+#        * others
+#
+#    * if it's text file:
+#        * if it's vimball, install it
+#        * inspect file content
+#            - known format:
+#                * do install
+#
+#            - unknwon
+#                * check script_type 
+#                * for knwon script type , do install
+
 sub run {
     my ( $self ) = @_;
 
@@ -204,22 +220,21 @@ sub find_runtime_node {
     return $nodes;
 }
 
-
-
-sub where_is_vim {
-    return 'vim';
+sub find_vim {
+    use File::Which;
+    return $ENV{VIMPATH} || File::Which::which( 'vim' );
 }
 
 sub install_from_vimball {
     my $self = shift;
     my $file = $self->file;
-    my $vim = where_is_vim();
+    my $vim = find_vim();
     system( qq|$vim $file -c ":so %" -c q|);
 }
 
 
 sub update_vim_doc_tags {
-    my $vim = where_is_vim();
+    my $vim = find_vim();
     my $dir = File::Spec->join( runtime_path() , 'doc' );
     system(qq|$vim -c ':helptags $dir'  -c q |);
 }
