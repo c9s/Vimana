@@ -8,19 +8,22 @@ Vimana::Manual - Getting started
 
 =head1 INTRODUCTION
 
-Vimana provides varied kinds of installation strategy. To install a vim plugin,
-Vimana downloads the file from vim.org , then detects the downloaded file type.
-if the downloaded file is a Vimball script, then call Vim to run the Vimball
+Vimana provides varied kinds of installation strategy. 
+
+To install a vim plugin, Vimana downloads the file from vim.org , then detects
+the downloaded file type.
+
+if the downloaded file is a Vimball script, Vimana calls Vim to run the Vimball
 script to install. if it's a colorscheme or syntax file , then copy the
 files into your ~/.vim/colors/ or ~/.vim/syntax/ directory.
 
 If it's an archive file (zip, bzip,rar .. etc) , Vimana looks into the archive
-file , see if it contains a 'Makefile' file, then use the Makefile file to
+file, see if it contains a 'Makefile' file, then use the Makefile file to
 install a plugin.
 
 if it doesn't contain a 'Makefile' file.  Vimana looks into the directory tree, 
-see if it contains 'doc','plugin','syntax' directories, if so , copy these
-files into your vim runtime directory recursivly.
+see if it contains 'doc','plugin','syntax' directories and vim scripts, 
+if so , copy these files into your vim runtime directory recursively.
 
 * if the downloaded file is not a Vimball script and not a colorscheme or syntax
 file and doesn't contains a Makefile file or 'doc','plugin','syntax',
@@ -28,8 +31,8 @@ Vimana will ask you to install the plugin manually.
 
 =head1 REQUIREMENT
 
-To install Vimana , please make sure you are in unix-like system.  Vimana 
-supports Unix-like system only, such like Linux , Mac OS , BSD .. etc. these 
+To install Vimana , please make sure you are in Unix-Like system.  Vimana 
+supports Unix-like system only. for example, Linux , Mac OS , BSD .. etc. these
 perl-installed system.
 
 * Windows is not supported yet.
@@ -70,17 +73,19 @@ To search script or plugin:
 
     $ _
 
-To see more information about rails.vim
+To see more information about "rails.vim" plugin
 
     $ vimana info rails.vim
 
     ... skip
 
-To install rails.vim package:
+To install "rails.vim" package:
 
     $ vimana install rails.vim
 
-Check your F<~/.vim/> directory , rails plugin is installed.
+Check your F<~/.vim/> directory , rails plugin should be installed.
+
+To install "rails.vim" package and enable verbose messages:
 
     $ vimana install rails.vim -v
 
