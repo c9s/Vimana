@@ -21,6 +21,10 @@ sub is_archive { $_[ 0 ]->filetype =~ m{(x-bzip2|x-gzip|x-gtar|zip|rar|tar)} ? 1
 
 sub is_text { $_[ 0 ]->filetype =~ m{octet-stream} ? 1 : 0 }
 
+sub script_type { $_[ 0 ]->info->{type}   }
+
+sub script_is { $_[ 0 ]->script_type eq $_[1] }
+
 sub download {
     my $self = shift;
 
@@ -45,6 +49,7 @@ sub detect_filetype {
 
     if( $self->is_archive ) {
         $self->archive( Archive::Any->new( $self->file ) );
+        die unless $self->archive;
     }
 }
 
@@ -64,8 +69,8 @@ sub auto_install {
     my %args = @_;
 
     require Vimana::AutoInstall;
-    my $auto = Vimana::AutoInstall->new( $self );
-    $auto->install( %args );  # dry_run , verbose
+    my $auto = Vimana::AutoInstall->new( package => $self , options => \%args );
+    return $auto->run();  # dry_run , verbose
 
 }
 

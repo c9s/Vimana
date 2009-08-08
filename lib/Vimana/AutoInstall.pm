@@ -3,7 +3,6 @@ use warnings;
 use strict;
 
 # use re 'debug';
-use Moose;
 use File::Copy::Recursive qw(fcopy rcopy dircopy fmove rmove dirmove);
 use File::Spec;
 use File::Path qw'mkpath rmtree';
@@ -13,6 +12,10 @@ use File::Type;
 use File::Temp qw(tempdir);
 use Vimana::Logger;
 
+use Moose;
+
+has 'package' => ( is => 'rw', isa => 'Vimana::PackageFile' );
+has 'options' => ( is => 'rw' , isa => 'HashRef' );
 
 $| = 1;
 
@@ -26,29 +29,6 @@ Vimna::AutoInstall
 
 =cut
 
-
-
-=head2 can_autoinstall
-
-=cut
-
-sub can_autoinstall {
-    my ( $self, $cmd , $file, $info , $page ) = @_;
-
-    if( $cmd->is_archive_file( ) ) {
-        my $archive = Archive::Any->new($file);
-        my @files = $archive->files;
-        my $nodes = $self->find_runtime_node( \@files );
-        return i_know_what_to_do( $nodes );
-    }
-    elsif( $cmd->is_text_file( ) ) {
-        return 1 if $info->{type} eq 'color scheme'
-                        or $info->{type} eq 'syntax'
-                        or $info->{type} eq 'indent';
-        return 0;
-    }
-}
-
 sub inspect_text_content {
     my $file = shift;
     local $/;
@@ -60,29 +40,33 @@ sub inspect_text_content {
     return undef;
 }
 
-=head2 install
+=head2 run
 
 =cut
 
-sub install {
-    my ( $self , %args ) = @_;
-    # my ( $self, $cmd, $file, $info, $page ) = @_;
-    my $cmd = $args{command};
+sub run {
+    my ( $self ) = @_;
 
-    if( $cmd->is_archive_file() ) {
-        return $self->install_from_archive( %args );
+    my $pkg = $self->package;
+
+    if( $pkg->is_archive() ) {
+        $logger->info('Archive type file');
+
+        return $self->install_from_archive;
     }
-    elsif( $cmd->is_text_file() ) {
+    elsif( $pkg->is_text() ) {
+        $logger->info('Text type file');
 
-        return $self->install_to( $args{target} , 'colors' )
-            if $args{info}->{type} eq 'color scheme' ;
+        return $self->install_to( 'colors' )
+            if $pkg->script_is('color scheme');
 
-        return $self->install_to( $args{target} , 'syntax' )
-            if $args{info}->{type} eq 'syntax' ;
+        return $self->install_to( 'syntax' )
+            if $pkg->script_is('syntax');
 
-        return $self->install_to( $args{target} , 'indent' )
-            if $args{info}->{type} eq 'indent' ;
+        return $self->install_to( 'indent' )
+            if $pkg->script_is('indent');
 
+        return 0;
     }
 }
 
@@ -91,8 +75,17 @@ sub install {
 =cut
 
 sub install_to {
-    my ( $self , $file , $dir ) = @_;
-    fcopy( $file => File::Spec->join( runtime_path(), $dir ) );
+    my ( $self , $dir ) = @_;
+    my $file = $self->package->file;
+    my $target = File::Spec->join( runtime_path(), $dir );
+    my $ret = fcopy( $file => $target );
+    unless( $ret ) {
+        $logger->error( $! );
+    }
+    else {
+        $logger->info( "Installed" );
+    }
+    $ret;
 }
 
 =head2 install_from_archive 
@@ -100,15 +93,14 @@ sub install_to {
 =cut
 
 sub install_from_archive {
-    my ( $self , %args ) = @_;
-    my ( $cmd, $file, $info )
-        = ( $args{command}, $args{target}, $args{info} );
+    my $self = shift;
 
-    # XXX: make sure is archive file
-    my $archive = Archive::Any->new( $file );
-    my @files = $archive->files;
+    my $options = $self->options;
+    my $pkg = $self->package;
 
-    if( $cmd->{verbose} ) {
+    my @files = $pkg->archive->files;
+
+    if( $options->{verbose} ) {
         for (@files ) {
             print "FILE: $_ \n";
         }
@@ -117,25 +109,30 @@ sub install_from_archive {
     my $out = tempdir( CLEANUP => 1 );
     rmtree [ $out ] if -e $out;
     mkpath [ $out ];
-    $logger->info("Temporary directory created: $out") if $cmd->{verbose};
+    $logger->info("Temporary directory created: $out") if $options->{verbose};
 
-    $logger->info("Extracting...") if $cmd->{verbose};
-    $archive->extract( $out );  
+    $logger->info("Extracting...") if $options->{verbose};
+    $pkg->archive->extract( $out );  
 
     my @subdirs = File::Find::Rule->file->in(  $out );
 
     # XXX: check vim runtime path subdirs
-    $logger->info("Initializing vim runtime path...") if $cmd->{verbose};
+    $logger->info("Initializing vim runtime path...") if $options->{verbose};
     $self->init_vim_runtime();
 
     my $nodes = $self->find_runtime_node( \@subdirs );
+
+    unless ( keys %$nodes ) {
+        $logger->warn("Can't found base path.");
+        return 0;
+    }
     
-    if( $cmd->{verbose} ) {
-        $logger->info('Install base path:');
+    if( $options->{verbose} ) {
+        $logger->info('base path:');
         $logger->info( $_ ) for ( keys %$nodes );
     }
 
-    $self->install_from_nodes( $cmd, $nodes , runtime_path() );
+    $self->install_from_nodes( $nodes , runtime_path() );
 
     $self->update_vim_doc_tags();
 
@@ -173,10 +170,10 @@ sub init_vim_runtime {
 =cut
 
 sub install_from_nodes {
-    my ($self , $cmd , $nodes , $to ) = @_;
+    my ($self , $nodes , $to ) = @_;
     $logger->info("Copying files...");
     for my $node  ( grep { $nodes->{ $_ } > 1 } keys %$nodes ) {
-        $logger->info("$node => $to") if $cmd->{verbose};
+        $logger->info("$node => $to") if $self->options->{verbose};
         my (@ret) = dircopy($node, $to );
 
     }

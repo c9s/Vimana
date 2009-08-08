@@ -67,20 +67,11 @@ sub run {
 
 
     $logger->info( "Check if we can auto install this package" );
-#    if( Vimana::AutoInstall->can_autoinstall( $self , $target , $info , $page ) ) {
-#        $logger->info("Auto install $target");
-#        my $ret = Vimana::AutoInstall->install( 
-#                    command => $self , 
-#                    target => $target ,
-#                    info => $info ,
-#                    page => $page );
-#
-#        unless ( $ret ) {
-#            $logger->error("Auto install failed");
-#            die;
-#        }
-#    }
-#
+    my $ret = $pkgfile->auto_install( verbose => 1 );
+    unless ( $ret ) {
+        $logger->warn("Auto-install failed");
+    }
+
     print "Done\n";
 }
 
