@@ -77,6 +77,14 @@ sub has_makefile {
     return undef;
 }
 
+sub has_vimball {
+    my $self = shift;
+    my @files = $self->archive->files();
+    @files = grep /\.vba$/i , @files;
+    return @files if scalar @files;
+    return undef;
+}
+
 # vimball
 sub vba_install {
 
