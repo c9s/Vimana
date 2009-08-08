@@ -4,6 +4,7 @@ use strict;
 use URI;
 use LWP::Simple qw();
 use HTML::Entities;
+use utf8;
 # use Lingua::ZH::Wrap qw(wrap $columns $overflow);
 use Text::Wrap qw(wrap $columns $huge);
 
