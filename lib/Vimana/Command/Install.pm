@@ -60,10 +60,12 @@ sub run {
 
     $logger->info("Check if we can install this package via port file");
 
-#    if( Vimana::PortInstall->has_portfile ) {
-#
-#
-#    }
+    if( $pkgfile->has_portfile ) {
+
+
+    }
+
+
     $logger->info( "Check if we can auto install this package" );
 #    if( Vimana::AutoInstall->can_autoinstall( $self , $target , $info , $page ) ) {
 #        $logger->info("Auto install $target");

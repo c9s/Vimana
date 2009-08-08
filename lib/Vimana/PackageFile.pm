@@ -15,6 +15,7 @@ has info => ( is => 'rw', isa => 'HashRef' );
 
 has page_info => ( is => 'rw' , isa => 'HashRef' );
 
+has archive => ( is => 'rw' , isa => 'Archive::Any' );
 
 sub is_archive { $_[ 0 ]->filetype =~ m{(x-bzip2|x-gzip|x-gtar|zip|rar|tar)} ? 1 : 0; }
 
@@ -37,16 +38,34 @@ sub download {
 }
 
 sub detect_filetype { 
-    $_[0]->filetype( 
-        Vimana::Util::get_mine_type( $_[0]->file )
-    ) 
+    my $self = shift;
+    $self->filetype( 
+        Vimana::Util::get_mine_type( $self->file )
+    );
+
+    if( $self->is_archive ) {
+        $self->archive( Archive::Any->new( $self->file ) );
+    }
 }
 
 sub has_portfile {
+    my $self = shift;
 
 }
 
 sub has_makefile {
+    my $self = shift;
+
+
+}
+
+sub auto_install {
+    my $self = shift;
+    my %args = @_;
+
+    require Vimana::AutoInstall;
+    my $auto = Vimana::AutoInstall->new( $self );
+    $auto->install( %args );  # dry_run , verbose
 
 }
 

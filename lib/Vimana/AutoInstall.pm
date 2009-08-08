@@ -3,6 +3,7 @@ use warnings;
 use strict;
 
 # use re 'debug';
+use Moose;
 use File::Copy::Recursive qw(fcopy rcopy dircopy fmove rmove dirmove);
 use File::Spec;
 use File::Path qw'mkpath rmtree';
@@ -25,17 +26,19 @@ Vimna::AutoInstall
 
 =cut
 
+
+
 =head2 can_autoinstall
 
 =cut
 
 sub can_autoinstall {
-    my ( $class, $cmd , $file, $info , $page ) = @_;
+    my ( $self, $cmd , $file, $info , $page ) = @_;
 
     if( $cmd->is_archive_file( ) ) {
         my $archive = Archive::Any->new($file);
         my @files = $archive->files;
-        my $nodes = $class->find_runtime_node( \@files );
+        my $nodes = $self->find_runtime_node( \@files );
         return i_know_what_to_do( $nodes );
     }
     elsif( $cmd->is_text_file( ) ) {
@@ -62,22 +65,22 @@ sub inspect_text_content {
 =cut
 
 sub install {
-    my ( $class , %args ) = @_;
-    # my ( $class, $cmd, $file, $info, $page ) = @_;
+    my ( $self , %args ) = @_;
+    # my ( $self, $cmd, $file, $info, $page ) = @_;
     my $cmd = $args{command};
 
     if( $cmd->is_archive_file() ) {
-        return $class->install_from_archive( %args );
+        return $self->install_from_archive( %args );
     }
     elsif( $cmd->is_text_file() ) {
 
-        return $class->install_to( $args{target} , 'colors' )
+        return $self->install_to( $args{target} , 'colors' )
             if $args{info}->{type} eq 'color scheme' ;
 
-        return $class->install_to( $args{target} , 'syntax' )
+        return $self->install_to( $args{target} , 'syntax' )
             if $args{info}->{type} eq 'syntax' ;
 
-        return $class->install_to( $args{target} , 'indent' )
+        return $self->install_to( $args{target} , 'indent' )
             if $args{info}->{type} eq 'indent' ;
 
     }
@@ -88,7 +91,7 @@ sub install {
 =cut
 
 sub install_to {
-    my ( $class , $file , $dir ) = @_;
+    my ( $self , $file , $dir ) = @_;
     fcopy( $file => File::Spec->join( runtime_path(), $dir ) );
 }
 
@@ -97,7 +100,7 @@ sub install_to {
 =cut
 
 sub install_from_archive {
-    my ( $class , %args ) = @_;
+    my ( $self , %args ) = @_;
     my ( $cmd, $file, $info )
         = ( $args{command}, $args{target}, $args{info} );
 
@@ -123,18 +126,18 @@ sub install_from_archive {
 
     # XXX: check vim runtime path subdirs
     $logger->info("Initializing vim runtime path...") if $cmd->{verbose};
-    $class->init_vim_runtime();
+    $self->init_vim_runtime();
 
-    my $nodes = $class->find_runtime_node( \@subdirs );
+    my $nodes = $self->find_runtime_node( \@subdirs );
     
     if( $cmd->{verbose} ) {
         $logger->info('Install base path:');
         $logger->info( $_ ) for ( keys %$nodes );
     }
 
-    $class->install_from_nodes( $cmd, $nodes , runtime_path() );
+    $self->install_from_nodes( $cmd, $nodes , runtime_path() );
 
-    $class->update_vim_doc_tags();
+    $self->update_vim_doc_tags();
 
     return 1;
 }
@@ -157,7 +160,7 @@ sub runtime_path {
 =cut
 
 sub init_vim_runtime {
-    my $class = shift;
+    my $self = shift;
     my $paths = [ ];
     for my $subdir ( qw(plugin doc syntax colors after ftplugin indent autoload) ) {
         push @$paths ,File::Spec->join( runtime_path , $subdir );
@@ -170,7 +173,7 @@ sub init_vim_runtime {
 =cut
 
 sub install_from_nodes {
-    my ($class , $cmd , $nodes , $to ) = @_;
+    my ($self , $cmd , $nodes , $to ) = @_;
     $logger->info("Copying files...");
     for my $node  ( grep { $nodes->{ $_ } > 1 } keys %$nodes ) {
         $logger->info("$node => $to") if $cmd->{verbose};
@@ -197,7 +200,7 @@ sub i_know_what_to_do {
 =cut
 
 sub find_runtime_node {
-    my ( $class, $paths ) = @_;
+    my ( $self, $paths ) = @_;
     my $nodes = {};
     for my $p ( @$paths ) {
         if ( $p =~ m{^(.*?/)?(plugin|doc|syntax|indent|colors|autoload|after|ftplugin)/.*?\.(vim|txt)$} ) {
