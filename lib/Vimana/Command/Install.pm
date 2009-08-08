@@ -61,10 +61,6 @@ sub run {
     $pkgfile->detect_filetype();
 
 =pod
-
-
-    4. look for vimball (archive)
-
     4. guess what to do
 
        if it's archive file:
