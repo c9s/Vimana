@@ -22,16 +22,10 @@ sub options {
 
 
 sub is_archive_file {
-    my $self = shift;
-    return 1 if $self->filetype =~ m{(x-bzip2|x-gzip|x-gtar|zip|rar|tar)};
-    return 0;
+    $_[ 0 ]->filetype =~ m{(x-bzip2|x-gzip|x-gtar|zip|rar|tar)} ? 1 : 0;
 }
 
-sub is_text_file {
-    my $self = shift;
-    return 1 if $self->filetype =~ m{octet-stream};
-    return 0;
-}
+sub is_text_file { $_[ 0 ]->filetype =~ m{octet-stream} ? 1 : 0 }
 
 
 sub detect_filetype {
