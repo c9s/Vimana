@@ -98,8 +98,6 @@ sub build_search_uri {
 
     my $uri = URI->new("http://www.vim.org/scripts/script_search_results.php");
     $uri->query_form( %args ); 
-
-    warn $uri;
     return $uri;
 }
 
