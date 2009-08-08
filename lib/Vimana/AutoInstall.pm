@@ -10,6 +10,7 @@ use Archive::Any;
 use File::Find::Rule;
 use File::Type;
 use File::Temp qw(tempdir);
+use Vimana::Logger;
 
 $| = 1;
 
@@ -106,11 +107,10 @@ sub install_from_archive {
         }
     }
 
-    print "Creating temporary directory.\n" if $cmd->{verbose};
-
     my $out = tempdir( CLEANUP => 1 );
     rmtree [ $out ] if -e $out;
     mkpath [ $out ];
+    $logger->info("temporary directory created: $out") if $cmd->{verbose};
 
     print "Extracting...\n" if $cmd->{verbose};
     $archive->extract( $out );  
