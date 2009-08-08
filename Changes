@@ -1,6 +1,10 @@
 Revision history for Vimana
 
+0.07
+        supports Vimball install.
 
+0.06
+        supports auto-install (smart install) for packages
 
 0.01    
-        First version, released on an unsuspecting world.
+        first version, released on an unsuspecting world.
