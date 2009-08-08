@@ -3,7 +3,6 @@ use warnings;
 use strict;
 use URI;
 use LWP::Simple qw();
-use Text::Table;
 use HTML::Entities;
 # use Lingua::ZH::Wrap qw(wrap $columns $overflow);
 use Text::Wrap qw(wrap $columns $huge);
