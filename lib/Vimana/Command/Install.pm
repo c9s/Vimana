@@ -83,7 +83,7 @@ DONE:
         # if it's vimball, install it
         if( $pkgfile->is_text() and $pkgfile->is_vimball() ) {
             Vimana::AutoInstall::vimball_install( $pkgfile->file );
-            last DONE ;
+            last DONE;
         }
 
         # or try to find in port tree
