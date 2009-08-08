@@ -1,6 +1,7 @@
 package Vimana::VimOnline::Search;
 use strict;
 use warnings;
+require LWP::UserAgent;
 my $last_pos;
 
 sub parse_columns {
