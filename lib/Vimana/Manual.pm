@@ -1,5 +1,7 @@
 =begin
 
+=encoding utf8
+
 =head1 NAME
 
 Vimana::Manual

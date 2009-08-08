@@ -6,6 +6,8 @@ use Vimana::Index;
 
 use vars qw($INDEX);
 
+=encoding utf8
+
 =head1 NAME
 
 Vimana - Vim script manager.
@@ -112,7 +114,7 @@ L<http://search.cpan.org/dist/Vimana>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2007 You-An Lin ( Cornelius / c9s ), all rights reserved.
+Copyright 2007 You-An Lin 林佑安 ( Cornelius / c9s ), all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

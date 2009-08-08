@@ -20,6 +20,8 @@ has 'options' => ( is => 'rw' , isa => 'HashRef' );
 
 $| = 1;
 
+=encoding utf8
+
 =head1 NAME
 
 Vimna::AutoInstall
