@@ -71,8 +71,10 @@ sub has_portfile {
 
 sub has_makefile {
     my $self = shift;
-
-
+    my @files = $self->archive->files();
+    @files = grep /makefile/i , @files;
+    return @files if scalar @files;
+    return undef;
 }
 
 # vimball

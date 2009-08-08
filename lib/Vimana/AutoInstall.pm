@@ -41,9 +41,9 @@ sub inspect_text_content {
 =cut
 
 #    * if it's archive file:
+#        * if it contains makefile  (check outside of autoinstall)
+#        * if it contains vimball (x)   (check outside of autoinstall)
 #        * check directory structure
-#        * if it contains makefile
-#        * if it contains vimball
 #        * others
 #
 #    * if it's text file:
@@ -63,7 +63,6 @@ sub run {
 
     if( $pkg->is_archive() ) {
         $logger->info('Archive type file');
-
         return $self->install_from_archive;
     }
     elsif( $pkg->is_text() ) {
