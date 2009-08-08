@@ -34,3 +34,4 @@ META.yml
 plan
 README
 t/00-load.t
+t/00-install.t
