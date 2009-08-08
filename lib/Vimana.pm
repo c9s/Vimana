@@ -43,6 +43,8 @@ internationalization in future.
 
 NOTE: Vimana only provides search,info,install commmands currently.
 
+* Getting started from L<Vimana::Manual>.
+
 =head1 FUNCTIONS
 
 =head2 index
