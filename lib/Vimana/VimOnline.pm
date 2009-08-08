@@ -1,7 +1,11 @@
-package Vimana::VimOnline::SearchResult;
-
+package Vimana::VimOnline;
+use warnings;
+use strict;
 require Vimana::VimOnline::Search;
 require Vimana::VimOnline::ScriptPage;
+
+package Vimana::VimOnline::SearchResult;
+
 
 sub display {
     my ($class , $results ) = @_; 
