@@ -60,11 +60,7 @@ sub run {
     $pkgfile->detect_filetype();
 
 =pod
-    1. if it's vimball, install it
 
-    2. look for port file (for any kind of package)
-
-    3. look for makefile (archive)
 
     4. look for vimball (archive)
 
@@ -84,22 +80,25 @@ sub run {
 =cut
 DONE:
     {
+        # if it's vimball, install it
         if( $pkgfile->is_text() and $pkgfile->is_vimball() ) {
             my $ret = $pkgfile->vimball_install();
             last DONE ;
         }
 
+        # or try to find in port tree
         $logger->info("Check if we can install this package via port file");
-        if( $pkgfile->has_portfile ) {
-
-
-        }
-        else {
-            $logger->info( "Can not found port file." );
-        }
+#        if( Vimana::PortTree->find( ) ) {
+#
+#
+#        }
+#        else {
+#            $logger->info( "Can not found port file." );
+#        }
 
 
         # unknown 
+        # look for makefile (archive)
         if ( $pkgfile->is_archive() ) {
             $logger->info("Check if this package contains 'Makefile' file");
             if( my @makefile = $pkgfile->has_makefile() ) {
@@ -107,10 +106,6 @@ DONE:
                 last DONE if 0;
             }
 
-            if( my @vimball = $pkgfile->has_vimball() ) {
-
-                last DONE if 0;
-            }
         }
 
         $logger->info( "Check if we can auto install this package" );

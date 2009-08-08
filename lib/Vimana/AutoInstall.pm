@@ -11,6 +11,7 @@ use File::Find::Rule;
 use File::Type;
 use File::Temp qw(tempdir);
 use Vimana::Logger;
+use Vimana::Util;
 
 use Moose;
 
@@ -87,7 +88,6 @@ sub install_to {
 
 sub install_from_archive {
     my $self = shift;
-
     my $options = $self->options;
     my $pkg = $self->package;
 
@@ -107,28 +107,37 @@ sub install_from_archive {
     $logger->info("Extracting...") if $options->{verbose};
     $pkg->archive->extract( $out );  
 
-    my @subdirs = File::Find::Rule->file->in(  $out );
-
-    # XXX: check vim runtime path subdirs
-    $logger->info("Initializing vim runtime path...") if $options->{verbose};
-    $self->init_vim_runtime();
-
-    my $nodes = $self->find_runtime_node( \@subdirs );
-
-    unless ( keys %$nodes ) {
-        $logger->warn("Can't found base path.");
-        return 0;
-    }
-    
-    if( $options->{verbose} ) {
-        $logger->info('base path:');
-        $logger->info( $_ ) for ( keys %$nodes );
+    if( $pkg->has_vimball() ) {
+        $logger->info( "I found vimball files inside the archive file , try to install vimballs");
+        my @vimballs = File::Find::Rule->file->name( "*.vba" )->in( $out );
+        vimball_install( @vimballs );
     }
 
-    $self->install_from_nodes( $nodes , runtime_path() );
+    # check directory structure
+    {
 
-    $logger->info("Updating helptags");
-    $self->update_vim_doc_tags();
+        # XXX: check vim runtime path subdirs , mv to init script
+        $logger->info("Initializing vim runtime path...") if $options->{verbose};
+        Vimana::Util::init_vim_runtime();
+
+        my @files = File::Find::Rule->file->in(  $out );
+        my $nodes = $self->find_base_path( \@files );
+
+        unless ( keys %$nodes ) {
+            $logger->warn("Can't found base path.");
+            return 0;
+        }
+        
+        if( $options->{verbose} ) {
+            $logger->info('base path:');
+            $logger->info( $_ ) for ( keys %$nodes );
+        }
+
+        $self->install_from_nodes( $nodes , runtime_path() );
+
+        $logger->info("Updating helptags");
+        $self->update_vim_doc_tags();
+    }
 
     $logger->info("Clean up temporary directory.");
     rmtree [ $out ] if -e $out;
@@ -136,31 +145,15 @@ sub install_from_archive {
     return 1;
 }
 
-=head2 runtime_path
-
-You can export enviroment variable VIMANA_RUNTIME_PATH to override default
-runtime path.
-
-=cut
-
-sub runtime_path {
-    # return File::Spec->join( $ENV{HOME} , 'vim-test' );
-    return $ENV{VIMANA_RUNTIME_PATH} || File::Spec->join( $ENV{HOME} , '.vim' );
-}
-
-
-=head2 init_vim_runtime 
-
-=cut
-
-sub init_vim_runtime {
-    my $self = shift;
-    my $paths = [ ];
-    for my $subdir ( qw(plugin doc syntax colors after ftplugin indent autoload) ) {
-        push @$paths ,File::Spec->join( runtime_path , $subdir );
+sub vimball_install {
+    my @files = @_;
+    my $vim = find_vim();
+    for my $vimball ( @files ) {
+        system( qq|$vim $vimball -c ":so %" -c q|);
     }
-    mkpath $paths;
 }
+
+
 
 =head2 install_from_nodes
 
@@ -189,11 +182,11 @@ sub i_know_what_to_do {
 }
 
 
-=head2 find_runtime_node 
+=head2 find_base_path 
 
 =cut
 
-sub find_runtime_node {
+sub find_base_path {
     my ( $self, $paths ) = @_;
     my $nodes = {};
     for my $p ( @$paths ) {
@@ -203,15 +196,6 @@ sub find_runtime_node {
     }
     return $nodes;
 }
-
-
-sub install_from_vimball {
-    my $self = shift;
-    my $file = $self->file;
-    my $vim = find_vim();
-    system( qq|$vim $file -c ":so %" -c q|);
-}
-
 
 sub update_vim_doc_tags {
     my $vim = find_vim();

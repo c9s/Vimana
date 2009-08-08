@@ -81,13 +81,6 @@ sub has_vimball {
     return undef;
 }
 
-# vimball
-sub vimball_install {
-    my $self = shift;
-    my $vimball = $self->file;
-
-
-}
 
 sub auto_install {
     my $self = shift;
