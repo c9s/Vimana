@@ -57,7 +57,7 @@ sub run {
         my $type = $self->inspect_text_content;
         if ($type) {
             $logger->info("Found script type: $type");
-            $self->install_to($type);
+            return $self->install_to($type);
         }
 
         return $self->install_to( 'colors' )
