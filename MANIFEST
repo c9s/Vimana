@@ -22,6 +22,8 @@ lib/Vimana/Command/Search.pm
 lib/Vimana/Command/Update.pm
 lib/Vimana/Index.pm
 lib/Vimana/Logger.pm
+lib/Vimana/Manual.pm
+lib/Vimana/PackageFile.pm
 lib/Vimana/Util.pm
 lib/Vimana/VimOnline.pm
 lib/Vimana/VimOnline/ScriptPage.pm
