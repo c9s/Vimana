@@ -13,6 +13,25 @@ exit (defined $ret ? $ret : 1);
 
 vimana
 
+=head1 USAGE
+
+to update index
+
+    $ vimana update 
+
+check rails.vim plugin info
+
+    $ vimana info rails.vim
+
+to search jifty script
+
+    $ vimana search rails
+
+to install rails.vim package:
+
+    $ vimana install rails.vim
+
+
 =head1 AUTHORS
 
 Cornelius E<lt>cornelius.howl@gmail.comE<gt>
