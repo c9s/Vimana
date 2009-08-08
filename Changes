@@ -1,7 +1,9 @@
 Revision history for Vimana
 
 0.07
-        supports Vimball install.
+        * supports Vimball install.
+        * provide download command.
+
 
 0.06
         supports auto-install (smart install) for packages
