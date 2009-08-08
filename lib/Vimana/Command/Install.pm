@@ -15,8 +15,12 @@ use Vimana::PackageFile;
 
 sub options {
     (
-        'v|verbose'     => 'verbose',
-        'y|yes'         => 'assume_yes',
+        'd|dry-run'           => 'dry_run',
+        'v|verbose'           => 'verbose',
+        'y|yes'               => 'assume_yes',
+        'ai|auto-install'     => 'auto_install',
+        'pi|port-install'     => 'port_install',
+        'mi|makefile-install' => 'makefile_install',
     );
 }
 
