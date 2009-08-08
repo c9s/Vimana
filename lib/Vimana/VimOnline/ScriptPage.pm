@@ -69,7 +69,11 @@ INFO
     
 }
 
-# it's very dirty
+#
+# vimonline website sucks , i can't found any elemetn class or to scraper by
+# Web::Scraper.
+#
+# so.. it's very dirty
 sub parse {
     my ( $class , $content ) = @_;
 
