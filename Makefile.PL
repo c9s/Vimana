@@ -31,6 +31,15 @@ requires
 include('ExtUtils::AutoInstall');
 auto_install();
 auto_provides();
+
+my $ret = qx( vim --version );
+die "Can not found Vim , Please install Vim on your system" unless $ret =~ /^VIM - Vi IMproved/ ;
+
+print "Vim found:\n" . '-' x 10 . "\n";
+my @lines = split("\n", $ret );
+print join( "\n" , splice(  @lines , 0 , 3 ) ) , "\n";
+print '-' x 10 . "\n";
+
 WriteAll( sign => 0 );
 
 1;
