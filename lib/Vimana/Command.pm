@@ -5,10 +5,6 @@ use strict;
 use base qw(App::CLI App::CLI::Command);
 use Getopt::Long qw(:config no_ignore_case bundling);
 
-
-
-
-
 sub invoke {
     my ($pkg , $cmd,  @args) = @_;
     my ($ret);

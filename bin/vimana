@@ -1,9 +1,7 @@
-#!/usr/bin/perl
-use lib 'lib';
+#!/usr/bin/env perl 
 use strict;
 use warnings;
 use Vimana;
-
 use Vimana::Command;
 
 my $cmd = shift @ARGV;
