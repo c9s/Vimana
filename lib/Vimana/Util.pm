@@ -47,7 +47,8 @@ use File::Path qw'mkpath rmtree';
 sub init_vim_runtime {
     my $paths = [ ];
     for my $subdir ( qw(plugin doc syntax colors after ftplugin indent autoload) ) {
-        push @$paths ,File::Spec->join( runtime_path , $subdir );
+        push @$paths ,
+            File::Spec->join( runtime_path , $subdir );
     }
     mkpath $paths;
 }

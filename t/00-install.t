@@ -1,7 +1,7 @@
 #!perl
 use lib 'lib';
 
-use Test::More tests => 11;
+use Test::More tests => 13;
 
 BEGIN {
     $ENV{VIMANA_RUNTIME_PATH} = '/tmp/vimana-test';
@@ -14,20 +14,44 @@ BEGIN {
     use_ok( 'Vimana::Command::Install');
 }
 
+use File::Spec;
 use File::Path qw(mkpath rmtree);
 my $path = '/tmp/vimana-test' ;
-mkpath [ $path ];
-my $cmd = Vimana::Command::Install->new;
-my $ret = $cmd->run( 'rails.vim' );   # smart install
-ok( $ret );
 
-# inspect directory
-ok( -e File::Spec->join( $path, 'doc',      'rails.txt' ) );
-ok( -e File::Spec->join( $path, 'autoload', 'rails.vim' ) );
-ok( -e File::Spec->join( $path, 'plugin',   'rails.vim' ) );
+# autoinstall
+{
+    mkpath [ $path ];
+    Vimana::Util::init_vim_runtime();
+
+    my $cmd = Vimana::Command::Install->new;
+    my $ret = $cmd->run( 'rails.vim' );   
+    ok( $ret );
+
+    # inspect directory
+    ok( -e File::Spec->join( $path, 'doc',      'rails.txt' ) );
+    ok( -e File::Spec->join( $path, 'autoload', 'rails.vim' ) );
+    ok( -e File::Spec->join( $path, 'plugin',   'rails.vim' ) );
+
+    rmtree [ $path ];
+}
 
 
-rmtree [ $path ];
+
+# vimball install
+{
+    mkpath [ $path ];
+    Vimana::Util::init_vim_runtime();
+
+    my $cmd = Vimana::Command::Install->new;
+    my $ret = $cmd->run( 'ctags-highlighting' );   # smart install
+    ok( $ret );
+
+    # inspect directory , vimball install scripts into user's home vim direcotyr
+    ok( -e File::Spec->join( $ENV{HOME} , '.vim' , 'plugin',   'ctags_highlighting.vim' ) );
+
+    rmtree [ $path ];
+}
+
 
 
 
