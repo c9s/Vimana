@@ -1,0 +1,69 @@
+---
+abstract: 'Vim script port manager'
+author:
+  - 'You-An Lin <cornelius.howl@gmail.com>'
+build_requires:
+  ExtUtils::MakeMaker: 6.42
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
+distribution_type: module
+generated_by: 'Module::Install version 0.90'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Vimana
+no_index:
+  directory:
+    - inc
+    - t
+provides:
+  Vimana:
+    file: lib/Vimana.pm
+    version: 0.061
+  Vimana::AutoInstall:
+    file: lib/Vimana/AutoInstall.pm
+  Vimana::Command:
+    file: lib/Vimana/Command.pm
+  Vimana::Command::Info:
+    file: lib/Vimana/Command/Info.pm
+  Vimana::Command::Install:
+    file: lib/Vimana/Command/Install.pm
+  Vimana::Command::Search:
+    file: lib/Vimana/Command/Search.pm
+  Vimana::Command::Update:
+    file: lib/Vimana/Command/Update.pm
+  Vimana::Index:
+    file: lib/Vimana/Index.pm
+  Vimana::Logger:
+    file: lib/Vimana/Logger.pm
+  Vimana::Logger::Compat:
+    file: lib/Vimana/Logger.pm
+  Vimana::Util:
+    file: lib/Vimana/Util.pm
+  Vimana::VimOnline::ScriptPage:
+    file: lib/Vimana/VimOnline/ScriptPage.pm
+  Vimana::VimOnline::Search:
+    file: lib/Vimana/VimOnline/Search.pm
+  Vimana::VimOnline::SearchResult:
+    file: lib/Vimana/VimOnline.pm
+requires:
+  App::CLI: 0.08
+  Archive::Any: 0
+  Cache::File: 2.04
+  Class::Accessor::Fast: 0
+  File::Copy::Recursive: 0.38
+  File::Find::Rule: 0.3
+  File::Path: 2.07
+  File::Spec: 0
+  File::Temp: 0
+  File::Type: 0
+  Getopt::Long: 0
+  LWP::Simple: 0
+  LWP::UserAgent: 0
+  Moose: 0
+  Test::More: 0
+  URI: 1.37
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.061
