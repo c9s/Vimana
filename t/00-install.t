@@ -1,7 +1,7 @@
 #!perl
 use lib 'lib';
 
-use Test::More tests => 13;
+use Test::More tests => 15;
 
 BEGIN {
     $ENV{VIMANA_RUNTIME_PATH} = '/tmp/vimana-test';
@@ -49,6 +49,17 @@ my $path = '/tmp/vimana-test' ;
     # inspect directory , vimball install scripts into user's home vim direcotyr
     ok( -e File::Spec->join( $ENV{HOME} , '.vim' , 'plugin',   'ctags_highlighting.vim' ) );
 
+    rmtree [ $path ];
+}
+
+# colorscheme install
+{
+    mkpath [ $path ];
+    Vimana::Util::init_vim_runtime();
+    my $cmd = Vimana::Command::Install->new;
+    my $ret = $cmd->run( 'montz.vim' );   # smart install
+    ok( $ret );
+    ok( -e File::Spec->join( $path, 'colors', 'montz.vim' ) );
     rmtree [ $path ];
 }
 
