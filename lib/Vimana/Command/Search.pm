@@ -26,6 +26,8 @@ sub run {
     # Search from Index
     my $results = Vimana::VimOnline::Search->fetch(
         keywords     => join(' ' , @keywords) ,
+        result_ptr => 0,
+        show_me => 100,
         ( $self->{script_type} ? ( script_type => $self->{script_type} ) : () ),
         ( $self->{order_by} ? ( order_by => $self->{order_by} )  : () ),
     );

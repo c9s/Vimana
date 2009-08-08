@@ -10,6 +10,7 @@ use Moose;
 require Vimana::VimOnline;
 require Vimana::VimOnline::ScriptPage;
 use Vimana::AutoInstall;
+use Vimana::VimballInstall;
 use Vimana::Logger;
 use Vimana::PackageFile;
 
@@ -82,7 +83,9 @@ DONE:
     {
         # if it's vimball, install it
         if( $pkgfile->is_text() and $pkgfile->is_vimball() ) {
-            Vimana::AutoInstall::vimball_install( $pkgfile->file );
+            $logger->info("Found Vimball File");
+            my $install = Vimana::VimballInstall->new( package => $pkgfile );
+            $install->run();
             last DONE;
         }
 
