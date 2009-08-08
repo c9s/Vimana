@@ -127,7 +127,11 @@ sub install_from_archive {
 
     $self->install_from_nodes( $nodes , runtime_path() );
 
+    $logger->info("Updating helptags");
     $self->update_vim_doc_tags();
+
+    $logger->info("Clean up temporary directory.");
+    rmtree [ $out ] if -e $out;
 
     return 1;
 }
@@ -202,7 +206,6 @@ sub find_runtime_node {
 
 
 sub update_vim_doc_tags {
-    $logger->info("Updating helptags");
     my $dir = File::Spec->join( runtime_path() , 'doc' );
     system(qq| vim -c ':helptags $dir'  -c q |);
 }
