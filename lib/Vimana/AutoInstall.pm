@@ -205,9 +205,23 @@ sub find_runtime_node {
 }
 
 
+
+sub where_is_vim {
+    return 'vim';
+}
+
+sub install_from_vimball {
+    my $self = shift;
+    my $file = $self->file;
+    my $vim = where_is_vim();
+    system( qq|$vim $file -c ":so %" -c q|);
+}
+
+
 sub update_vim_doc_tags {
+    my $vim = where_is_vim();
     my $dir = File::Spec->join( runtime_path() , 'doc' );
-    system(qq| vim -c ':helptags $dir'  -c q |);
+    system(qq|$vim -c ':helptags $dir'  -c q |);
 }
 
 
