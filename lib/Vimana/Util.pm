@@ -14,5 +14,10 @@ sub canonical_script_name {
     $name;
 }
 
+sub get_mine_type {
+    my $type = File::Type->new->checktype_filename( $_[ 0 ] );
+    die "can not found file type from @{[ $_[0] ]}" unless $type;
+    return $type;
+}
 
 1;

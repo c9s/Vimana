@@ -11,10 +11,7 @@ use File::Find::Rule;
 use File::Type;
 use File::Temp qw(tempdir);
 use Vimana::Logger;
-use Moose;
 
-has 'cmd' => 
-    ( is => 'rw' , isa => 'Vimana::Command');
 
 $| = 1;
 
@@ -26,6 +23,8 @@ Vimna::AutoInstall
 
 =head1 FUNCTIONS
 
+=cut
+
 =head2 can_autoinstall
 
 =cut
@@ -33,13 +32,13 @@ Vimna::AutoInstall
 sub can_autoinstall {
     my ( $class, $cmd , $file, $info , $page ) = @_;
 
-    if( is_archive_file( $file ) ) {
+    if( $cmd->is_archive_file( ) ) {
         my $archive = Archive::Any->new($file);
         my @files = $archive->files;
         my $nodes = $class->find_runtime_node( \@files );
         return i_know_what_to_do( $nodes );
     }
-    elsif( is_text_file( $file ) ) {
+    elsif( $cmd->is_text_file( ) ) {
         return 1 if $info->{type} eq 'color scheme'
                         or $info->{type} eq 'syntax'
                         or $info->{type} eq 'indent';
@@ -65,11 +64,12 @@ sub inspect_text_content {
 sub install {
     my ( $class , %args ) = @_;
     # my ( $class, $cmd, $file, $info, $page ) = @_;
+    my $cmd = $args{command};
 
-    if( is_archive_file( $args{target} ) ) {
+    if( $cmd->is_archive_file() ) {
         return $class->install_from_archive( %args );
     }
-    elsif( is_text_file( $args{target} ) ) {
+    elsif( $cmd->is_text_file() ) {
 
         return $class->install_to( $args{target} , 'colors' )
             if $args{info}->{type} eq 'color scheme' ;
@@ -151,32 +151,6 @@ sub runtime_path {
     return $ENV{VIMANA_RUNTIME_PATH} || File::Spec->join( $ENV{HOME} , '.vim' );
 }
 
-
-sub get_mine_type {
-    my $type = File::Type->new->checktype_filename( $_[ 0 ] );
-    die "can not found file type from @{[ $_[0] ]}" unless $type;
-    return $type;
-}
-
-=head2 is_archive_file
-
-=cut
-
-sub is_archive_file {
-    my $type = get_mine_type( $_[ 0 ] );
-    return 1 if $type =~ m{(x-bzip2|x-gzip|x-gtar|zip|rar|tar)};
-    return 0;
-}
-
-=head2 is_text_file
-
-=cut
-
-sub is_text_file {
-    my $type = get_mine_type( $_[ 0 ] );
-    return 1 if $type =~ m{octet-stream};
-    return 0;
-}
 
 =head2 init_vim_runtime 
 
