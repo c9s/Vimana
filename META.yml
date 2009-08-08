@@ -41,6 +41,8 @@ provides:
     file: lib/Vimana/Logger.pm
   Vimana::Util:
     file: lib/Vimana/Util.pm
+  Vimana::VimOnline:
+    file: lib/Vimana/VimOnline.pm
   Vimana::VimOnline::ScriptPage:
     file: lib/Vimana/VimOnline/ScriptPage.pm
   Vimana::VimOnline::Search:
