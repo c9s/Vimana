@@ -79,12 +79,7 @@ sub install_to {
     my $file = $self->package->file;
     my $target = File::Spec->join( runtime_path(), $dir );
     my $ret = fcopy( $file => $target );
-    unless( $ret ) {
-        $logger->error( $! );
-    }
-    else {
-        $logger->info( "Installed" );
-    }
+    !$ret ? $! : $logger->info("Installed");
     $ret;
 }
 

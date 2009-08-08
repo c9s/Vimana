@@ -23,7 +23,8 @@ requires
     'LWP::UserAgent'        => 0,
     'LWP::Simple'           => 0,
     'URI'                   => 1.37,
-    'Class::Accessor::Fast' => 0;
+    'Class::Accessor::Fast' => 0,
+    'Moose' => 0;
 
 include('ExtUtils::AutoInstall');
 auto_install();
