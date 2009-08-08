@@ -30,12 +30,8 @@ Vimna::AutoInstall
 =cut
 
 sub inspect_text_content {
-    my $file = shift;
-    local $/;
-    open my $fh , "<" , $file;
-    my $content = <$fh>;
-    close $fh;
-
+    my $self = shift;
+    my $content = $self->package->content;
     return 'colors' if $content =~ m/let\s+(g:)?colors_name\s*=/;
     return undef;
 }

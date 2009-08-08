@@ -53,6 +53,15 @@ sub detect_filetype {
     }
 }
 
+sub content {
+    my $self = shift;
+    local $/;
+    open my $fh , "<" , $self->file;
+    my $content = <$fh>;
+    close $fh;
+    return $content;
+}
+
 sub has_portfile {
     my $self = shift;
 
