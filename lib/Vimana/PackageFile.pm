@@ -64,7 +64,6 @@ sub content {
     return $content;
 }
 
-
 sub has_makefile {
     my $self = shift;
     my @files = $self->archive->files();

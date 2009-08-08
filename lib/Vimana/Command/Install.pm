@@ -82,7 +82,7 @@ DONE:
     {
         # if it's vimball, install it
         if( $pkgfile->is_text() and $pkgfile->is_vimball() ) {
-            my $ret = $pkgfile->vimball_install();
+            Vimana::AutoInstall::vimball_install( $pkgfile->file );
             last DONE ;
         }
 
