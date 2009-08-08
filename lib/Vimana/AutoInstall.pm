@@ -110,26 +110,26 @@ sub install_from_archive {
     my $out = tempdir( CLEANUP => 1 );
     rmtree [ $out ] if -e $out;
     mkpath [ $out ];
-    $logger->info("temporary directory created: $out") if $cmd->{verbose};
+    $logger->info("Temporary directory created: $out") if $cmd->{verbose};
 
-    print "Extracting...\n" if $cmd->{verbose};
+    $logger->info("Extracting...") if $cmd->{verbose};
     $archive->extract( $out );  
 
     my @subdirs = File::Find::Rule->file->in(  $out );
 
     # XXX: check vim runtime path subdirs
-    print "Initializing vim runtime path...\n" if $cmd->{verbose};
+    $logger->info("Initializing vim runtime path...") if $cmd->{verbose};
     $class->init_vim_runtime();
 
     my $nodes = $class->find_runtime_node( \@subdirs );
     
-    print "Runtime path in extracted directory\n" if $cmd->{verbose};
-    print join("\n" , keys %$nodes ) . "\n" if $cmd->{verbose};
+    if( $cmd->{verbose} ) {
+        $logger->info('Install base path:');
+        $logger->info( $_ ) for ( keys %$nodes );
+    }
 
-    print "Installing...\n" if $cmd->{verbose};
-    $class->install_from_nodes( $nodes , runtime_path() );
+    $class->install_from_nodes( $cmd, $nodes , runtime_path() );
 
-    print "Updating helptags\n" if $cmd->{verbose};
     $class->update_vim_doc_tags();
 
     return 1;
@@ -192,9 +192,12 @@ sub init_vim_runtime {
 =cut
 
 sub install_from_nodes {
-    my ($class , $nodes , $to ) = @_;
+    my ($class , $cmd , $nodes , $to ) = @_;
+    $logger->info("Copying files...");
     for my $node  ( grep { $nodes->{ $_ } > 1 } keys %$nodes ) {
+        $logger->info("$node => $to") if $cmd->{verbose};
         my (@ret) = dircopy($node, $to );
+
     }
 }
 
@@ -228,8 +231,9 @@ sub find_runtime_node {
 
 
 sub update_vim_doc_tags {
+    $logger->info("Updating helptags");
     my $dir = File::Spec->join( runtime_path() , 'doc' );
-    qx( vim -c ':helptags $dir'  -c q );
+    system(qq| vim -c ':helptags $dir'  -c q |);
 }
 
 
