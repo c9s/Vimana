@@ -64,10 +64,6 @@ sub content {
     return $content;
 }
 
-sub has_portfile {
-    my $self = shift;
-
-}
 
 sub has_makefile {
     my $self = shift;
