@@ -46,11 +46,30 @@ use File::Spec;
 use File::Path qw'mkpath rmtree';
 sub init_vim_runtime {
     my $paths = [ ];
-    for my $subdir ( qw(plugin doc syntax colors after ftplugin indent autoload) ) {
+
+#   filetype.vim
+#   scripts.vim
+#   menu.vim
+    for my $subdir ( qw(
+            autoload
+            colors
+            compiler
+            doc
+            ftplugin
+            indent
+            keymap
+            lang
+            plugin
+            print
+            spell
+            syntax
+            tutor    ) ) {
         push @$paths ,
             File::Spec->join( runtime_path , $subdir );
     }
+
     mkpath $paths;
+
 }
 
 
