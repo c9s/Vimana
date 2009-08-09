@@ -50,27 +50,24 @@ sub init_vim_runtime {
 #   filetype.vim
 #   scripts.vim
 #   menu.vim
-    for my $subdir ( qw(
-            after
-            autoload
-            colors
-            compiler
-            doc
-            ftplugin
-            indent
-            keymap
-            lang
-            plugin
-            print
-            spell
-            syntax
-            tutor    ) ) {
-        push @$paths ,
-            File::Spec->join( runtime_path , $subdir );
-    }
+    push @$paths , File::Spec->join( runtime_path , $_ )
+        for ( qw(
+                after
+                autoload
+                colors
+                compiler
+                doc
+                ftplugin
+                indent
+                keymap
+                lang
+                plugin
+                print
+                spell
+                syntax
+                tutor    ) );
 
     mkpath $paths;
-
 }
 
 

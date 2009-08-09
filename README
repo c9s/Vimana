@@ -50,6 +50,10 @@ to search jifty script
 
     $ vimana search rails
 
+to install snipmate.vim package:
+
+    $ vimana install snipmate
+
 to install rails.vim package:
 
     $ vimana install rails.vim
