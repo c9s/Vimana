@@ -51,6 +51,7 @@ sub init_vim_runtime {
 #   scripts.vim
 #   menu.vim
     for my $subdir ( qw(
+            after
             autoload
             colors
             compiler
