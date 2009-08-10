@@ -42,28 +42,28 @@ sub display {
 
     print <<INFO;
 
- @{[ $info->{TITLE} ]}              
+ @{[ $info->{title} ]}              
 
- TYPE:            @{[ $info->{TYPE} ]}
- VERSION:         @{[ $info->{VERSION} ]}
- VIM VERSION:     @{[ $info->{VIMVER} ]}
+ TYPE:            @{[ $info->{type} ]}
+ VERSION:         @{[ $info->{version} ]}
+ VIM VERSION:     @{[ $info->{vimver} ]}
 
- CREATE DATE:     @{[ $info->{DATE} ]}
+ CREATE DATE:     @{[ $info->{date} ]}
 
- AUTHOR NAME:     @{[ $info->{AUTHOR_NAME} ]}
- AUTHOR PROFILE:  @{[ $info->{AUTHOR_URL} ]}
+ AUTHOR NAME:     @{[ $info->{author_name} ]}
+ AUTHOR PROFILE:  @{[ $info->{author_url} ]}
 
  DESCRIPTION:
 
- @{ [ wrap( ' ' x 4, '  ', $info->{DESCRIPTION} ) ] }
+ @{ [ wrap( ' ' x 4, '  ', $info->{description} ) ] }
 
  INSTALL DETAILS:
 
- @{ [ wrap( ' ' x 4, '  ', $info->{INSTALL_DETAILS} ) ] }
+ @{ [ wrap( ' ' x 4, '  ', $info->{install_details} ) ] }
 
- FILENAME:   @{ [ $info->{FILENAME} ] }
+ FILENAME:   @{ [ $info->{filename} ] }
 
- DOWNLOAD:   @{ [ $info->{DOWNLOAD} ] }
+ DOWNLOAD:   @{ [ $info->{download} ] }
 
 INFO
     
@@ -78,44 +78,40 @@ sub parse {
     my ( $class , $content ) = @_;
 
     my %info = ();
-    $content =~ m{<title>(?<TITLE>.*?)\s:\svim online</title>}gsi;
-    %info = ( %info , %- );
+    ( $info{title} ) = 
+        $content =~ m{<title>(.*?)\s:\svim online</title>}gsi;
 
-    $content =~ m{<tr><td class="prompt">created by</td></tr>
-<tr><td><a href="(?<AUTHOR_URL>.*?)">(?<AUTHOR_NAME>.*?)</a></td></tr>}gsi;
-    %info = ( %info , %- );
+    ( $info{author_url} , $info{author_name} ) = 
+        $content =~ m{<tr><td class="prompt">created by</td></tr>\s*<tr><td><a href="(.*?)">(.*?)</a></td></tr>}gsi;
 
-    $content =~ m{<tr><td class="prompt">script type</td></tr>
-<tr><td>(?<TYPE>.*?)</td></tr>}gsi;
-    %info = ( %info , %- );
+    ( $info{type} ) = 
+        $content =~ m{<tr><td class="prompt">script type</td></tr>\s*<tr><td>(.*?)</td></tr>}gsi;
 
-    $content =~ m{<tr><td class="prompt">description</td></tr>
-.*?<tr><td>(?<DESCRIPTION>.*?)</td></tr>}gsi;
-    %info = ( %info , %- );
+    ( $info{description} ) = 
+        $content =~ m{<tr><td class="prompt">description</td></tr>
+.*?<tr><td>(.*?)</td></tr>}gsi;
 
+    ( $info{install_details} ) = 
+        $content =~ m{<tr><td class="prompt">install details</td></tr>.*?
+<tr><td>(.*?)</td></tr>}gsi;
 
-    $content =~ m{<tr><td class="prompt">install details</td></tr>.*?
-<tr><td>(?<INSTALL_DETAILS>.*?)</td></tr>}gsi;
-    %info = ( %info , %- );
-
-    $content =~ m{\s*<td class="rowodd" valign="top" nowrap><a href="(?<DOWNLOAD>.*?)">(?<FILENAME>.*?)</a></td>
-\s*<td class="rowodd" valign="top" nowrap><b>(?<VERSION>.*?)</b></td>
-\s*<td class="rowodd" valign="top" nowrap><i>(?<DATE>.*?)</i></td>
-\s*<td class="rowodd" valign="top" nowrap>(?<VIMVER>.*?)</td>
-\s*<td class="rowodd" valign="top"><i><a href="(?<AUTHOR_URL>.*?)">(?<AUTHOR_NAME>.*?)</a></i></td>}gsi;
-    %info = ( %info , %- );
-
-
+    ( $info{download} , $info{filename} , $info{version} , $info{date} , $info{vimver} , $info{author_url} , $info{author_name} ) =
+        $content =~ m{\s*<td class="rowodd" valign="top" nowrap><a href="(.*?)">(.*?)</a></td>
+\s*<td class="rowodd" valign="top" nowrap><b>(.*?)</b></td>
+\s*<td class="rowodd" valign="top" nowrap><i>(.*?)</i></td>
+\s*<td class="rowodd" valign="top" nowrap>(.*?)</td>
+\s*<td class="rowodd" valign="top"><i><a href="(.*?)">(.*?)</a></i></td>}gsi;
 
     map {
-            $info{$_}->[0] =~ s{<br/?>}{\n}g;
-            $info{$_}->[0] =~ s{</?.+?>}{}g;
-            $info{$_} = $info{$_}->[0];
+            $info{$_} =~ s{<br/?>}{\n}g;
+            $info{$_} =~ s{</?.+?>}{}g;
+            $info{$_} =~ s{\s*$}{}g;
+            $info{$_} =~ s{^\s*}{}g;
     }  keys %info;
     map { $info{$_} = decode_entities( $info{$_} )  }  keys %info;
 
-    $info{AUTHOR_URL} = $base_uri . $info{AUTHOR_URL};
-    $info{DOWNLOAD}   = $base_uri . '/scripts/' . $info{DOWNLOAD};
+    $info{author_url} = $base_uri . $info{author_url};
+    $info{download}   = $base_uri . '/scripts/' . $info{download};
 
     return \%info;
 
