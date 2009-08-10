@@ -14,11 +14,11 @@ Vimana - Vim script manager.
 
 =head1 VERSION
 
-Version 0.071
+Version 0.072
 
 =cut
 
-our $VERSION = '0.071';
+our $VERSION = '0.072';
 
 =head1 DESCRIPTION
 
