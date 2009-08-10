@@ -1,7 +1,7 @@
 #!/usr/bin/env perl 
 use warnings;
 use strict;
-use Test::More tests => 3;
+use Test::More tests => 5;
 use Vimana::VimOnline::Search;
 my $result = Vimana::VimOnline::Search->fetch(
     keyword => '',
@@ -11,4 +11,11 @@ my $result = Vimana::VimOnline::Search->fetch(
 );
 ok( $result );
 is( ref $result , 'HASH' );
-is( scalar keys %$result  , 20 )
+is( scalar keys %$result  , 20 );
+
+
+my ($name , $info) = each %$result;
+require Vimana::VimOnline::ScriptPage;
+my $script_info = Vimana::VimOnline::ScriptPage->fetch(  $info->{script_id}  ) ;
+ok( $script_info );
+is( ref $script_info , 'HASH' );
