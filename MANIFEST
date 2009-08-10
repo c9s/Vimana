@@ -16,6 +16,7 @@ inc/Module/Install/WriteAll.pm
 lib/Vimana.pm
 lib/Vimana/AutoInstall.pm
 lib/Vimana/Command.pm
+lib/Vimana/Command/Download.pm
 lib/Vimana/Command/Info.pm
 lib/Vimana/Command/Install.pm
 lib/Vimana/Command/Search.pm
@@ -37,3 +38,4 @@ plan
 README
 t/00-install.t
 t/00-load.t
+t/00-update.t
