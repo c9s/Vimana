@@ -21,6 +21,7 @@ lib/Vimana/Command/Info.pm
 lib/Vimana/Command/Install.pm
 lib/Vimana/Command/Search.pm
 lib/Vimana/Command/Update.pm
+lib/Vimana/Command/Upgrade.pm
 lib/Vimana/Index.pm
 lib/Vimana/Logger.pm
 lib/Vimana/Manual.pm
