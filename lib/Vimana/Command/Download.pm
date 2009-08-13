@@ -33,8 +33,8 @@ sub run {
 
     my $dir = '/tmp' || tempdir( DIR => '/tmp' );
 
-    my $url = $page->{DOWNLOAD};
-    my $filename = $page->{FILENAME};
+    my $url = $page->{download};
+    my $filename = $page->{filename};
 
     $logger->info("Download from: $url");;
 

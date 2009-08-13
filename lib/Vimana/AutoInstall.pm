@@ -71,6 +71,9 @@ sub run {
         return $self->install_to( 'indent' )
             if $pkg->script_is('indent');
 
+        return $self->install_to( 'ftplugin' )
+            if $pkg->script_is('ftplugin');
+
         return 0;
     }
 }
@@ -83,6 +86,7 @@ sub install_to {
     my ( $self , $dir ) = @_;
     my $file = $self->package->file;
     my $target = File::Spec->join( runtime_path(), $dir );
+    $logger->info( "Install $file to $target" );
     my $ret = fcopy( $file => $target );
     !$ret ? 
         $logger->error( $! ) :
