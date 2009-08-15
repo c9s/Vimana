@@ -69,7 +69,7 @@ sub fetch {
     my %param = @_;
 
     my $cache = Vimana->index->cache();
-    $cache->clear();
+    # $cache->clear();
 
     my $uri = $class->build_search_uri( %param );
     my $content = $cache->get( $uri );
