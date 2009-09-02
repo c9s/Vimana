@@ -4,8 +4,8 @@ use warnings;
 
 use Vimana::Util;
 use Vimana::Logger;
-use Moose;
-has package => ( is => 'rw' , isa => 'Vimana::PackageFile' );
+use base qw/Class::Accessor::Fast/;
+__PACKAGE__->mk_accessors( qw(package) );
 
 sub run {
     my $self = shift;

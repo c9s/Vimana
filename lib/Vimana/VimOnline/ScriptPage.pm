@@ -77,6 +77,10 @@ INFO
 sub parse {
     my ( $class , $content ) = @_;
 
+    use Encode qw(decode);
+    $content = decode('iso-8859-1' , $content );
+    # map { $info{$_} = decode( 'iso-8859-1' ,  $info{$_} )  }  keys %info;
+
     my %info = ();
     ( $info{title} ) = 
         $content =~ m{<title>(.*?)\s:\svim online</title>}gsi;
@@ -102,12 +106,15 @@ sub parse {
 \s*<td class="rowodd" valign="top" nowrap>(.*?)</td>
 \s*<td class="rowodd" valign="top"><i><a href="(.*?)">(.*?)</a></i></td>}gsi;
 
+
     map {
             $info{$_} =~ s{<br/?>}{\n}g;
             $info{$_} =~ s{</?.+?>}{}g;
             $info{$_} =~ s{\s*$}{}g;
             $info{$_} =~ s{^\s*}{}g;
     }  keys %info;
+
+
     map { $info{$_} = decode_entities( $info{$_} )  }  keys %info;
 
     $info{author_url} = $base_uri . $info{author_url};

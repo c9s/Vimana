@@ -1,6 +1,7 @@
 package Vimana::VimOnline::Search;
 use strict;
 use warnings;
+use utf8;
 require LWP::UserAgent;
 my $last_pos;
 
@@ -69,7 +70,7 @@ sub fetch {
     my %param = @_;
 
     my $cache = Vimana->index->cache();
-    # $cache->clear();
+    $cache->clear();
 
     my $uri = $class->build_search_uri( %param );
     my $content = $cache->get( $uri );
@@ -77,8 +78,11 @@ sub fetch {
         my $ua = LWP::UserAgent->new;
         my $response = $ua->get( $uri );
         # XXX: catch exception 
+
         die 'page query failed ' unless ($response->is_success);
+
         $content = $response->decoded_content;
+
 
         $cache->set( $uri , $content );
         

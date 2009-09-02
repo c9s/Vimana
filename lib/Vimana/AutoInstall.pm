@@ -12,11 +12,9 @@ use File::Type;
 use File::Temp qw(tempdir);
 use Vimana::Logger;
 use Vimana::Util;
+use base qw/Class::Accessor::Fast/;
+__PACKAGE__->mk_accessors( qw(package options) );
 
-use Moose;
-
-has 'package' => ( is => 'rw', isa => 'Vimana::PackageFile' );
-has 'options' => ( is => 'rw' , isa => 'HashRef' );
 
 $| = 1;
 

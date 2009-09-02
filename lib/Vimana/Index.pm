@@ -3,11 +3,10 @@ use warnings;
 use strict;
 
 use Cache::File;
-use Moose;
 use Storable;
 use Vimana::Logger;
-
-has cache => ( is => 'rw' , isa => 'Cache::File' );
+use base qw/Class::Accessor::Fast/;
+__PACKAGE__->mk_accessors( qw(cache) );
 
 sub init {
     my $self = shift;
