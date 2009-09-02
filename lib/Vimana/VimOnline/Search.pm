@@ -83,9 +83,7 @@ sub fetch {
 
         $content = $response->decoded_content;
 
-
-        $cache->set( $uri , $content );
-        
+        $cache->set( "$uri" , $content );
     }
     return $class->parse( $content );
 }
