@@ -1,6 +1,7 @@
 #!/usr/bin/env perl 
 use warnings;
 use strict;
+use lib 'lib';
 use Test::More tests => 16;
 use Vimana::VimOnline::Search;
 my $result = Vimana::VimOnline::Search->fetch(
