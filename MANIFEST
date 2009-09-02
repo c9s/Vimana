@@ -41,3 +41,4 @@ t/00-commands.t
 t/00-install.t
 t/00-load.t
 t/00-update.t
+t/01-package.t
