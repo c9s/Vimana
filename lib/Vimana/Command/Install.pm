@@ -79,7 +79,7 @@ DONE:
         # if it's vimball, install it
         if( $pkgfile->is_text() and $pkgfile->is_vimball() ) {
             $logger->info("Found Vimball File");
-            my $install = Vimana::VimballInstall->new( package => $pkgfile );
+            my $install = Vimana::VimballInstall->new({ package => $pkgfile });
             $install->run();
             last DONE;
         }

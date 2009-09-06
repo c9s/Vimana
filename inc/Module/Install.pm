@@ -17,10 +17,12 @@ package Module::Install;
 #     3. The ./inc/ version of Module::Install loads
 # }
 
-use 5.005;
+BEGIN {
+	require 5.004;
+}
 use strict 'vars';
 
-use vars qw{$VERSION $MAIN};
+use vars qw{$VERSION};
 BEGIN {
 	# All Module::Install core packages now require synchronised versions.
 	# This will be used to ensure we don't accidentally load old or
@@ -28,10 +30,7 @@ BEGIN {
 	# This is not enforced yet, but will be some time in the next few
 	# releases once we can make sure it won't clash with custom
 	# Module::Install extensions.
-	$VERSION = '0.90';
-
-	# Storage for the pseudo-singleton
-	$MAIN    = undef;
+	$VERSION = '0.80';
 
 	*inc::Module::Install::VERSION = *VERSION;
 	@inc::Module::Install::ISA     = __PACKAGE__;
@@ -70,26 +69,15 @@ END_DIE
 # again. This is bad. Rather than taking action to touch it (which
 # is unreliable on some platforms and requires write permissions)
 # for now we should catch this and refuse to run.
-if ( -f $0 ) {
-	my $s = (stat($0))[9];
+if ( -f $0 and (stat($0))[9] > time ) { die <<"END_DIE" }
 
-	# If the modification time is only slightly in the future,
-	# sleep briefly to remove the problem.
-	my $a = $s - time;
-	if ( $a > 0 and $a < 5 ) { sleep 5 }
-
-	# Too far in the future, throw an error.
-	my $t = time;
-	if ( $s > $t ) { die <<"END_DIE" }
-
-Your installer $0 has a modification time in the future ($s > $t).
+Your installer $0 has a modification time in the future.
 
 This is known to create infinite loops in make.
 
 Please correct this, then run $0 again.
 
 END_DIE
-}
 
 
 
@@ -133,22 +121,14 @@ sub autoload {
 	$sym->{$cwd} = sub {
 		my $pwd = Cwd::cwd();
 		if ( my $code = $sym->{$pwd} ) {
-			# Delegate back to parent dirs
+			# delegate back to parent dirs
 			goto &$code unless $cwd eq $pwd;
 		}
 		$$sym =~ /([^:]+)$/ or die "Cannot autoload $who - $sym";
-		my $method = $1;
-		if ( uc($method) eq $method ) {
-			# Do nothing
-			return;
-		} elsif ( $method =~ /^_/ and $self->can($method) ) {
-			# Dispatch to the root M:I class
-			return $self->$method(@_);
+		unless ( uc($1) eq $1 ) {
+			unshift @_, ( $self, $1 );
+			goto &{$self->can('call')};
 		}
-
-		# Dispatch to the appropriate plugin
-		unshift @_, ( $self, $1 );
-		goto &{$self->can('call')};
 	};
 }
 
@@ -173,9 +153,6 @@ sub import {
 	delete $INC{"$self->{file}"};
 	delete $INC{"$self->{path}.pm"};
 
-	# Save to the singleton
-	$MAIN = $self;
-
 	return 1;
 }
 
@@ -189,7 +166,8 @@ sub preload {
 
 	my @exts = @{$self->{extensions}};
 	unless ( @exts ) {
-		@exts = $self->{admin}->load_all_extensions;
+		my $admin = $self->{admin};
+		@exts = $admin->load_all_extensions;
 	}
 
 	my %seen;
@@ -272,7 +250,7 @@ END_DIE
 sub load_extensions {
 	my ($self, $path, $top) = @_;
 
-	unless ( grep { ! ref $_ and lc $_ eq lc $self->{prefix} } @INC ) {
+	unless ( grep { !ref $_ and lc $_ eq lc $self->{prefix} } @INC ) {
 		unshift @INC, $self->{prefix};
 	}
 
@@ -336,7 +314,7 @@ sub find_extensions {
 
 
 #####################################################################
-# Common Utility Functions
+# Utility Functions
 
 sub _caller {
 	my $depth = 0;
@@ -350,68 +328,29 @@ sub _caller {
 
 sub _read {
 	local *FH;
-	if ( $] >= 5.006 ) {
-		open( FH, '<', $_[0] ) or die "open($_[0]): $!";
-	} else {
-		open( FH, "< $_[0]"  ) or die "open($_[0]): $!";
-	}
-	my $string = do { local $/; <FH> };
+	open FH, "< $_[0]" or die "open($_[0]): $!";
+	my $str = do { local $/; <FH> };
 	close FH or die "close($_[0]): $!";
-	return $string;
-}
-
-sub _readperl {
-	my $string = Module::Install::_read($_[0]);
-	$string =~ s/(?:\015{1,2}\012|\015|\012)/\n/sg;
-	$string =~ s/(\n)\n*__(?:DATA|END)__\b.*\z/$1/s;
-	$string =~ s/\n\n=\w+.+?\n\n=cut\b.+?\n+/\n\n/sg;
-	return $string;
-}
-
-sub _readpod {
-	my $string = Module::Install::_read($_[0]);
-	$string =~ s/(?:\015{1,2}\012|\015|\012)/\n/sg;
-	return $string if $_[0] =~ /\.pod\z/;
-	$string =~ s/(^|\n=cut\b.+?\n+)[^=\s].+?\n(\n=\w+|\z)/$1$2/sg;
-	$string =~ s/\n*=pod\b[^\n]*\n+/\n\n/sg;
-	$string =~ s/\n*=cut\b[^\n]*\n+/\n\n/sg;
-	$string =~ s/^\n+//s;
-	return $string;
+	return $str;
 }
 
 sub _write {
 	local *FH;
-	if ( $] >= 5.006 ) {
-		open( FH, '>', $_[0] ) or die "open($_[0]): $!";
-	} else {
-		open( FH, "> $_[0]"  ) or die "open($_[0]): $!";
-	}
-	foreach ( 1 .. $#_ ) {
-		print FH $_[$_] or die "print($_[0]): $!";
-	}
+	open FH, "> $_[0]" or die "open($_[0]): $!";
+	foreach ( 1 .. $#_ ) { print FH $_[$_] or die "print($_[0]): $!" }
 	close FH or die "close($_[0]): $!";
 }
 
 # _version is for processing module versions (eg, 1.03_05) not
 # Perl versions (eg, 5.8.1).
+
 sub _version ($) {
 	my $s = shift || 0;
-	my $d =()= $s =~ /(\.)/g;
-	if ( $d >= 2 ) {
-		# Normalise multipart versions
-		$s =~ s/(\.)(\d{1,3})/sprintf("$1%03d",$2)/eg;
-	}
-	$s =~ s/^(\d+)\.?//;
+	   $s =~ s/^(\d+)\.?//;
 	my $l = $1 || 0;
-	my @v = map {
-		$_ . '0' x (3 - length $_)
-	} $s =~ /(\d{1,3})\D?/g;
-	$l = $l . '.' . join '', @v if @v;
+	my @v = map { $_ . '0' x (3 - length $_) } $s =~ /(\d{1,3})\D?/g;
+	   $l = $l . '.' . join '', @v if @v;
 	return $l + 0;
-}
-
-sub _cmp ($$) {
-	_version($_[0]) <=> _version($_[1]);
 }
 
 # Cloned from Params::Util::_CLASS

@@ -2,13 +2,13 @@
 package Module::Install::AutoInstall;
 
 use strict;
-use Module::Install::Base ();
+use Module::Install::Base;
 
-use vars qw{$VERSION @ISA $ISCORE};
+use vars qw{$VERSION $ISCORE @ISA};
 BEGIN {
-	$VERSION = '0.90';
-	@ISA     = 'Module::Install::Base';
+	$VERSION = '0.80';
 	$ISCORE  = 1;
+	@ISA     = qw{Module::Install::Base};
 }
 
 sub AutoInstall { $_[0] }

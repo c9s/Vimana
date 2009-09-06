@@ -18,9 +18,7 @@ my %FeatureMap = (
 
 # various lexical flags
 my ( @Missing, @Existing,  %DisabledTests, $UnderCPAN,     $HasCPANPLUS );
-my (
-    $Config, $CheckOnly, $SkipInstall, $AcceptDefault, $TestOnly, $AllDeps
-);
+my ( $Config,  $CheckOnly, $SkipInstall,   $AcceptDefault, $TestOnly );
 my ( $PostambleActions, $PostambleUsed );
 
 # See if it's a testing or non-interactive session
@@ -75,9 +73,6 @@ sub _init {
         elsif ( $arg =~ /^--test(?:only)?$/ ) {
             $TestOnly = 1;
         }
-        elsif ( $arg =~ /^--all(?:deps)?$/ ) {
-            $AllDeps = 1;
-        }
     }
 }
 
@@ -119,13 +114,6 @@ sub import {
               grep { /^[^\-]/ or /^-core$/i } keys %{ +{@args} }
         )[0]
     );
-
-    # We want to know if we're under CPAN early to avoid prompting, but
-    # if we aren't going to try and install anything anyway then skip the
-    # check entirely since we don't want to have to load (and configure)
-    # an old CPAN just for a cosmetic message
-
-    $UnderCPAN = _check_lock(1) unless $SkipInstall;
 
     while ( my ( $feature, $modules ) = splice( @args, 0, 2 ) ) {
         my ( @required, @tests, @skiptests );
@@ -175,24 +163,15 @@ sub import {
             }
 
             # XXX: check for conflicts and uninstalls(!) them.
-            my $cur = _load($mod);
-            if (_version_cmp ($cur, $arg) >= 0)
+            if (
+                defined( my $cur = _version_check( _load($mod), $arg ||= 0 ) ) )
             {
                 print "loaded. ($cur" . ( $arg ? " >= $arg" : '' ) . ")\n";
                 push @Existing, $mod => $arg;
                 $DisabledTests{$_} = 1 for map { glob($_) } @skiptests;
             }
             else {
-                if (not defined $cur)   # indeed missing
-                {
-                    print "missing." . ( $arg ? " (would need $arg)" : '' ) . "\n";
-                }
-                else
-                {
-                    # no need to check $arg as _version_cmp ($cur, undef) would satisfy >= above
-                    print "too old. ($cur < $arg)\n";
-                }
-
+                print "missing." . ( $arg ? " (would need $arg)" : '' ) . "\n";
                 push @required, $mod => $arg;
             }
         }
@@ -205,8 +184,7 @@ sub import {
             !$SkipInstall
             and (
                 $CheckOnly
-                or ($mandatory and $UnderCPAN)
-                or $AllDeps
+                or ($mandatory and $ENV{PERL5_CPANPLUS_IS_RUNNING})
                 or _prompt(
                     qq{==> Auto-install the }
                       . ( @required / 2 )
@@ -237,6 +215,8 @@ sub import {
         }
     }
 
+    $UnderCPAN = _check_lock();    # check for $UnderCPAN
+
     if ( @Missing and not( $CheckOnly or $UnderCPAN ) ) {
         require Config;
         print
@@ -255,38 +235,21 @@ sub import {
     *{'main::WriteMakefile'} = \&Write if caller(0) eq 'main';
 }
 
-sub _running_under {
-    my $thing = shift;
-    print <<"END_MESSAGE";
-*** Since we're running under ${thing}, I'll just let it take care
-    of the dependency's installation later.
-END_MESSAGE
-    return 1;
-}
-
 # Check to see if we are currently running under CPAN.pm and/or CPANPLUS;
 # if we are, then we simply let it taking care of our dependencies
 sub _check_lock {
-    return unless @Missing or @_;
-
-    my $cpan_env = $ENV{PERL5_CPAN_IS_RUNNING};
+    return unless @Missing;
 
     if ($ENV{PERL5_CPANPLUS_IS_RUNNING}) {
-        return _running_under($cpan_env ? 'CPAN' : 'CPANPLUS');
+        print <<'END_MESSAGE';
+
+*** Since we're running under CPANPLUS, I'll just let it take care
+    of the dependency's installation later.
+END_MESSAGE
+        return 1;
     }
 
-    require CPAN;
-
-    if ($CPAN::VERSION > '1.89') {
-        if ($cpan_env) {
-            return _running_under('CPAN');
-        }
-        return; # CPAN.pm new enough, don't need to check further
-    }
-
-    # last ditch attempt, this -will- configure CPAN, very sorry
-
-    _load_cpan(1); # force initialize even though it's already loaded
+    _load_cpan();
 
     # Find the CPAN lock-file
     my $lock = MM->catfile( $CPAN::Config->{cpan_home}, ".lock" );
@@ -322,7 +285,7 @@ sub install {
     while ( my ( $pkg, $ver ) = splice( @_, 0, 2 ) ) {
 
         # grep out those already installed
-        if ( _version_cmp( _load($pkg), $ver ) >= 0 ) {
+        if ( defined( _version_check( _load($pkg), $ver ) ) ) {
             push @installed, $pkg;
         }
         else {
@@ -351,7 +314,7 @@ sub install {
         @modules = @newmod;
     }
 
-    if ( _has_cpanplus() and not $ENV{PERL_AUTOINSTALL_PREFER_CPAN} ) {
+    if ( _has_cpanplus() ) {
         _install_cpanplus( \@modules, \@config );
     } else {
         _install_cpan( \@modules, \@config );
@@ -361,7 +324,7 @@ sub install {
 
     # see if we have successfully installed them
     while ( my ( $pkg, $ver ) = splice( @modules, 0, 2 ) ) {
-        if ( _version_cmp( _load($pkg), $ver ) >= 0 ) {
+        if ( defined( _version_check( _load($pkg), $ver ) ) ) {
             push @installed, $pkg;
         }
         elsif ( $args{do_once} and open( FAILED, '>> .#autoinstall.failed' ) ) {
@@ -416,7 +379,7 @@ sub _install_cpanplus {
         my $success;
         my $obj = $modtree->{$pkg};
 
-        if ( $obj and _version_cmp( $obj->{version}, $ver ) >= 0 ) {
+        if ( $obj and defined( _version_check( $obj->{version}, $ver ) ) ) {
             my $pathname = $pkg;
             $pathname =~ s/::/\\W/;
 
@@ -509,7 +472,7 @@ sub _install_cpan {
         my $obj     = CPAN::Shell->expand( Module => $pkg );
         my $success = 0;
 
-        if ( $obj and _version_cmp( $obj->cpan_version, $ver ) >= 0 ) {
+        if ( $obj and defined( _version_check( $obj->cpan_version, $ver ) ) ) {
             my $pathname = $pkg;
             $pathname =~ s/::/\\W/;
 
@@ -573,7 +536,7 @@ sub _update_to {
     my $ver   = shift;
 
     return
-      if _version_cmp( _load($class), $ver ) >= 0;  # no need to upgrade
+      if defined( _version_check( _load($class), $ver ) );  # no need to upgrade
 
     if (
         _prompt( "==> A newer version of $class ($ver) is required. Install?",
@@ -670,7 +633,7 @@ sub _load {
 
 # Load CPAN.pm and it's configuration
 sub _load_cpan {
-    return if $CPAN::VERSION and $CPAN::Config and not @_;
+    return if $CPAN::VERSION;
     require CPAN;
     if ( $CPAN::HandleConfig::VERSION ) {
         # Newer versions of CPAN have a HandleConfig module
@@ -682,11 +645,9 @@ sub _load_cpan {
 }
 
 # compare two versions, either use Sort::Versions or plain comparison
-# return values same as <=>
-sub _version_cmp {
+sub _version_check {
     my ( $cur, $min ) = @_;
-    return -1 unless defined $cur;  # if 0 keep comparing
-    return 1 unless $min;
+    return unless defined $cur;
 
     $cur =~ s/\s+$//;
 
@@ -697,13 +658,16 @@ sub _version_cmp {
             ) {
 
             # use version.pm if it is installed.
-            return version->new($cur) <=> version->new($min);
+            return (
+                ( version->new($cur) >= version->new($min) ) ? $cur : undef );
         }
         elsif ( $Sort::Versions::VERSION or defined( _load('Sort::Versions') ) )
         {
 
             # use Sort::Versions as the sorting algorithm for a.b.c versions
-            return Sort::Versions::versioncmp( $cur, $min );
+            return ( ( Sort::Versions::versioncmp( $cur, $min ) != -1 )
+                ? $cur
+                : undef );
         }
 
         warn "Cannot reliably compare non-decimal formatted versions.\n"
@@ -712,7 +676,7 @@ sub _version_cmp {
 
     # plain comparison
     local $^W = 0;    # shuts off 'not numeric' bugs
-    return $cur <=> $min;
+    return ( $cur >= $min ? $cur : undef );
 }
 
 # nothing; this usage is deprecated.
@@ -743,7 +707,7 @@ sub _make_args {
       if $Config;
 
     $PostambleActions = (
-        ($missing and not $UnderCPAN)
+        $missing
         ? "\$(PERL) $0 --config=$config --installdeps=$missing"
         : "\$(NOECHO) \$(NOOP)"
     );
@@ -783,7 +747,7 @@ sub Write {
 sub postamble {
     $PostambleUsed = 1;
 
-    return <<"END_MAKE";
+    return << ".";
 
 config :: installdeps
 \t\$(NOECHO) \$(NOOP)
@@ -794,7 +758,7 @@ checkdeps ::
 installdeps ::
 \t$PostambleActions
 
-END_MAKE
+.
 
 }
 
@@ -802,4 +766,4 @@ END_MAKE
 
 __END__
 
-#line 1056
+#line 1004
