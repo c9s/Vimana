@@ -11,12 +11,11 @@ Vimana::Record->set_record(
 );
 
 my $recordset = Vimana::Record->get_recordset();
-ok( $recordset );
-is( ref($recordset) , 'HASH' );
+ok( $recordset , 'get record set' );
+is( ref($recordset) , 'HASH' , 'hash' );
 
 my $record = Vimana::Record->get_record( 'test' );
-ok( $record );
+ok( $record , 'get record' );
 is( ref($record) , 'HASH' );
 
-is_deeply( $recordset->{test} , $record );
-
+is_deeply( $recordset->{test} , $record , 'test record' );
