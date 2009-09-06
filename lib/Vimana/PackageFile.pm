@@ -26,9 +26,11 @@ __PACKAGE__->mk_accessors( qw(
 
 =head2 script_is
 
+=head2 download
+
 =head2 preprocess
 
-=head2 download
+=head2 postprocess
 
 =cut
 
@@ -60,6 +62,10 @@ sub download {
 
 
 sub preprocess {
+
+}
+
+sub postprocess {
 
 }
 
