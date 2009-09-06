@@ -11,11 +11,7 @@ __PACKAGE__->mk_accessors( qw(cache) );
 sub init {
     my $self = shift;
     $logger->debug("cache::file init");
-    my $cache = Cache::File->new(
-        cache_root      => $ENV{VIMANA_CACHE_DIR} || '/tmp/vim.get',
-        lock_level      => Cache::File::LOCK_LOCAL(),
-        default_expires => '3 hours'
-    );
+    my $cache = Vimana->cache;
     $logger->debug("cache::file done");
     $self->cache( $cache );
 }

@@ -75,7 +75,7 @@ sub auto_install {
     my %args = @_;
 
     require Vimana::AutoInstall;
-    my $auto = Vimana::AutoInstall->new( package => $self , options => \%args );
+    my $auto = Vimana::AutoInstall->new( { package => $self , options => \%args } );
     return $auto->run();  # dry_run , verbose
 
 }
