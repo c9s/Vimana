@@ -4,7 +4,29 @@ use strict;
 use Vimana::Logger;
 use LWP::Simple qw();
 use base qw/Class::Accessor::Fast/;
-__PACKAGE__->mk_accessors( qw(file url filetype info page_fino archive) );
+__PACKAGE__->mk_accessors( qw(
+    file 
+    url 
+    filetype 
+    info 
+    page_fino 
+    archive
+) );
+
+
+=head1 FUNCTIONS
+
+=head2 is_archive
+
+=head2 is_text
+
+=head2 is_vimball
+
+=head2 script_type
+
+=head2 script_is
+
+=cut
 
 sub is_archive { $_[ 0 ]->filetype =~ m{(x-bzip2|x-gzip|x-gtar|zip|rar|tar)} ? 1 : 0; }
 
@@ -30,6 +52,14 @@ sub download {
     close FH;
 
     return 1;
+}
+
+=head2 preprocess
+
+=cut
+
+sub preprocess {
+
 }
 
 sub detect_filetype { 
@@ -67,6 +97,12 @@ sub has_vimball {
     @files = grep /\.vba$/i , @files;
     return @files if scalar @files;
     return undef;
+}
+
+sub set_record {
+    my $self = shift;
+    my @files;
+    Vimana::Record->set_record(  cname => $package , files => [ $pkgfile ]  );
 }
 
 

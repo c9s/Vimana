@@ -86,6 +86,7 @@ DONE:
 
         # or try to find in port tree
         $logger->info("Check if we can install this package via port file");
+
 #        if( Vimana::PortTree->find( ) ) {
 #
 #
@@ -102,7 +103,7 @@ DONE:
             if( $pkgfile->has_makefile() ) {
                 
                 $pkgfile->makefile_install();
-                last DONE if 0;
+                last DONE if 0;  # XXX:
             }
 
         }
