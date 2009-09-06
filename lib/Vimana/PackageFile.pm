@@ -26,6 +26,10 @@ __PACKAGE__->mk_accessors( qw(
 
 =head2 script_is
 
+=head2 preprocess
+
+=head2 download
+
 =cut
 
 sub is_archive { $_[ 0 ]->filetype =~ m{(x-bzip2|x-gzip|x-gtar|zip|rar|tar)} ? 1 : 0; }
@@ -54,9 +58,6 @@ sub download {
     return 1;
 }
 
-=head2 preprocess
-
-=cut
 
 sub preprocess {
 
