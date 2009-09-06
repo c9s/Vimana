@@ -1,5 +1,8 @@
 Revision history for Vimana
 
+0.1
+        * support install record
+
 0.075   
         * remove Moose dependency
 
