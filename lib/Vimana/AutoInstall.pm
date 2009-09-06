@@ -22,7 +22,7 @@ $| = 1;
 
 =head1 NAME
 
-Vimna::AutoInstall
+Vimana::AutoInstall
 
 =head1 DESCRIPTION
 
