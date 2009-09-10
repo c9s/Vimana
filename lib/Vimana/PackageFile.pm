@@ -70,6 +70,7 @@ sub preprocess {
     }
 }
 
+# XXX: DESTROY
 sub postprocess {
 
 
