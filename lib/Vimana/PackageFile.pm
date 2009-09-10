@@ -5,6 +5,7 @@ use Vimana::Logger;
 use LWP::Simple qw();
 use base qw/Class::Accessor::Fast/;
 __PACKAGE__->mk_accessors( qw(
+    cname
     file 
     url 
     filetype 

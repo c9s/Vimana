@@ -26,10 +26,9 @@ sub options {
 
 
 sub run {
-    my ( $self, $package ) = @_;
+    my ( $self, $package ) = @_;  # $package is a canonicalized name
 
-    my $index = Vimana->index();
-    my $info = $index->find_package( $package );
+    my $info = Vimana->index->find_package( $package );
 
     unless( $info ) {
         $logger->error("Can not found package: $package");
@@ -47,6 +46,7 @@ sub run {
     $logger->info("Download from: $url");;
 
     my $pkgfile = Vimana::PackageFile->new( {
+            cname      => $package,
             file      => $target,
             url       => $url,
             info      => $info,

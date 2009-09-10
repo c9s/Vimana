@@ -4,11 +4,21 @@ use strict;
 use Vimana;
 use Storable;
 
+=head1 FUNCTIONS
+
+=head2 get_all 
+
+=cut
+
 sub get_all {
     my $c = Vimana->cache->get( 'record' ) ;
     return Storable::thaw( $c ) if $c;
     return { };
 }
+
+=head2 set_all
+
+=cut
 
 sub set_all {
     my $class = shift;
@@ -23,6 +33,15 @@ sub get {
     return ;
 }
 
+=head2 set %PARAM
+
+cname : Canonicalized name
+
+    cname => String
+    files => ArrayRef
+
+=cut
+
 sub set {
     my $class = shift;
     my %args = @_;
@@ -30,6 +49,8 @@ sub set {
     $recordset->{ $args{cname} } = {
         cname => $args{cname} , 
         files => [ ],
+        type  => undef,
+        install_date  => undef,
         %args,
     };
     $class->set_recordset( $recordset );
