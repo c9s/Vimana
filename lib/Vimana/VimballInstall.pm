@@ -19,6 +19,9 @@ sub install_vimballs {
     for my $vimball ( @files ) {
         $logger->info( "Installing Vimball: $vimball" );
         system( qq|$vim $vimball -c ":so %" -c q|);
+
+
+
     }
 }
 

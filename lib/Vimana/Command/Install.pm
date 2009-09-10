@@ -47,10 +47,10 @@ sub run {
     $logger->info("Download from: $url");;
 
     my $pkgfile = Vimana::PackageFile->new( {
-        file => $target,
-        url => $url,
-        info => $info ,
-        page_info => $page ,
+            file      => $target,
+            url       => $url,
+            info      => $info,
+            page_info => $page,
     } );
 
     return unless $pkgfile->download();
