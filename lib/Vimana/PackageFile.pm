@@ -63,10 +63,15 @@ sub download {
 
 
 sub preprocess {
-
+    my $self = shift;
+    if( $self->is_archive ) {
+        $self->archive( Archive::Any->new( $self->file ) );
+        die "Can not read archive file: @{[ $self->file ]}" unless $self->archive;
+    }
 }
 
 sub postprocess {
+
 
 }
 
@@ -76,10 +81,6 @@ sub detect_filetype {
         Vimana::Util::get_mine_type( $self->file )
     );
 
-    if( $self->is_archive ) {
-        $self->archive( Archive::Any->new( $self->file ) );
-        die unless $self->archive;
-    }
 }
 
 sub archive_files {

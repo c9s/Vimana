@@ -58,6 +58,7 @@ sub run {
     $logger->info("Stored at: $target");
 
     $pkgfile->detect_filetype();
+    $pkgfile->preprocess( );
 
 =pod
     4. guess what to do
