@@ -82,6 +82,12 @@ sub detect_filetype {
     }
 }
 
+sub archive_files {
+    my $self = shift;
+    my @files = $self->archive->files;
+    return \@files;
+}
+
 sub content {
     my $self = shift;
     local $/;

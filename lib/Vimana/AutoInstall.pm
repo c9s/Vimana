@@ -12,6 +12,7 @@ use File::Type;
 use File::Temp qw(tempdir);
 use Vimana::Logger;
 use Vimana::Util;
+use DateTime;
 use base qw/Class::Accessor::Fast/;
 __PACKAGE__->mk_accessors( qw(package options) );
 
@@ -49,6 +50,14 @@ sub run {
 
     if( $pkg->is_archive() ) {
         $logger->info('Archive type file');
+        Vimana::Record->set(
+            cname => $pkg->cname,
+            install_date => DateTime->now,
+            type  => 'archive',
+            files => [
+
+            ],
+        );
         return $self->install_from_archive;
     }
     elsif( $pkg->is_text() ) {
@@ -74,6 +83,7 @@ sub run {
 
         return 0;
     }
+
 }
 
 =head2 install_to 
