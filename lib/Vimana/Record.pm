@@ -42,6 +42,7 @@ cname : Canonicalized name
 
 =cut
 
+# XXX: check if cname conflicts
 sub set {
     my $class = shift;
     my %args = @_;
