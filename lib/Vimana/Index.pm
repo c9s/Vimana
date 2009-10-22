@@ -90,8 +90,23 @@ sub update {
 
 =head2 read_index 
 
+read_index return package informations , which is a hashref
 
+    {
+        plugin_name => {
+            plugin_name => 
+            script_id   => 
+            type        => 
+            description => 
+        },
 
+        plugin_name => {
+            plugin_name => 
+            script_id   => 
+            type        => 
+            description => 
+        },
+    }
 
 =cut
 
