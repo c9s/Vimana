@@ -117,7 +117,7 @@ sub has_vimball {
 
 sub set_record {
     my ( $self , $package , $pkgfiles ) =  @_;
-    Vimana::Record->set_record(  cname => $package , files => [ $pkgfiles ]  );
+    # Vimana::Record->set_record(  cname => $package , files => [ $pkgfiles ]  );
 }
 
 sub auto_install {

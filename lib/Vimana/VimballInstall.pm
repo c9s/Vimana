@@ -22,12 +22,12 @@ sub install_vimballs {
         $logger->info( "Installing Vimball: $vimball" );
         system( qq|$vim $vimball -c ":so %" -c q|);
 
-        Vimana::Record->set(
-            cname => $self->package->cname,
-            type  => 'vimball',
-            source => $vimball,
-            install_date => DateTime->now,
-        );
+#        Vimana::Record->set(
+#            cname => $self->package->cname,
+#            type  => 'vimball',
+#            source => $vimball,
+#            install_date => DateTime->now,
+#        );
     }
 }
 
