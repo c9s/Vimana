@@ -111,7 +111,7 @@ sub install_from_archive {
         }
     }
 
-    my $out = Vimana::tmpdir();
+    my $out = Vimana::Util::tempdir();
     rmtree [ $out ] if -e $out;
     mkpath [ $out ];
     $logger->info("Temporary directory created: $out") if $options->{verbose};

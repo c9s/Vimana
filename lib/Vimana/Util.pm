@@ -14,6 +14,10 @@ sub canonical_script_name {
     $name;
 }
 
+sub tempdir {
+    return  "/tmp/vimana-" . join '',map { [ 'a' .. 'z' ]->[ int rand(26) ] }  1 .. 6;
+}
+
 sub get_mine_type {
     my $type = File::Type->new->checktype_filename( $_[ 0 ] );
     die "can not found file type from @{[ $_[0] ]}" unless $type;
