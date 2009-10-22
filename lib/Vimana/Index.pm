@@ -40,7 +40,7 @@ sub find_package {
 use File::Path;
 
 sub index_file {
-    my $dir = "/usr/local/share/vimana";
+    my $dir = $ENV{HOME} . "/.vimana";
     File::Path::mkpath [ $dir ];
     return $dir . "/index";
 }
