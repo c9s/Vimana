@@ -9,7 +9,6 @@ use File::Path qw'mkpath rmtree';
 use Archive::Any;
 use File::Find::Rule;
 use File::Type;
-use File::Temp qw(tempdir);
 use Vimana::Logger;
 use Vimana::Util;
 use DateTime;
@@ -94,6 +93,7 @@ sub install_to {
     $ret;
 }
 
+
 =head2 install_from_archive 
 
 =cut
@@ -111,7 +111,7 @@ sub install_from_archive {
         }
     }
 
-    my $out = tempdir( CLEANUP => 1 );
+    my $out = Vimana::tmpdir();
     rmtree [ $out ] if -e $out;
     mkpath [ $out ];
     $logger->info("Temporary directory created: $out") if $options->{verbose};

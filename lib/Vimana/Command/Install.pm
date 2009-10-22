@@ -4,7 +4,6 @@ package Vimana::Command::Install;
 use base qw(App::CLI::Command);
 use URI;
 use LWP::Simple qw();
-use File::Temp qw(tempdir);
 
 require Vimana::VimOnline;
 require Vimana::VimOnline::ScriptPage;
@@ -37,7 +36,7 @@ sub run {
 
     my $page = Vimana::VimOnline::ScriptPage->fetch( $info->{script_id} );
 
-    my $dir = '/tmp' || tempdir( DIR => '/tmp' );
+    my $dir = '/tmp' || Vimana::tmpdir();
 
     my $url = $page->{download};
     my $filename = $page->{filename};

@@ -72,6 +72,10 @@ sub index {
     return $INDEX;
 }
 
+sub tmpdir {
+    return  "/tmp/vimana-" . join '',map { [ 'a' .. 'z' ]->[ int rand(26) ] }  1 .. 6;
+}
+
 
 =head1 AUTHOR
 

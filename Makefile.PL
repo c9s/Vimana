@@ -18,7 +18,6 @@ requires
     'File::Find::Rule'      => 0.30,
     'File::Path'            => 2.07,
     'File::Spec'            => 0,
-    'File::Temp'            => 0,
     'Getopt::Long'          => 0,
     'LWP::UserAgent'        => 0,
     'LWP::Simple'           => 0,
