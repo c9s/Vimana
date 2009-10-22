@@ -54,7 +54,10 @@ sub download {
         return 0;
     }
 
-    open FH , ">" , $self->file or die $@;
+    unlink $self->file if -e $self->file;
+
+    print "Save to " . $self->file . "\n";
+    open FH,">",$self->file or die $@;
     print FH $file_content;
     close FH;
 
