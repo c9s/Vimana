@@ -80,7 +80,13 @@ sub update {
         print "\rupdating index: ";
         print $cnt++;
 
+
         my $v = $plugins->{ $plugin_name };
+
+        chomp $v->{summary}->{text};
+        $v->{summary}->{text} =~ s/^\s*//g;
+        $v->{summary}->{text} =~ s/[\n\r\s]*$//g;
+
         print $fh join("\t", $plugin_name , $v->{script_id} , $v->{type} , $v->{summary}->{text} )."\n";
     }
     close $fh;
@@ -114,15 +120,18 @@ sub read_index {
     my $self = shift;
     my $index_file = $self->index_file;
 
+    return undef unless -e $index_file;
+
     my $result;
     open my $fh , "<" , $index_file or die $@;
     while( my $line = <$fh> ) {
+        chomp $line;
         my ( $plugin_name , $script_id , $type , $description ) = split(/\t/,$line);
 
-        $result->{ $plugin_name } = {
+        $result->{$plugin_name} = {
             plugin_name => $plugin_name,
-            script_id => $script_id ,
-            type => $type,
+            script_id   => $script_id,
+            type        => $type,
             description => $description,
         };
 
