@@ -24,18 +24,21 @@ sub run {
     }
 
     my $index = Vimana->index();
-    unless( $index ) {
-        print STDERR "Can not found index.\n";
-        my $plugins = Vimana::VimOnline::Search->fetch(
+    my $plugins = $index->read_index();
+
+    unless( $plugins ) {
+        print "Can not found index. Fetching..\n";
+        my $result = Vimana::VimOnline::Search->fetch(
                 keyword => '',
                 show_me => 3000,
                 order_by => 'creation_date',
                 direction => 'ascending'
         );
-        $index->update( $plugins );
+        $index->update( $result );
+        $plugins = $index->read_index();
+        print "Done\n";
     }
 
-    my $plugins = $index->read_index();
 
     my $keyword = $keywords[0]; # FIXME:
     my @result = map { ( $_->{description} =~ /$keyword/ or $_->{plugin_name} =~ /$keyword/ ) ? $_ : ()  } values %$plugins;
