@@ -20,8 +20,8 @@ sub find_package_like {
     my ( $self, $findname ) = @_;
     my $index = $self->read_index();
     while( my ( $pkg_name , $info ) = each %$index ) {
-        if ( $info->{script}->{text} =~ $findname  ) {
-            warn " '@{[ $info->{script}->{text} ]}' looks like '$findname'.\n" ;
+        if ( $pkg_name =~ $findname  ) {
+            # XXX: should return LIST
             return $info ;
         }
     }
