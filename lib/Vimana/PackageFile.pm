@@ -54,7 +54,7 @@ sub download {
         return 0;
     }
 
-    open FH , ">" , $self->file or die 'Can not create file handle';
+    open FH , ">" , $self->file or die $@;
     print FH $file_content;
     close FH;
 
