@@ -19,7 +19,6 @@ requires
     'File::Path'            => 2.07,
     'File::Spec'            => 0,
     'File::Temp'            => 0,
-    'Storable'              => 0,
     'Getopt::Long'          => 0,
     'LWP::UserAgent'        => 0,
     'LWP::Simple'           => 0,
