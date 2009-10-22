@@ -26,22 +26,16 @@ sub fetch_index {
     );
 }
 
+
 sub run {
     my ($self, @args ) = @_;
-
-    $logger->info("Updating....");
+    $logger->info("Fetching...");
     my $results = fetch_index();
-    my $cnt = scalar keys %$results;
 
     my $index = Vimana->index();
     $index->update( $results );
-    $logger->info("Index updated: $cnt items");
 
-
-    # check installed packages , calcuate outdated items
-
-
-
+    # XXX: check installed packages , calcuate outdated items
 }
 
 

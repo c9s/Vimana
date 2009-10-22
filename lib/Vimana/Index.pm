@@ -3,7 +3,6 @@ use warnings;
 use strict;
 
 use Cache::File;
-use Storable;
 use Vimana::Logger;
 use base qw/Class::Accessor::Fast/;
 __PACKAGE__->mk_accessors( qw(cache) );
@@ -38,14 +37,54 @@ sub find_package {
     return defined $index->{ $cname }  ? $index->{ $cname } : undef;
 }
 
+use File::Path;
+
+sub index_file {
+    my $dir = "/usr/local/share/vimana";
+    File::Path::mkpath [ $dir ];
+    return $dir . "/index";
+}
+
+=head2 update( $plugins )
+
+update index . $plugins is a hashref contains :
+
+    'rsl.vim' => {
+        'downloads' => '408',
+        'script'    => {
+            'link' => 'script.php?script_id=1297',
+            'text' => 'rsl.vim'
+        },
+        'summary' => {
+            'link' => 'script.php?script_id=1297',
+            'text' => 'Basic syntax for RSL (droidarena.net).'
+        },
+        'type'      => 'syntax',
+        'script_id' => '1297',
+        'rating'    => '2'
+    }
+
+=cut
 
 sub update {
-    my ($self, $results ) = @_;
-    $logger->debug('freezing...');
-    my $f = Storable::freeze( $results );
-    $logger->debug('done');
-    die unless $f;
-    $self->cache->set( 'index' , $f );
+    my ($self, $plugins ) = @_;
+
+    my $index_file = $self->index_file;
+
+    # merge results
+    # [ name | script_id | type | description ]
+    $|++;
+    my $cnt = 0;
+    open my $fh , ">" , $index_file or die $@;
+    for my $plugin_name ( keys %$plugins ) {
+        print "\rupdating index: ";
+        print $cnt++;
+
+        my $v = $plugins->{ $plugin_name };
+        print $fh join("\t", $plugin_name , $v->{script_id} , $v->{type} , $v->{summary}->{text} )."\n";
+    }
+    close $fh;
+    print "\nindex updated\n";
 }
 
 sub get {

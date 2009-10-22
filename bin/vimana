@@ -4,6 +4,7 @@ use warnings;
 use Vimana;
 use Vimana::Command;
 
+$|++;
 my $cmd = shift @ARGV;
 my $ret = Vimana::Command->invoke( $cmd, @ARGV );
 
