@@ -18,7 +18,7 @@ sub init {
 
 sub find_package_like {
     my ( $self, $findname ) = @_;
-    my $index = $self->get();
+    my $index = $self->read_index();
     while( my ( $pkg_name , $info ) = each %$index ) {
         if ( $info->{script}->{text} =~ $findname  ) {
             warn " '@{[ $info->{script}->{text} ]}' looks like '$findname'.\n" ;
@@ -31,7 +31,7 @@ sub find_package_like {
 use Vimana::Util;
 sub find_package {
     my ($self, $findname ) = @_;
-    my $index = $self->get();
+    my $index = $self->read_index();
     my $cname = canonical_script_name( $findname );
     $logger->info( "Canonical name: $cname" );
     return defined $index->{ $cname }  ? $index->{ $cname } : undef;
@@ -87,16 +87,38 @@ sub update {
     print "\nindex updated\n";
 }
 
-sub get {
+
+=head2 read_index 
+
+
+
+
+=cut
+
+sub read_index {
     my $self = shift;
-    my $ret = $self->cache->get( 'index' );
-    $logger->debug('thawing...');
-    $ret = Storable::thaw $ret;
-    $logger->debug('done');
-    return $ret if $ret;
-    return undef;
+    my $index_file = $self->index_file;
+
+    my $result;
+    open my $fh , "<" , $index_file or die $@;
+    while( my $line = <$fh> ) {
+        my ( $plugin_name , $script_id , $type , $description ) = split(/\t/,$line);
+
+        $result->{ $plugin_name } = {
+            plugin_name => $plugin_name,
+            script_id => $script_id ,
+            type => $type,
+            description => $description,
+        };
+
+    }
+    close $fh;
+    return $result;
 }
 
-
+sub get {
+    my $self = shift;
+    return $self->read_index();
+}
 
 1;
