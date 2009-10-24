@@ -24,9 +24,19 @@ sub get_mine_type {
     return $type;
 }
 
-use File::Which;
+
+sub which {
+    my $which = shift;
+    my $path = $ENV{PATH};
+    my @paths = split /:/,$path;
+    for ( @paths ) {
+        my $bin = $_ . '/' . $which;
+        return $bin if( -x $bin ) ;
+    }
+}
+
 sub find_vim {
-    return $ENV{VIMPATH} || File::Which::which( 'vim' );
+    return $ENV{VIMPATH} || which('vim');
 }
 
 
