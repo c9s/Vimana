@@ -60,6 +60,10 @@ to install rails.vim package:
 
     $ vimana install rails.vim
 
+to download:
+
+    $ vimana download markdown-syntax.vim
+
 SUPPORT AND DOCUMENTATION
 ==========================
 
