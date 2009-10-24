@@ -41,12 +41,15 @@ sub find {
 
 sub add {
     my ( $class, $info ) = @_;
-
     my $record = $class->load;
 
-    $record->{  $info->{cname}  } = $info;
+    if( defined $record->{ $info->{cname} } ) {
+        return 0;
+    }
 
+    $record->{  $info->{cname}  } = $info;
     $class->save( $record );
+    return $record;
 }
 
 =pod

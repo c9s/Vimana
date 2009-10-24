@@ -1,6 +1,6 @@
 #!/usr/bin/env perl 
 use lib 'lib';
-use Test::More tests => 5;
+use Test::More tests => 8;
 # use Test::More skip_all => "skip";
 use File::Path;
 
@@ -11,21 +11,33 @@ BEGIN {
 
 File::Path::mkpath [ $ENV{VIMANA_BASE} ];
 
-Vimana::Record->add({
+my $ret ;
+$ret = Vimana::Record->add({
     cname => "test.vim",
     files => [ qw(
         plugin/xxx
         plugin/aaa
     )],
 });
+ok( $ret );
 
-Vimana::Record->add({
+$ret = Vimana::Record->add({
     cname => "test2.vim",
     files => [ qw(
         plugin/asdf
         plugin/zcxv
     )],
 });
+ok( $ret );
+
+$ret = Vimana::Record->add({
+    cname => "test2.vim",
+    files => [ qw(
+        plugin/asdf
+        plugin/zcxv
+    )],
+});
+ok( ! $ret );
 
 my $record = Vimana::Record->load();
 ok( $record );
