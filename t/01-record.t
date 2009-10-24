@@ -1,22 +1,31 @@
 use lib 'lib';
-# use Test::More tests => 6;
-use Test::More skip_all => "skip";
+use Test::More tests => 3;
+# use Test::More skip_all => "skip";
+use File::Path;
 
 BEGIN {
     use_ok('Vimana::Record');
+    $ENV{VIMANA_BASE} = '/tmp/vimana_test'
 }
 
-Vimana::Record->set(
-    cname => 'test',
-    files => [ qw(123 foo bar) ],
-);
+File::Path::mkpath [ $ENV{VIMANA_BASE} ];
 
-my $recordset = Vimana::Record->get_all();
-ok( $recordset , 'get record set' );
-is( ref($recordset) , 'HASH' , 'hash' );
+Vimana::Record->add({
+    cname => "test.vim",
+    files => [ qw(
+        plugin/xxx
+        plugin/aaa
+    )],
+});
 
-my $record = Vimana::Record->get( 'test' );
-ok( $record , 'get record' );
-is( ref($record) , 'HASH' );
 
-is_deeply( $recordset->{test} , $record , 'test record' );
+my $record = Vimana::Record->load();
+ok( $record );
+
+is_deeply( $record, {
+        'test.vim' => {
+            'files' => [ 'plugin/xxx', 'plugin/aaa' ],
+            'cname' => 'test.vim'
+        } } );
+
+File::Path::rmtree [ $ENV{VIMANA_BASE} ];
