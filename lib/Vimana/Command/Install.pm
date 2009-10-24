@@ -117,7 +117,7 @@ DONE:
             my $files = $pkgfile->archive_files();
             Vimana::Record->add( {
                 cname => $pkgfile->cname,
-                url  => $pkgfile->name,
+                url  => $pkgfile->url,
                 filetype => $pkgfile->filetype,
                 files => $files,
             });
