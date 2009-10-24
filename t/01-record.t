@@ -1,5 +1,5 @@
 use lib 'lib';
-use Test::More tests => 3;
+use Test::More tests => 4;
 # use Test::More skip_all => "skip";
 use File::Path;
 
@@ -27,5 +27,8 @@ is_deeply( $record, {
             'files' => [ 'plugin/xxx', 'plugin/aaa' ],
             'cname' => 'test.vim'
         } } );
+
+my $find = Vimana::Record->find('test.vim');
+ok( $find );
 
 File::Path::rmtree [ $ENV{VIMANA_BASE} ];

@@ -10,7 +10,9 @@ BEGIN {
     }
 }
 
+sub record_dir { return ( $ENV{VIMANA_BASE} || $ENV{HOME} ) . '/.vimana'; }
 
+sub record_file {  $_[0]->record_dir . '/index' }
 
 sub load {
     my $class = shift;
@@ -31,9 +33,11 @@ sub save {
 }
 
 
-sub record_dir { return ( $ENV{VIMANA_BASE} || $ENV{HOME} ) . '/.vimana'; }
-
-sub record_file {  $_[0]->record_dir . '/index' }
+sub find {
+    my ($class,$cname) = @_;
+    my $record = $class->load();
+    return $record->{$cname} if defined $record->{ $cname };
+}
 
 sub add {
     my ( $class, $info ) = @_;

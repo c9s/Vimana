@@ -113,7 +113,6 @@ DONE:
             return 0;
         }
 
-
         if( $pkgfile->is_archive() ) {
             my $files = $pkgfile->archive_files();
             Vimana::Record->add( {
@@ -123,8 +122,6 @@ DONE:
                 files => $files,
             });
         }
-
-
     }
 
 
