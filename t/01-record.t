@@ -1,5 +1,6 @@
+#!/usr/bin/env perl 
 use lib 'lib';
-use Test::More tests => 4;
+use Test::More tests => 5;
 # use Test::More skip_all => "skip";
 use File::Path;
 
@@ -18,6 +19,13 @@ Vimana::Record->add({
     )],
 });
 
+Vimana::Record->add({
+    cname => "test2.vim",
+    files => [ qw(
+        plugin/asdf
+        plugin/zcxv
+    )],
+});
 
 my $record = Vimana::Record->load();
 ok( $record );
@@ -26,9 +34,19 @@ is_deeply( $record, {
         'test.vim' => {
             'files' => [ 'plugin/xxx', 'plugin/aaa' ],
             'cname' => 'test.vim'
-        } } );
-
+        },
+        'test2.vim' => {
+            cname => "test2.vim",
+            files => [ qw(
+                plugin/asdf
+                plugin/zcxv
+            )],
+        }
+    } );
 my $find = Vimana::Record->find('test.vim');
+ok( $find );
+
+my $find = Vimana::Record->find('test2.vim');
 ok( $find );
 
 File::Path::rmtree [ $ENV{VIMANA_BASE} ];
