@@ -68,6 +68,10 @@ perldoc command.
 
     perldoc Vimana
 
+IRC Channel:
+
+    #vimana on irc.freenode.net
+
 You can also look for information at:
 
     RT, CPAN's request tracker
