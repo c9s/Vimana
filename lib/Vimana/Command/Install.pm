@@ -7,6 +7,7 @@ use LWP::Simple qw();
 
 require Vimana::VimOnline;
 require Vimana::VimOnline::ScriptPage;
+use Vimana::Record;
 use Vimana::AutoInstall;
 use Vimana::VimballInstall;
 use Vimana::Logger;
