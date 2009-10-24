@@ -27,6 +27,11 @@ sub options {
 sub run {
     my ( $self, $package ) = @_;  # $package is a canonicalized name
 
+    # XXX: check if we've installed this package
+
+
+    # XXX: check if package files conflict
+
     my $info = Vimana->index->find_package( $package );
 
     unless( $info ) {
