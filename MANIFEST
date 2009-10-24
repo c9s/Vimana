@@ -43,3 +43,4 @@ t/00-load.t
 t/00-update.t
 t/01-package.t
 t/01-record.t
+t/00-path.t
