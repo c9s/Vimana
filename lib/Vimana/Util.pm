@@ -3,6 +3,7 @@ use warnings;
 use strict;
 use base qw(Exporter::Lite);
 our @EXPORT = qw(canonical_script_name runtime_path find_vim);
+our @EXPORT_OK = qw(findbin find_vim tempdir);
 
 sub canonical_script_name {
     my $name = shift;
@@ -24,8 +25,7 @@ sub get_mine_type {
     return $type;
 }
 
-
-sub which {
+sub findbin {
     my $which = shift;
     my $path = $ENV{PATH};
     my @paths = split /:/,$path;
@@ -36,7 +36,7 @@ sub which {
 }
 
 sub find_vim {
-    return $ENV{VIMPATH} || which('vim');
+    return $ENV{VIMPATH} || findbin('vim');
 }
 
 
