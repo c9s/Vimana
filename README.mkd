@@ -4,15 +4,15 @@ Vimana
 Vimana is an easy to use system for searching , installing, and downloading vim
 script.
 
-Vimana provides a command-line interface such like C<aptitude> programe on
+Vimana provides a command-line interface such like aptitude program on
 Debian linux, for you to search , download , install , upgrade scripts from
-L<http://www.vim.org> (vimonline site).
+http://www.vim.org (vimonline site).
 
 Vimana can install a vim script package to your vim runtime path automatically
 by inspecting the content of archive file or vim script. for example , if an
 archive file contains 'syntax','plugin','indent' directory , then these files
-should be installed to F<~/.vim/> directory.   if it is a vim color scheme ,
-then it should be put into F<~/.vim/colors/> and prompt for setting the
+should be installed to ~/.vim/ directory.   if it is a vim color scheme ,
+then it should be put into ~/.vim/colors/ and prompt for setting the
 installed colorscheme as default.
 
 We plan to provide port files via git repository, vimrc customization and
