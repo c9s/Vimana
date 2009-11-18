@@ -121,12 +121,12 @@ DONE:
 
         if( $pkgfile->is_archive() ) {
             my $files = $pkgfile->archive_files();
-            Vimana::Record->add( {
-                cname => $pkgfile->cname,
-                url  => $pkgfile->url,
-                filetype => $pkgfile->filetype,
-                files => $files,
-            });
+            # Vimana::Record->add( {
+            #     cname => $pkgfile->cname,
+            #     url  => $pkgfile->url,
+            #     filetype => $pkgfile->filetype,
+            #     files => $files,
+            # });
         }
     }
 
