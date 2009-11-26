@@ -12,13 +12,9 @@ use vars qw($INDEX $CACHE);
 
 Vimana - Vim script manager.
 
-=head1 VERSION
-
-Version 0.09
-
 =cut
 
-our $VERSION = '0.09';
+our $VERSION = 2009.33100 ;
 
 =head1 DESCRIPTION
 
