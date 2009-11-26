@@ -9,6 +9,8 @@ license 'perl';
 version_from 'lib/Vimana.pm';
 install_script 'bin/vimana';
 requires
+    'YAML' => 0,
+    'DateTime' => 0,
     'Test::More'            => 0,
     'App::CLI'              => 0.08,
     'File::Type'            => 0,
