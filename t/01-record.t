@@ -55,10 +55,14 @@ is_deeply( $record, {
             )],
         }
     } );
-my $find = Vimana::Record->find('test.vim');
-ok( $find );
+{
+    my $find = Vimana::Record->find('test.vim');
+    ok( $find );
+}
 
-my $find = Vimana::Record->find('test2.vim');
-ok( $find );
+{
+    my $find = Vimana::Record->find('test2.vim');
+    ok( $find );
+}
 
 File::Path::rmtree [ $ENV{VIMANA_BASE} ];
