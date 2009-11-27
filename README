@@ -58,6 +58,10 @@ to install rails.vim package:
 
     $ vimana install rails.vim
 
+to list installed vim packages:
+
+    $ vimana installed
+
 SUPPORT AND DOCUMENTATION
 
 After installing, you can find documentation for this module with the
