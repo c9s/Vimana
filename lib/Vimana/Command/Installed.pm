@@ -2,6 +2,7 @@ package Vimana::Command::Installed;
 use warnings;
 use strict;
 use base qw(App::CLI::Command);
+use YAML;
 use Vimana::Logger;
 use Vimana::PackageFile;
 use File::Find;
@@ -16,6 +17,7 @@ sub run {
     my $self = shift;
     my @dir = ( File::Spec->join( $ENV{HOME}  , '.vim' , 'record' ) );
     File::Find::find( sub { 
+        return unless -f $_;
 
     # $File::Find::dir is the current directory name,
     # $_ is the current filename within that directory
@@ -37,7 +39,7 @@ sub run {
             print STDERR "ERROR: Record $_ meta doesn't have package name.\n";
             return;
         }
-        print $record->{meta}{name} . "\n";
+        print ' ' x 3 . $record->{meta}{name} . "\n";
 
     } , @dir);
 }
