@@ -58,7 +58,7 @@ to install rails.vim package:
 
     $ vimana install rails.vim
 
-to list installed vim packages:
+to list installed vim packages:  ( you should install packages which contain Vim meta file (see VIM::Packager) )
 
     $ vimana installed
 
