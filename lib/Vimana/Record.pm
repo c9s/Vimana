@@ -3,12 +3,7 @@ use warnings;
 use strict;
 use Vimana;
 use File::Path;
-BEGIN {
-    eval 'use YAML::Syck;';
-    if( $@ ) {
-        use YAML;
-    }
-}
+use YAML;
 
 sub record_dir { return ( $ENV{VIMANA_BASE} || $ENV{HOME} ) . '/.vimana'; }
 
@@ -22,14 +17,14 @@ sub load {
     }
 
     my $record_file =  $class->record_file;
-    my $record = LoadFile( $record_file ) if -e $record_file;
+    my $record = YAML::LoadFile( $record_file ) if -e $record_file;
     return $record || {};
 }
 
 sub save {
     my ($class,$new_record)= @_;
     my $record_file = $class->record_file;
-    DumpFile( $record_file , $new_record );
+    YAML::DumpFile( $record_file , $new_record );
 }
 
 
