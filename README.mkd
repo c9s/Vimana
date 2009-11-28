@@ -64,6 +64,10 @@ to download:
 
     $ vimana download markdown-syntax.vim
 
+to list installed packages:
+
+    $ vimana installed
+
 SUPPORT AND DOCUMENTATION
 ==========================
 
