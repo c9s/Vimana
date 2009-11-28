@@ -1,11 +1,12 @@
 #!perl
 use lib 'lib';
-use Test::More tests => 7;
+use Test::More tests => 9;
 
 BEGIN {
     use_ok('Vimana::PackageFile');
 }
 
+diag "basic";
 {
     my $pkgfile = Vimana::PackageFile->new({
         file => "test",
@@ -31,6 +32,8 @@ diag "directory detection";
     $pkgfile->detect_filetype();
     $pkgfile->preprocess( );
 
+    ok( $pkgfile->is_archive );
+
     my @files = $pkgfile->archive->files();
     ok( @files );
     is_deeply(
@@ -40,5 +43,18 @@ diag "directory detection";
 }
 
 
+diag "makefile";
+{
+    my $pkgfile = Vimana::PackageFile->new({
+            file => 't/data/rails.zip',
+            info => {} ,
+            page_info => {} });
+    ok( $pkgfile );
+    $pkgfile->detect_filetype();
+    $pkgfile->preprocess( );
 
+}
+
+
+diag "metafile";
 
