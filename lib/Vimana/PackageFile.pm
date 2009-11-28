@@ -5,7 +5,7 @@ use Vimana::Logger;
 use Vimana::Util;
 use Archive::Any;
 use LWP::Simple qw();
-use base qw/Class::Accessor::Fast/;
+use base qw(Vimana::Accessor);
 __PACKAGE__->mk_accessors( qw(
     cname
     file 
@@ -77,8 +77,9 @@ sub preprocess {
 }
 
 sub DESTROY {
+    my $self = shift;
     # clean up myself
-
+    # unlink $self->file if $self->file;
 }
 
 sub detect_filetype { 

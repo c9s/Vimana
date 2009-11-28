@@ -2,6 +2,7 @@ package Vimana::Util;
 use warnings;
 use strict;
 use base qw(Exporter::Lite);
+use File::Type;
 our @EXPORT = qw(canonical_script_name runtime_path find_vim);
 our @EXPORT_OK = qw(findbin find_vim tempdir);
 

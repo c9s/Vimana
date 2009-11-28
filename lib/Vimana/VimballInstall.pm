@@ -4,7 +4,7 @@ use warnings;
 
 use Vimana::Util;
 use Vimana::Logger;
-use base qw/Class::Accessor::Fast/;
+use base qw(Vimana::Accessor);
 __PACKAGE__->mk_accessors( qw(package) );
 
 use DateTime;

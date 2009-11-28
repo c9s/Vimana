@@ -63,7 +63,8 @@ sub install_archive_type {
     if( $pkgfile->has_metafile ) {
         # ensure that we have VIM::Packager installed.
 
-        $ret = $self->metafile_install( $pkgfile );
+        # $ret = $self->metafile_install( $pkgfile );
+
 
         return $ret if $ret;
     }

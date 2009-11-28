@@ -4,7 +4,7 @@ use strict;
 
 use Cache::File;
 use Vimana::Logger;
-use base qw/Class::Accessor::Fast/;
+use base qw(Vimana::Accessor);
 __PACKAGE__->mk_accessors( qw(cache) );
 
 sub init {
