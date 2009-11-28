@@ -9,22 +9,23 @@ license 'perl';
 version_from 'lib/Vimana.pm';
 install_script 'bin/vimana';
 requires
-    'YAML' => 0,
-    'DateTime' => 0,
-    'Test::More'            => 0,
     'App::CLI'              => 0.08,
-    'File::Type'            => 0,
     'Archive::Any'          => 0,
     'Cache::File'           => 2.04,
+    'DateTime'              => 0,
+    'Exporter::Lite'        => 0,
     'File::Copy::Recursive' => 0.38,
-    'File::Find::Rule'      => 0.30,  # XXX: use File::Find instead. it's built module
-    'File::Path'            => 2.07,
-    'File::Spec'            => 0,
-    'Getopt::Long'          => 0,
-    'LWP::UserAgent'        => 0,
-    'LWP::Simple'           => 0,
-    'URI'                   => 1.37,
-    'Exporter::Lite'        => 0;
+    'File::Find::Rule' => 0.30,    # XXX: use File::Find instead. it's built module
+    'File::Path'     => 2.07,
+    'File::Spec'     => 0,
+    'File::Type'     => 0,
+    'Getopt::Long'   => 0,
+    'LWP::Simple'    => 0,
+    'LWP::UserAgent' => 0,
+    'Test::More'     => 0,
+    'URI'            => 1.37,
+    'YAML'           => 0,
+    ;
 
 include('ExtUtils::AutoInstall');
 auto_install();
