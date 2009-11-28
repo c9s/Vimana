@@ -70,8 +70,7 @@ sub download {
 sub preprocess {
     my $self = shift;
     $self->detect_filetype unless $self->filetype;
-
-    if( $self->is_archive ) {
+    if( $self->filetype and $self->is_archive ) {
         $self->archive( Archive::Any->new( $self->file ) );
         die "Can not read archive file: @{[ $self->file ]}" unless $self->archive;
     }
