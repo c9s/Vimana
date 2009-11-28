@@ -92,8 +92,8 @@ sub detect_filetype {
 
 sub archive_files {
     my $self = shift;
-    my @files = $self->archive->files;
-    return \@files;
+    $self->{_archive_files} ||= [ $self->archive->files ];
+    return $self->{_archive_files} if $self->{_archive_files};
 }
 
 sub content {
