@@ -90,16 +90,10 @@ DONE:
             $install->run();
             last DONE;
         }
+        elsif( $pkgfile->is_text() ) {
+            # guess text filetype here.  (colorscheme, ftplugin ...etc)
 
-        # or try to find in port tree
-        $logger->info("Check if we can install this package via port file");
-
-#        if( Vimana::PortTree->find( ) ) {
-#        }
-#        else {
-#            $logger->info( "Can not found port file." );
-#        }
-
+        }
 
         # unknown 
         # look for makefile (archive)
