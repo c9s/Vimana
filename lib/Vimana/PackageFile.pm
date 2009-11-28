@@ -2,6 +2,8 @@ package Vimana::PackageFile;
 use warnings;
 use strict;
 use Vimana::Logger;
+use Vimana::Util;
+use Archive::Any;
 use LWP::Simple qw();
 use base qw/Class::Accessor::Fast/;
 __PACKAGE__->mk_accessors( qw(
@@ -79,6 +81,8 @@ sub postprocess {
 
 }
 
+
+
 sub detect_filetype { 
     my $self = shift;
     $self->filetype( 
@@ -102,17 +106,16 @@ sub content {
     return $content;
 }
 
-
 sub has_metafile {
     my $self = shift;
-    my @files = grep /makefile/i , @self->archive->files();
+    my @files = grep /makefile/i , $self->archive->files();
     return @files if scalar @files;
     return undef;
 }
 
 sub has_makefile {
     my $self = shift;
-    my @files = grep /makefile/i , @self->archive->files();
+    my @files = grep /makefile/i , $self->archive->files();
     return @files if scalar @files;
     return undef;
 }
