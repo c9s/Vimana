@@ -6,6 +6,7 @@ BEGIN {
     use_ok('Vimana::PackageFile');
 }
 
+
 diag "basic";
 {
     my $pkgfile = Vimana::PackageFile->new({
@@ -29,7 +30,6 @@ diag "directory detection";
             page_info => {} });
     ok( $pkgfile );
 
-    $pkgfile->detect_filetype();
     $pkgfile->preprocess( );
 
     ok( $pkgfile->is_archive );
