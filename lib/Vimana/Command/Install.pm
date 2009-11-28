@@ -29,11 +29,15 @@ use Vimana::Installer::Meta;
 use Vimana::Installer::Makefile;
 use Vimana::Installer::Auto;
 
+# XXX: mv this method into Vimana::Installer , maybe
 sub get_installer {
-    my ($self,$type) = @_;
-
-
+    my ( $self, $type, @args ) = @_;
+    my $class = qq{Vimana::Installer::$type};
+    return $class->new(@args);
 }
+
+
+
 
 sub install_text_type_ {
     my ($self, $pkgfile) = @_;
