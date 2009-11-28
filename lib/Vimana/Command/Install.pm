@@ -25,6 +25,16 @@ sub options {
 }
 
 
+use Vimana::Installer::Meta;
+use Vimana::Installer::Makefile;
+use Vimana::Installer::Auto;
+
+sub get_installer {
+    my ($self,$type) = @_;
+
+
+}
+
 sub install_text_type_ {
     my ($self, $pkgfile) = @_;
 
@@ -39,6 +49,7 @@ sub install_text_type_ {
 
     return 0;
 }
+
 sub install_archive_type {
     my ($self, $pkgfile) = @_;
     my $files = $pkgfile->archive_files();
@@ -47,6 +58,8 @@ sub install_archive_type {
     # find meta file
     $logger->info("Check 'META' or 'VIMMETA' file for VIM::Packager.");
     if( $pkgfile->has_metafile ) {
+        # ensure that we have VIM::Packager installed.
+
         $ret = $self->metafile_install( $pkgfile );
 
         return $ret if $ret;
