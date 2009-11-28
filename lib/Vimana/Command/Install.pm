@@ -43,25 +43,31 @@ sub install_archive_type {
     my ($self, $pkgfile) = @_;
     my $files = $pkgfile->archive_files();
 
+    my $ret;
     # find meta file
     $logger->info("Check 'META' or 'VIMMETA' file for VIM::Packager.");
     if( $pkgfile->has_metafile ) {
+        $ret = $self->metafile_install( $pkgfile );
 
+        return $ret if $ret;
     }
 
     # find Makefile
-    $logger->info("check Makefile");
+    $logger->info("Check Makefile.");
     if( $pkgfile->has_makefile() ) {
-        $pkgfile->makefile_install();
-        last DONE if 0;  # XXX:
+        $ret = $pkgfile->makefile_install(); # XXX: mv this method out
+
+        return $ret if $ret;
     }
 
-    $logger->info( "check Auto-installable" );
+    $logger->info( "Check detect directory structure." );
     my $ret = $pkgfile->auto_install( verbose => $self->{verbose} );
-    unless ( $ret ) {
-        $logger->warn("Auto-install failed");
-        return 0;
-    }
+    return $ret if $ret;
+
+    $logger->warn("Install failed");
+    $logger->warn("Reason: package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file");
+    $logger->warn("Vimana does not know how to install this package");
+    return 0;
 
     # add record:
     # Vimana::Record->add( {
@@ -127,8 +133,8 @@ sub run {
         * dont know ?
            * check script_type 
            * inspect text content
-                - known format:
-                  * do install
+            - known format:
+            * do install
 =cut
 
     # if it's vimball, install it
