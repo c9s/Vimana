@@ -131,14 +131,19 @@ sub run {
                  * for knwon script type , do install
 =cut
     # if it's vimball, install it
+    my $ret;
     if( $pkgfile->is_text ) {
-        $self->install_text_type( $pkgfile );
+        $ret = $self->install_text_type( $pkgfile );
 
     }
     elsif( $pkgfile->is_archive ) {
-        $self->install_archive_type( $pkgfile );
+        $ret = $self->install_archive_type( $pkgfile );
     }
 
+    unless( $ret ) {
+        print "FAIL\n";
+        exit 1;
+    }
 
     print "Done\n";
 }
