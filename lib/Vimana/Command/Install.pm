@@ -78,7 +78,7 @@ sub install_archive_type {
     }
 
     $logger->info( "Check detect directory structure." );
-    my $ret = $pkgfile->auto_install( verbose => $self->{verbose} );
+    $ret = $pkgfile->auto_install( verbose => $self->{verbose} );
     return $ret if $ret;
 
     $logger->warn("Install failed");
