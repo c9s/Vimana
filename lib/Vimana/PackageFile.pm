@@ -102,10 +102,17 @@ sub content {
     return $content;
 }
 
+
+sub has_metafile {
+    my $self = shift;
+    my @files = grep /makefile/i , @self->archive->files();
+    return @files if scalar @files;
+    return undef;
+}
+
 sub has_makefile {
     my $self = shift;
-    my @files = $self->archive->files();
-    @files = grep /makefile/i , @files;
+    my @files = grep /makefile/i , @self->archive->files();
     return @files if scalar @files;
     return undef;
 }
