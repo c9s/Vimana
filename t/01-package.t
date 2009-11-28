@@ -17,3 +17,7 @@ ok( $pkgfile );
 
 is( $pkgfile->file , "test" );
 is( $pkgfile->url , "http://www.google.com.tw/" );
+
+
+
+
