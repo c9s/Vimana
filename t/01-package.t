@@ -19,6 +19,8 @@ BEGIN {
     is( $pkgfile->url , "http://www.google.com.tw/" );
 }
 
+
+diag "directory detection";
 {
     my $pkgfile = Vimana::PackageFile->new({
             file => 't/data/rails.zip',
