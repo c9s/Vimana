@@ -15,7 +15,6 @@ requires
     'DateTime'              => 0,
     'Exporter::Lite'        => 0,
     'File::Copy::Recursive' => 0.38,
-    'File::Find::Rule' => 0.30,    # XXX: use File::Find instead. it's built module
     'File::Path'     => 2.07,
     'File::Spec'     => 0,
     'File::Type'     => 0,
