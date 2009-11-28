@@ -44,20 +44,19 @@ sub install_archive_type {
     my $files = $pkgfile->archive_files();
 
     # find meta file
-    $logger->info("Check if this package contains 'META' or 'VIMMETA'");
+    $logger->info("Check 'META' or 'VIMMETA' file for VIM::Packager.");
     if( $pkgfile->has_metafile ) {
-
 
     }
 
     # find Makefile
-    $logger->info("Check if this package contains 'Makefile' file");
+    $logger->info("check Makefile");
     if( $pkgfile->has_makefile() ) {
         $pkgfile->makefile_install();
         last DONE if 0;  # XXX:
     }
 
-    $logger->info( "Check if we can auto install this package" );
+    $logger->info( "check Auto-installable" );
     my $ret = $pkgfile->auto_install( verbose => $self->{verbose} );
     unless ( $ret ) {
         $logger->warn("Auto-install failed");
