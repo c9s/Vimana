@@ -7,7 +7,7 @@ use File::Copy::Recursive qw(fcopy rcopy dircopy fmove rmove dirmove);
 use File::Spec;
 use File::Path qw'mkpath rmtree';
 use Archive::Any;
-use File::Find::Rule;
+use File::Find;
 use File::Type;
 use Vimana::Logger;
 use Vimana::Util;
@@ -122,7 +122,11 @@ sub install_from_archive {
     if( $pkg->has_vimball() ) {
         $logger->info( "I found vimball files inside the archive file , trying to install vimballs");
         use Vimana::VimballInstall;
-        my @vimballs = File::Find::Rule->file->name( "*.vba" )->in( $out );
+        my @vimballs;
+        File::Find::find(  sub {
+                return unless -f $_;
+                push @vimballs , $_ if /\.vba$/;
+            } , $out );
         Vimana::VimballInstall->install_vimballs( @vimballs );
     }
 
@@ -133,7 +137,12 @@ sub install_from_archive {
         $logger->info("Initializing vim runtime path...") if $options->{verbose};
         Vimana::Util::init_vim_runtime();
 
-        my @files = File::Find::Rule->file->in(  $out );
+        my @files;
+        File::Find::find(  sub {
+                return unless -f $_;
+                push @files , $_ if -f $_;
+            } , $out );
+
         my $nodes = $self->find_base_path( \@files );
 
         unless ( keys %$nodes ) {
