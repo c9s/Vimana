@@ -130,22 +130,13 @@ sub run {
                    * check script_type 
                  * for knwon script type , do install
 =cut
-DONE:
-    {
-        # if it's vimball, install it
-        if( $pkgfile->is_text ) {
-            $self->install_text_type( $pkgfile );
+    # if it's vimball, install it
+    if( $pkgfile->is_text ) {
+        $self->install_text_type( $pkgfile );
 
-        }
-        elsif( $pkgfile->is_archive ) {
-            $self->install_archive_type( $pkgfile );
-        }
-
-            my $files = $pkgfile->archive_files;
-
-
-        }
-
+    }
+    elsif( $pkgfile->is_archive ) {
+        $self->install_archive_type( $pkgfile );
     }
 
 
