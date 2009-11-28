@@ -76,9 +76,8 @@ sub preprocess {
     }
 }
 
-# XXX: DESTROY
-sub postprocess {
-
+sub DESTROY {
+    # clean up myself
 
 }
 
