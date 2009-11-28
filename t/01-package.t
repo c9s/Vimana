@@ -1,6 +1,6 @@
 #!perl
 use lib 'lib';
-use Test::More tests => 4;
+use Test::More tests => 7;
 
 BEGIN {
     use_ok('Vimana::PackageFile');
