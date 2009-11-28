@@ -32,11 +32,10 @@ use Vimana::Installer::Auto;
 # XXX: mv this method into Vimana::Installer , maybe
 sub get_installer {
     my ( $self, $type, @args ) = @_;
+    $type = ucfirst( $type );
     my $class = qq{Vimana::Installer::$type};
     return $class->new(@args);
 }
-
-
 
 
 sub install_text_type_ {
