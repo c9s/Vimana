@@ -12,7 +12,7 @@ __PACKAGE__->mk_accessors( qw(
     url 
     filetype 
     info 
-    page_fino 
+    page_info 
     archive
 ) );
 
