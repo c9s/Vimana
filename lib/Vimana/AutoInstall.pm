@@ -145,7 +145,7 @@ sub install_from_archive {
         my @files;
         File::Find::find(  sub {
                 return unless -f $_;
-                push @files , $_ if -f $_;
+                push @files , File::Spec->join( $File::Find::dir , $_ ) if -f $_;
             } , $out );
 
         my $nodes = $self->find_base_path( \@files );
@@ -211,7 +211,7 @@ sub find_base_path {
     my $nodes = {};
     for my $p ( @$paths ) {
         if ( $p =~ m{^(.*?/)?(plugin|doc|syntax|indent|colors|autoload|after|ftplugin)/.*?\.(vim|txt)$} ) {
-            $nodes->{ $1 || '' } += 2;
+            $nodes->{ $1 || '' } ++;
         }
     }
     return $nodes;
