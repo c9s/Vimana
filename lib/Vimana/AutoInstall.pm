@@ -48,11 +48,11 @@ sub run {
     my $pkg = $self->package;
 
     if( $pkg->is_archive() ) {
-        $logger->info('Archive type file');
+        $logger->info('Archive file');
         return $self->install_from_archive;
     }
     elsif( $pkg->is_text() ) {
-        $logger->info('Text type file');
+        $logger->info('Plain Text file');
 
         my $type = $self->inspect_text_content;
         if ($type) {
