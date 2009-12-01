@@ -34,6 +34,8 @@ sub inspect_text_content {
     my $content = $self->package->content;
     return 'colors' if $content =~ m/let\s+(g:)?colors_name\s*=/;
     return 'syntax' if $content =~ m/^syn[tax]* (?:match|region|keyword)/;
+    return 'compiler' if $content =~ m/^let\s+current_compiler\s*=/;
+    return 'indent' if $content =~ m/let\s+b:did_indent/;
     return undef;
 }
 
