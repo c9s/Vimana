@@ -98,7 +98,7 @@ sub find_vimball_files {
     my @vimballs;
     File::Find::find(  sub {
             return unless -f $_;
-            push @vimballs , $_ if /\.vba$/;
+            push @vimballs , File::Spec->join($File::Find::dir , $_ ) if /\.vba$/;
         } , $out );
     return @vimballs;
 }
