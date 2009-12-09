@@ -70,6 +70,13 @@ to list installed packages:
 
     $ vimana installed
 
+COMMAND ALIAS
+=============
+
+    $ vimana i   # alias of install command.
+    $ vimana s   # alias of search command.
+    $ vimana d   # alias of download command.
+
 TESTED CASES
 ============
 
