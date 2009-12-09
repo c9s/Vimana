@@ -5,6 +5,14 @@ use strict;
 use base qw(App::CLI App::CLI::Command);
 use Getopt::Long qw(:config no_ignore_case bundling);
 
+use constant alias => qw(
+    i       install
+    ins     install
+    s       search
+    d       download
+);
+
+
 sub invoke {
     my ($pkg , $cmd,  @args) = @_;
     my ($ret);
