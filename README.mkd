@@ -15,12 +15,14 @@ should be installed to ~/.vim/ directory.   if it is a vim color scheme ,
 then it should be put into ~/.vim/colors/ and prompt for setting the
 installed colorscheme as default.
 
-We plan to provide port files via git repository, vimrc customization and
-internationalization in future.
+vimball is supported.
+
+In future, Vimana will support Makefile,Rakefile install. and Vim package meta
+file (for VIM::Packager).
 
 ( In some modern Indian languages, vimāna or vimān means "aircraft". )
 
-NOTE: Vimana only provides search,info,install commmands currently.
+NOTE: Vimana only provides search, info ,install commmands currently.
 
 INSTALLATION
 ===============
@@ -67,6 +69,14 @@ to download:
 to list installed packages:
 
     $ vimana installed
+
+TESTED CASES
+============
+
+    $ vimana install the-nerd-tree
+    $ vimana install autocomplpop
+    $ vimaan install gsession.vim
+    $ vimana install snipmate
 
 SUPPORT AND DOCUMENTATION
 ==========================
