@@ -180,7 +180,7 @@ sub extract_to {
     mkpath [ $out ];
     $logger->info("Temporary directory created: $out");
     $logger->info("Extracting to: $out");
-    $pkg->archive->extract( $out );  
+    $self->archive->extract( $out );  
     return $out;
 }
 
