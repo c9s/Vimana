@@ -5,6 +5,9 @@ use Vimana::Logger;
 use Vimana::Util;
 use Archive::Any;
 use LWP::Simple qw();
+use File::Spec;
+use File::Path;
+use File::Copy;
 use base qw(Vimana::Accessor);
 __PACKAGE__->mk_accessors( qw(
     cname
@@ -137,11 +140,7 @@ sub auto_install {
 
 }
 
-use File::Spec;
-use File::Path;
-use File::Copy;
-
-sub install_to {
+sub copy_to {
     my ( $self , $dir ) = @_;
     my $file = $self->file;
     my $target = File::Spec->join( runtime_path(), $dir );
@@ -154,8 +153,6 @@ sub install_to {
         :  $logger->error( $! ) ;
     $ret;
 }
-
-
 
 sub makefile_install {
 
