@@ -5,7 +5,6 @@ use base qw(Vimana::Installer);
 use Vimana::Logger;
 use Vimana::VimballInstall;
 
-sub new { bless {}, shift; }
 
 sub run {
     my ( $class, $pkgfile ) = @_;

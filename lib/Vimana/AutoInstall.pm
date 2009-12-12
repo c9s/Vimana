@@ -120,10 +120,11 @@ sub install_from_archive {
 
     if( $options->{verbose} ) {
         for (@files ) {
-            print "FILE: $_ \n";
+            print "\t$_\n";
         }
     }
 
+    # my $out = $pkg->extract_to( );
     my $out = Vimana::Util::tempdir();
     rmtree [ $out ] if -e $out;
     mkpath [ $out ];
@@ -133,7 +134,7 @@ sub install_from_archive {
     $pkg->archive->extract( $out );  
 
     if( $pkg->has_vimball() ) {
-        $logger->info( "I found vimball files inside the archive file , trying to install vimballs");
+        $logger->info( "vimball files found, trying to install vimballs");
         use Vimana::VimballInstall;
         my @vimballs = find_vimball_files $out;
         Vimana::VimballInstall->install_vimballs( @vimballs );
@@ -143,7 +144,7 @@ sub install_from_archive {
     {
 
         # XXX: check vim runtime path subdirs , mv to init script
-        $logger->info("Initializing vim runtime path...") if $options->{verbose};
+        $logger->info("Initializing vim runtime directories") if $options->{verbose};
         Vimana::Util::init_vim_runtime();
 
         my @files;
@@ -153,7 +154,6 @@ sub install_from_archive {
             } , $out );
 
         my $nodes = $self->find_base_path( \@files );
-
         unless ( keys %$nodes ) {
             $logger->warn("Can't found base path.");
             return 0;

@@ -84,6 +84,7 @@ TESTED CASES
     $ vimana install autocomplpop
     $ vimaan install gsession.vim
     $ vimana install snipmate
+    $ vimana i svg.vim
 
 SUPPORT AND DOCUMENTATION
 ==========================

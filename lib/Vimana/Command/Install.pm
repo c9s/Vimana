@@ -41,8 +41,8 @@ sub install_archive_type {
     my ($self, $pkgfile) = @_;
     my $files = $pkgfile->archive_files();
 
-    my $ret;
 
+    my $ret;
     my $ins_type;
 
     # find meta file
@@ -56,7 +56,7 @@ sub install_archive_type {
     $ins_type ||= 'auto';
 
     my $installer = $self->get_installer($ins_type);
-    my $ret = $installer->run( $pkgfile );
+    $ret = $installer->run( $pkgfile );
 
     unless( $ret ) {
         $logger->warn("Installation failed");
@@ -69,6 +69,7 @@ sub install_archive_type {
 
     }
 
+    return $ret;
     # add record:
     # Vimana::Record->add( {
     #     cname => $pkgfile->cname,

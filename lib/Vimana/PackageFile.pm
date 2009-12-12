@@ -130,16 +130,6 @@ sub has_vimball {
     return undef;
 }
 
-sub auto_install {
-    my $self = shift;
-    my %args = @_;
-
-    require Vimana::AutoInstall;
-    my $auto = Vimana::AutoInstall->new( { package => $self , options => \%args } );
-    return $auto->run();  # XXX: dry_run , verbose
-
-}
-
 =head2 $pkgfile->copy_to( '/path/to/file' )
 
 =cut
