@@ -142,7 +142,7 @@ use File::Path;
 
 sub install_to {
     my ( $self , $dir ) = @_;
-    my $file = $self->package->file;
+    my $file = $self->file;
     my $target = File::Spec->join( runtime_path(), $dir );
     File::Path::mkpath [ runtime_path() ];
 
