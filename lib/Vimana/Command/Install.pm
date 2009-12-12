@@ -102,7 +102,7 @@ sub run {
     my $filename = $page->{filename};
     my $target = File::Spec->join( $dir , $filename );
 
-    $logger->info("Download from: $url");;
+    $logger->info("Downloading from: $url");;
 
     my $pkgfile = Vimana::PackageFile->new( {
             cname      => $package,
