@@ -133,10 +133,21 @@ sub auto_install {
 
     require Vimana::AutoInstall;
     my $auto = Vimana::AutoInstall->new( { package => $self , options => \%args } );
-    return $auto->run();  # dry_run , verbose
+    return $auto->run();  # XXX: dry_run , verbose
 
 }
 
+use File::Path;
+use File::Copy;
+sub copy_to {
+    my $self = shift;
+    my $dest = shift;
+    my $src = $self->file;
+    my ($volume,$dir,$file) = File::Spec->splitpath( $dest );
+    File::Path::mkpath [ $dir ], 1;
+    File::Copy::copy( $self->file, $dest ) 
+                or die "Copy failed: $!";
+}
 
 sub makefile_install {
 
