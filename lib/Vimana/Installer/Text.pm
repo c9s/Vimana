@@ -18,16 +18,16 @@ sub run {
     }
 
     # known types (depends on the information that vim.org provides.
-    return $pkgfile->install_to( 'colors' )
+    return $pkgfile->copy_to_rtp( 'colors' )
         if $pkgfile->script_is('color scheme');
 
-    return $pkgfile->install_to( 'syntax' )
+    return $pkgfile->copy_to_rtp( 'syntax' )
         if $pkgfile->script_is('syntax');
 
-    return $pkgfile->install_to( 'indent' )
+    return $pkgfile->copy_to_rtp( 'indent' )
         if $pkgfile->script_is('indent');
 
-    return $pkgfile->install_to( 'ftplugin' )
+    return $pkgfile->copy_to_rtp( 'ftplugin' )
         if $pkgfile->script_is('ftplugin');
 
     # guess text filetype here.  (colorscheme, ftplugin ...etc)
