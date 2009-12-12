@@ -140,18 +140,35 @@ sub auto_install {
 
 }
 
-sub copy_to {
-    my ( $self , $dir ) = @_;
-    my $file = $self->file;
-    my $target = File::Spec->join( runtime_path(), $dir );
-    File::Path::mkpath [ runtime_path() ];
+=head2 $pkgfile->copy_to( '/path/to/file' )
 
-    $logger->info( "Installing $file to $target" );
-    my $ret = File::Copy::copy( $file => $target );
+=cut
+
+sub copy_to {
+    my ( $self , $path ) = @_;
+    my $src = $self->file;
+    my ( $v, $dir, $file ) = File::Spec->splitpath($path);
+    File::Path::mkpath [ $dir ];
+
+    $logger->info( "Copying $src to $path" );
+    my $ret = File::Copy::copy( $src => $path );
     $ret 
-        ?  $logger->info("Installed")
+        ?  $logger->info("Done")
         :  $logger->error( $! ) ;
     $ret;
+}
+
+
+=head2 $pkgfile->copy_to_rtp( $type )
+
+copy to vim runtime path
+
+=cut
+
+sub copy_to_rtp {
+    my ( $self, $type ) = @_ ;
+    my $target = File::Spec->join( runtime_path(), $type );
+    return $self->copy_to($target);
 }
 
 sub makefile_install {
