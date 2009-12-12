@@ -181,6 +181,7 @@ sub extract_to {
     $logger->info("Temporary directory created: $out");
     $logger->info("Extracting to: $out");
     $pkg->archive->extract( $out );  
+    return $out;
 }
 
 
