@@ -38,7 +38,7 @@ sub get_installer {
 }
 
 
-sub install_text_type_ {
+sub install_text_type {
     my ($self, $pkgfile) = @_;
 
     if( $pkgfile->is_vimball ) {
