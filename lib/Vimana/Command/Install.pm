@@ -131,11 +131,11 @@ sub run {
     }
 
     unless( $ret ) {
-        print "FAIL\n";
+        print "Installation Failed.\n";
         exit 1;
     }
 
-    print "Done\n";
+    print "Installation Done.\n";
 }
 
 
