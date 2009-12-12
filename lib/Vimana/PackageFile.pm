@@ -139,6 +139,7 @@ sub auto_install {
 
 use File::Spec;
 use File::Path;
+use File::Copy;
 
 sub install_to {
     my ( $self , $dir ) = @_;
@@ -147,7 +148,7 @@ sub install_to {
     File::Path::mkpath [ runtime_path() ];
 
     $logger->info( "Install $file to $target" );
-    my $ret = fcopy( $file => $target );
+    my $ret = File::Copy::copy( $file => $target );
     $ret 
         ?  $logger->info("Installed")
         :  $logger->error( $! ) ;
