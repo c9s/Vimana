@@ -69,11 +69,8 @@ sub fetch {
     my $class = shift;
     my %param = @_;
 
-    my $cache = Vimana->index->cache();
-    $cache->clear();
-
     my $uri = $class->build_search_uri( %param );
-    my $content = $cache->get( $uri );
+    my $content;
     unless( $content ) {
         my $ua = LWP::UserAgent->new;
         my $response = $ua->get( $uri );
@@ -82,8 +79,6 @@ sub fetch {
         die 'page query failed ' unless ($response->is_success);
 
         $content = $response->decoded_content;
-
-        $cache->set( "$uri" , $content );
     }
     return $class->parse( $content );
 }

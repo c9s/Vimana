@@ -2,17 +2,13 @@ package Vimana::Index;
 use warnings;
 use strict;
 
-use Cache::File;
 use Vimana::Logger;
 use base qw(Vimana::Accessor);
 __PACKAGE__->mk_accessors( qw(cache) );
 
 sub init {
     my $self = shift;
-    $logger->debug("cache::file init");
-    my $cache = Vimana->cache;
-    $logger->debug("cache::file done");
-    $self->cache( $cache );
+
 }
 
 
