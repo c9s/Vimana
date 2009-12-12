@@ -42,33 +42,32 @@ sub install_archive_type {
     my $files = $pkgfile->archive_files();
 
     my $ret;
+
+    my $ins_type;
+
     # find meta file
-    $logger->info("Check 'META' or 'VIMMETA' file for VIM::Packager.");
-    if( $pkgfile->has_metafile ) {
-        # ensure that we have VIM::Packager installed.
+    $logger->info("Check if 'META' or 'VIMMETA' file exists. support for VIM::Packager.");
+    $ins_type = 'meta' if $pkgfile->has_metafile;
 
-        # $ret = $self->metafile_install( $pkgfile );
+    $logger->info("Check if Makefile exists.");
+    $ins_type = 'makefile' if $pkgfile->has_makefile;
 
+    $logger->info( "No availiable strategy, try to auto-install." );
+    $ins_type ||= 'auto';
 
-        return $ret if $ret;
+    my $installer = $self->get_installer($ins_type);
+    my $ret = $installer->run( $pkgfile );
+
+    unless( $ret ) {
+        $logger->warn("Installation failed");
+        $logger->warn("Reason: package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file");
+        $logger->warn("Vimana does not know how to install this package");
+        return;
     }
+    else {
+        # succeed
 
-    # find Makefile
-    $logger->info("Check Makefile.");
-    if( $pkgfile->has_makefile() ) {
-        $ret = $pkgfile->makefile_install(); # XXX: mv this method out
-
-        return $ret if $ret;
     }
-
-    $logger->info( "Check detect directory structure." );
-    $ret = $pkgfile->auto_install( verbose => $self->{verbose} );
-    return $ret if $ret;
-
-    $logger->warn("Install failed");
-    $logger->warn("Reason: package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file");
-    $logger->warn("Vimana does not know how to install this package");
-    return 0;
 
     # add record:
     # Vimana::Record->add( {
