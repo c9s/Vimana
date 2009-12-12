@@ -147,7 +147,7 @@ sub install_to {
     my $target = File::Spec->join( runtime_path(), $dir );
     File::Path::mkpath [ runtime_path() ];
 
-    $logger->info( "Install $file to $target" );
+    $logger->info( "Installing $file to $target" );
     my $ret = File::Copy::copy( $file => $target );
     $ret 
         ?  $logger->info("Installed")
