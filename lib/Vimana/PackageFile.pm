@@ -137,17 +137,24 @@ sub auto_install {
 
 }
 
+use File::Spec;
 use File::Path;
-use File::Copy;
-sub copy_to {
-    my $self = shift;
-    my $dest = shift;
-    my $src = $self->file;
-    my ($volume,$dir,$file) = File::Spec->splitpath( $dest );
-    File::Path::mkpath [ $dir ], 1;
-    File::Copy::copy( $self->file, $dest ) 
-                or die "Copy failed: $!";
+
+sub install_to {
+    my ( $self , $dir ) = @_;
+    my $file = $self->package->file;
+    my $target = File::Spec->join( runtime_path(), $dir );
+    File::Path::mkpath [ runtime_path() ];
+
+    $logger->info( "Install $file to $target" );
+    my $ret = fcopy( $file => $target );
+    $ret 
+        ?  $logger->info("Installed")
+        :  $logger->error( $! ) ;
+    $ret;
 }
+
+
 
 sub makefile_install {
 
