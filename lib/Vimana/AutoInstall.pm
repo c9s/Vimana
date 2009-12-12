@@ -87,6 +87,8 @@ sub install_to {
     my ( $self , $dir ) = @_;
     my $file = $self->package->file;
     my $target = File::Spec->join( runtime_path(), $dir );
+    File::Path::mkpath [ runtime_path() ];
+
     $logger->info( "Install $file to $target" );
     my $ret = fcopy( $file => $target );
     !$ret ? 

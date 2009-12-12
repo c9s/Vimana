@@ -38,6 +38,8 @@ sub get_installer {
 }
 
 
+
+
 sub install_text_type {
     my ($self, $pkgfile) = @_;
 
@@ -47,6 +49,19 @@ sub install_text_type {
         $install->run();
         return 1;
     }
+
+    # known types (depends on the information that vim.org provides.
+    return $pkgfile->install_to( 'colors' )
+        if $pkgfile->script_is('color scheme');
+
+    return $pkgfile->install_to( 'syntax' )
+        if $pkgfile->script_is('syntax');
+
+    return $pkgfile->install_to( 'indent' )
+        if $pkgfile->script_is('indent');
+
+    return $pkgfile->install_to( 'ftplugin' )
+        if $pkgfile->script_is('ftplugin');
 
     # guess text filetype here.  (colorscheme, ftplugin ...etc)
 
