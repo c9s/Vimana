@@ -171,8 +171,17 @@ sub copy_to_rtp {
     return $self->copy_to($target);
 }
 
-sub makefile_install {
 
+use Vimana::Util;
+sub extract_to {
+    my ($self,$path) = @_;
+    my $out = Vimana::Util::tempdir();
+    rmtree [ $out ] if -e $out;
+    mkpath [ $out ];
+    $logger->info("Temporary directory created: $out");
+    $logger->info("Extracting to: $out");
+    $pkg->archive->extract( $out );  
 }
+
 
 1;
