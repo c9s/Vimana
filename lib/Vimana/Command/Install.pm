@@ -119,24 +119,6 @@ sub run {
     $pkgfile->detect_filetype();
     $pkgfile->preprocess( );
 
-=pod
-
-    4. guess what to do
-
-       if it's archive file:
-        * have vim meta file ?
-        * have makefile ?
-        * check directory structure
-        * others
-
-       if it's text file:
-        * vimball
-        * dont know ?
-           * check script_type 
-           * inspect text content
-            - known format:
-            * do install
-=cut
 
     # if it's vimball, install it
     my $ret;
