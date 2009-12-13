@@ -66,7 +66,11 @@ sub install_archive_type {
     $logger->info( "No availiable strategy, try to auto-install." );
     $ins_type ||= 'auto';
 
-    my $installer = $self->get_installer($ins_type);
+    my $installer = $self->get_installer(
+        $ins_type, {
+        package => $pkgfile,
+        path    => $tmpdir
+    } );
     $ret = $installer->run( $pkgfile );
 
     unless( $ret ) {
