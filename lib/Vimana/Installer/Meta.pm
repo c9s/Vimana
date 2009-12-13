@@ -3,6 +3,7 @@ use base qw(Vimana::Installer);
 use warnings;
 use strict;
 
+use constant _continue => 1;
 
 sub run {
     my $self = shift;
