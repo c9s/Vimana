@@ -28,7 +28,7 @@ sub find_vimball_files {
 sub run {
     my $self = shift;
 
-    my $path = $self->path;
+    my $out = $self->path;
     my $pkg = $self->package;
 
     my @files = $pkg->archive->files;
@@ -36,15 +36,6 @@ sub run {
     for (@files ) {
         print "\t$_\n";
     }
-
-    # my $out = $pkg->extract_to( );
-    my $out = Vimana::Util::tempdir();
-    rmtree [ $out ] if -e $out;
-    mkpath [ $out ];
-    $logger->info("Temporary directory created: $out") ;
-
-    $logger->info("Extracting...") ;
-    $pkg->archive->extract( $out );  
 
     if( $pkg->has_vimball() ) {
         $logger->info( "vimball files found, trying to install vimballs");
@@ -81,6 +72,7 @@ sub run {
     }
 
     $logger->info("Cleaning up temporary directory.");
+
     rmtree [ $out ] if -e $out;
 
     return 1;
