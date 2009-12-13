@@ -110,10 +110,19 @@ sub content {
 
 sub has_metafile {
     my $self = shift;
-    my @files = grep /makefile/i , $self->archive->files();
+    my @files = grep /(?:meta|vimmeta|vimmeta.yml)/i , $self->archive->files();
     return @files if scalar @files;
     return undef;
 }
+
+
+sub has_rakefile {
+    my $self = shift;
+    my @files = grep /rakefile/i , $self->archive->files();
+    return @files if scalar @files;
+    return undef;
+}
+
 
 sub has_makefile {
     my $self = shift;
