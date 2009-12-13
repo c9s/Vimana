@@ -19,8 +19,8 @@ rakefile , makefile , vim meta and vimball installation is supported.
 
 for scripts have its own doc, Vimana will try to update helptags after installation.
 
-And now, you can write your own makefile , rakefile, or vim meta file
-(VIM::Packager) for installer.
+And now, you can write your own vim meta file
+(VIM::Packager) or makefile , rakefile for installer.
 
 ( In some modern Indian languages, vimāna or vimān means "aircraft". )
 
