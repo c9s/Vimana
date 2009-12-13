@@ -1,5 +1,5 @@
 package Vimana::Installer::Auto;
-use base qw(Vimana::Installer Vimana::Accessor);
+use base qw(Vimana::Installer);
 use warnings;
 use strict;
 
@@ -15,11 +15,6 @@ use Vimana::Util;
 use DateTime;
 
 
-sub run {
-    my ($self,$pkgfile) = @_;
-    return $self->install_from_archive( $pkgfile );
-}
-
 sub find_vimball_files {
     my $out = shift;
     my @vimballs;
@@ -30,9 +25,11 @@ sub find_vimball_files {
     return @vimballs;
 }
 
-sub install_from_archive {
+sub run {
     my $self = shift;
-    my $pkg = shift;
+
+    my $path = $self->path;
+    my $pkg = $self->package;
 
     my @files = $pkg->archive->files;
 
