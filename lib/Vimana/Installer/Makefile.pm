@@ -12,6 +12,8 @@ sub run {
         my $ret = system( "make install" );
         return 1 if $ret == 0;
     }
+
+    $logger->error( 'Makefile install failed.' );
     return 0;
 }
 
