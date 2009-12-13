@@ -163,15 +163,15 @@ sub copy_to_rtp {
 
 
 use Vimana::Util;
+
 sub extract_to {
-    my ($self,$path) = @_;
-    my $out = Vimana::Util::tempdir();
-    rmtree [ $out ] if -e $out;
-    mkpath [ $out ];
-    $logger->info("Temporary directory created: $out");
-    $logger->info("Extracting to: $out");
-    $self->archive->extract( $out );  
-    return $out;
+    my ( $self, $path ) = @_;
+    # my $path ||= Vimana::Util::tempdir();
+    rmtree [ $path ] if -e $path;
+    mkpath [ $path ];
+    $logger->info("Temporary directory created: $path");
+    $logger->info("Extracting to: $path");
+    return $self->archive->extract($path);
 }
 
 

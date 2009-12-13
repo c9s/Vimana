@@ -39,8 +39,19 @@ sub get_installer {
 
 sub install_archive_type {
     my ($self, $pkgfile) = @_;
-    my $files = $pkgfile->archive_files();
 
+    # extract to a path 
+    my $tmpdir = Vimana::Util::tempdir();
+
+    $logger->info( "Extracting to $tmpdir." );
+    $pkgfile->extract_to( $tmpdir );
+
+    # chdir
+    $logger->info("Changing directory to $tmpdir.");
+    chdir $tmpdir;
+
+    my $files = $pkgfile->archive_files();
+    use Data::Dumper;warn Dumper( $files );
 
     my $ret;
     my $ins_type;
