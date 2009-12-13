@@ -53,27 +53,46 @@ sub install_archive_type {
     my $files = $pkgfile->archive_files();
 
     my $ret;
-    my $ins_type;
+    my @ins_type;
 
     # find meta file
     $logger->info("Check if 'META' or 'VIMMETA' file exists. support for VIM::Packager.");
-    $ins_type = 'meta' if $pkgfile->has_metafile;
+
+    if( $pkgfile->has_metafile ) {
+        $logger->info( 'Meta file found');
+        push @ins_type,'meta';
+    }
 
     $logger->info("Check if Makefile exists.");
-    $ins_type = 'makefile' if $pkgfile->has_makefile;
+    if ($pkgfile->has_makefile ) {
+        $logger->info( 'Makefile found.' );
+        push @ins_type,'makefile' ;
+    }
 
     $logger->info("Check if Rakefile exists.");
-    $ins_type = 'rakefile' if $pkgfile->has_rakefile;
+    if( $pkgfile->has_rakefile ) {
+        $logger->info( 'Rakefile found.');
+        push @ins_type,'rakefile' ;
+    }
 
-    $logger->info( "No availiable strategy, try to auto-install." );
-    $ins_type ||= 'auto';
+    unless( @ins_type ) {
+        $logger->info( "No availiable strategy, try to auto-install." );
+        push @ins_type,'auto';
+    }
 
-    my $installer = $self->get_installer( $ins_type, { package => $pkgfile } );
-    $ret = $installer->run( $tmpdir );
+DONE:
+    for my $ins_type ( @ins_type ) {
+        my $installer = $self->get_installer( $ins_type , { package => $pkgfile } );
+        $ret = $installer->run( $tmpdir );
+
+        last DONE if $ret;  # succeed
+        last DONE if ! $installer->_continue;  # not succeed, but we should continue other installation.
+    }
 
     unless( $ret ) {
-        $logger->warn("Installation failed");
-        $logger->warn("Reason: package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file");
+        $logger->warn("Installation failed.");
+        # $logger->warn("Reason: package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file");
+
         $logger->warn("Vimana does not know how to install this package");
         return $ret;
     }
