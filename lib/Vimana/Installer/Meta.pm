@@ -19,9 +19,10 @@ sub run {
     my $ret;
     $ret = system( 'vim-packager build' );
 
+    return 0 if $ret != 0;
+
     $ret = system( 'make install' );
-
-
+    return 1 if $ret == 0;
 }
 
 1;
