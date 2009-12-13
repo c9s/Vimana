@@ -37,6 +37,26 @@ sub get_installer {
     return $class->new( @args );
 }
 
+
+sub check_strategies {
+    my $self = shift;
+    my $pkg = shift;
+    my @sts = @_;
+    my @ins_type;
+    for my $st ( @sts ) {
+        print $st->{name} . ' : ' . $st->{desc} . ' ...';
+        my $method = $st->{method};
+        if( $pkg->$method ) {
+            print " [ found ]\n" ;
+            push @ins_type , $st->{installer};
+        }
+        else {
+            print " [ not found ]\n";
+        }
+    }
+    return @ins_type;
+}
+
 sub install_archive_type {
     my ($self, $pkgfile) = @_;
 
@@ -53,33 +73,33 @@ sub install_archive_type {
     my $files = $pkgfile->archive_files();
 
     my $ret;
-    my @ins_type;
+    my @ins_type = $self->check_strategies( $pkgfile ,
+        {
+            name => 'Meta',
+            desc => q{Check if 'META' or 'VIMMETA' file exists. support for VIM::Packager.},
+            installer => 'meta',
+            method => 'has_metafile',
+        },
+        {
+            name => 'Makefile',
+            desc => q{Check if makefile exists.},
+            installer => 'Makefile',
+            method => 'has_makefile',
+        },
+        {
+            name => 'Rakefile',
+            desc => q{Check if rakefile exists.},
+            installer => 'Rakefile',
+            method => 'has_rakefile',
+        },
+    );
 
-    # find meta file
-    $logger->info("Check if 'META' or 'VIMMETA' file exists. support for VIM::Packager.");
-
-    if( $pkgfile->has_metafile ) {
-        $logger->info( 'Meta file found');
-        push @ins_type,'meta';
-    }
-
-    $logger->info("Check if Makefile exists.");
-    if ($pkgfile->has_makefile ) {
-        $logger->info( 'Makefile found.' );
-        push @ins_type,'makefile' ;
-    }
-
-    $logger->info("Check if Rakefile exists.");
-    if( $pkgfile->has_rakefile ) {
-        $logger->info( 'Rakefile found.');
-        push @ins_type,'rakefile' ;
-    }
-
-    unless( @ins_type ) {
+    if( @ins_type == 0 ) {
         $logger->warn( "Package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file" );
         $logger->info( "No availiable strategy, try to auto-install." );
         push @ins_type,'auto';
     }
+    
 
 DONE:
     for my $ins_type ( @ins_type ) {

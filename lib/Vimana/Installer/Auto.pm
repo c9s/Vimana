@@ -29,6 +29,7 @@ sub run {
     my $pkg = $self->package;
     my @files = $pkg->archive->files;
 
+    print "Archive content:\n";
     for (@files ) {
         print "\t$_\n";
     }
