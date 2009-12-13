@@ -32,9 +32,9 @@ use Vimana::Installer::Text;
 # XXX: mv this method into Vimana::Installer , maybe
 sub get_installer {
     my ( $self, $type, @args ) = @_;
-    $type = ucfirst( $type );
+    $type = ucfirst($type);
     my $class = qq{Vimana::Installer::$type};
-    return $class->new(@args);
+    return $class->new( @args );
 }
 
 sub install_archive_type {
@@ -51,7 +51,6 @@ sub install_archive_type {
     chdir $tmpdir;
 
     my $files = $pkgfile->archive_files();
-    use Data::Dumper;warn Dumper( $files );
 
     my $ret;
     my $ins_type;
@@ -66,12 +65,8 @@ sub install_archive_type {
     $logger->info( "No availiable strategy, try to auto-install." );
     $ins_type ||= 'auto';
 
-    my $installer = $self->get_installer(
-        $ins_type, {
-        package => $pkgfile,
-        path    => $tmpdir
-    } );
-    $ret = $installer->run( $pkgfile );
+    my $installer = $self->get_installer( $ins_type, { package => $pkgfile } );
+    $ret = $installer->run( $tmpdir );
 
     unless( $ret ) {
         $logger->warn("Installation failed");
@@ -96,10 +91,8 @@ sub install_archive_type {
 
 
 sub run {
-    my ( $self, $package ) = @_;  # $package is a canonicalized name
-
+    my ( $self, $package ) = @_; 
     # XXX: check if we've installed this package
-
     # XXX: check if package files conflict
 
     my $info = Vimana->index->find_package( $package );
