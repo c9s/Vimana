@@ -27,8 +27,7 @@ sub find_vimball_files {
 
 sub run {
     my $self = shift;
-
-    my $out = $self->path;
+    my $out = shift;
     my $pkg = $self->package;
 
     my @files = $pkg->archive->files;
