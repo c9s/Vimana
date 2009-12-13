@@ -151,7 +151,7 @@ sub run {
     # if it's vimball, install it
     my $ret;
     if( $pkgfile->is_text ) {
-        my $installer = $self->get_installer('text');
+        my $installer = $self->get_installer('text' , { package => $pkgfile });
         $ret = $installer->run( $pkgfile );
     }
     elsif( $pkgfile->is_archive ) {
