@@ -7,7 +7,8 @@ use Vimana::VimballInstall;
 
 
 sub run {
-    my ( $self, $pkgfile ) = @_;
+    my $self = shift;
+    my $pkgfile = $self->package;
 
     if( $pkgfile->is_vimball ) {
         $logger->info("Found Vimball File");

@@ -14,7 +14,6 @@ use Vimana::Logger;
 use Vimana::Util;
 use DateTime;
 
-
 sub find_vimball_files {
     my $out = shift;
     my @vimballs;
@@ -26,10 +25,8 @@ sub find_vimball_files {
 }
 
 sub run {
-    my $self = shift;
-    my $out = shift;
+    my ($self, $out ) = @_;
     my $pkg = $self->package;
-
     my @files = $pkg->archive->files;
 
     for (@files ) {
@@ -37,7 +34,7 @@ sub run {
     }
 
     if( $pkg->has_vimball() ) {
-        $logger->info( "vimball files found, trying to install vimballs");
+        $logger->info( "vimball files found, trying to install vimball files");
         use Vimana::VimballInstall;
         my @vimballs = find_vimball_files $out;
         Vimana::VimballInstall->install_vimballs( @vimballs );
@@ -45,7 +42,6 @@ sub run {
 
     # check directory structure
     {
-
         # XXX: check vim runtime path subdirs , mv to init script
         $logger->info("Initializing vim runtime directories") ;
         Vimana::Util::init_vim_runtime();

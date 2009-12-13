@@ -62,6 +62,9 @@ sub install_archive_type {
     $logger->info("Check if Makefile exists.");
     $ins_type = 'makefile' if $pkgfile->has_makefile;
 
+    $logger->info("Check if Rakefile exists.");
+    $ins_type = 'rakefile' if $pkgfile->has_rakefile;
+
     $logger->info( "No availiable strategy, try to auto-install." );
     $ins_type ||= 'auto';
 
