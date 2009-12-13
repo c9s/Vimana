@@ -75,14 +75,12 @@ sub install_archive_type {
         $logger->warn("Installation failed");
         $logger->warn("Reason: package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file");
         $logger->warn("Vimana does not know how to install this package");
-        return;
-    }
-    else {
-        # succeed
-
+        return $ret;
     }
 
+    $logger->info( "Succeed." );
     return $ret;
+
     # add record:
     # Vimana::Record->add( {
     #     cname => $pkgfile->cname,
