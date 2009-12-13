@@ -19,7 +19,7 @@ __PACKAGE__->mk_accessors( qw(package) );
 
 sub run {
     my ($self,$pkgfile) = @_;
-    return $self->install_from_archive;
+    return $self->install_from_archive( $pkgfile );
 }
 
 sub find_vimball_files {
@@ -34,7 +34,7 @@ sub find_vimball_files {
 
 sub install_from_archive {
     my $self = shift;
-    my $pkg = $self->package;
+    my $pkg =  shift;
 
     my @files = $pkg->archive->files;
 
