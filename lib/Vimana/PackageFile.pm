@@ -110,10 +110,19 @@ sub content {
 
 sub has_metafile {
     my $self = shift;
-    my @files = grep /makefile/i , $self->archive->files();
+    my @files = grep /(?:meta|vimmeta|vimmeta.yml)/i , $self->archive->files();
     return @files if scalar @files;
     return undef;
 }
+
+
+sub has_rakefile {
+    my $self = shift;
+    my @files = grep /rakefile/i , $self->archive->files();
+    return @files if scalar @files;
+    return undef;
+}
+
 
 sub has_makefile {
     my $self = shift;
@@ -163,15 +172,15 @@ sub copy_to_rtp {
 
 
 use Vimana::Util;
+
 sub extract_to {
-    my ($self,$path) = @_;
-    my $out = Vimana::Util::tempdir();
-    rmtree [ $out ] if -e $out;
-    mkpath [ $out ];
-    $logger->info("Temporary directory created: $out");
-    $logger->info("Extracting to: $out");
-    $self->archive->extract( $out );  
-    return $out;
+    my ( $self, $path ) = @_;
+    # my $path ||= Vimana::Util::tempdir();
+    rmtree [ $path ] if -e $path;
+    mkpath [ $path ];
+    $logger->info("Temporary directory created: $path");
+    $logger->info("Extracting to: $path");
+    return $self->archive->extract($path);
 }
 
 

@@ -15,10 +15,12 @@ should be installed to ~/.vim/ directory.   if it is a vim color scheme ,
 then it should be put into ~/.vim/colors/ and prompt for setting the
 installed colorscheme as default.
 
-vimball is supported.
+rakefile , makefile , vim meta and vimball installation is supported.
 
-In future, Vimana will support Makefile,Rakefile install. and Vim package meta
-file (for VIM::Packager).
+for scripts have its own doc, Vimana will try to update helptags after installation.
+
+And now, you can write your own vim meta file
+(VIM::Packager) or makefile , rakefile for installer.
 
 ( In some modern Indian languages, vimāna or vimān means "aircraft". )
 

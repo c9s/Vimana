@@ -32,44 +32,94 @@ use Vimana::Installer::Text;
 # XXX: mv this method into Vimana::Installer , maybe
 sub get_installer {
     my ( $self, $type, @args ) = @_;
-    $type = ucfirst( $type );
+    $type = ucfirst($type);
     my $class = qq{Vimana::Installer::$type};
-    return $class->new(@args);
+    return $class->new( @args );
+}
+
+
+sub check_strategies {
+    my $self = shift;
+    my $pkg = shift;
+    my @sts = @_;
+    my @ins_type;
+    for my $st ( @sts ) {
+        print $st->{name} . ' : ' . $st->{desc} . ' ...';
+        my $method = $st->{method};
+        if( $pkg->$method ) {
+            print " [ found ]\n" ;
+            push @ins_type , $st->{installer};
+        }
+        else {
+            print " [ not found ]\n";
+        }
+    }
+    return @ins_type;
 }
 
 sub install_archive_type {
     my ($self, $pkgfile) = @_;
+
+    # extract to a path 
+    my $tmpdir = Vimana::Util::tempdir();
+
+    $logger->info( "Extracting to $tmpdir." );
+    $pkgfile->extract_to( $tmpdir );
+
+    # chdir
+    $logger->info("Changing directory to $tmpdir.");
+    chdir $tmpdir;
+
     my $files = $pkgfile->archive_files();
 
-
     my $ret;
-    my $ins_type;
+    my @ins_type = $self->check_strategies( $pkgfile ,
+        {
+            name => 'Meta',
+            desc => q{Check if 'META' or 'VIMMETA' file exists. support for VIM::Packager.},
+            installer => 'meta',
+            method => 'has_metafile',
+        },
+        {
+            name => 'Makefile',
+            desc => q{Check if makefile exists.},
+            installer => 'Makefile',
+            method => 'has_makefile',
+        },
+        {
+            name => 'Rakefile',
+            desc => q{Check if rakefile exists.},
+            installer => 'Rakefile',
+            method => 'has_rakefile',
+        },
+    );
 
-    # find meta file
-    $logger->info("Check if 'META' or 'VIMMETA' file exists. support for VIM::Packager.");
-    $ins_type = 'meta' if $pkgfile->has_metafile;
+    if( @ins_type == 0 ) {
+        $logger->warn( "Package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file" );
+        $logger->info( "No availiable strategy, try to auto-install." );
+        push @ins_type,'auto';
+    }
+    
 
-    $logger->info("Check if Makefile exists.");
-    $ins_type = 'makefile' if $pkgfile->has_makefile;
+DONE:
+    for my $ins_type ( @ins_type ) {
+        my $installer = $self->get_installer( $ins_type , { package => $pkgfile } );
+        $ret = $installer->run( $tmpdir );
 
-    $logger->info( "No availiable strategy, try to auto-install." );
-    $ins_type ||= 'auto';
-
-    my $installer = $self->get_installer($ins_type);
-    $ret = $installer->run( $pkgfile );
+        last DONE if $ret;  # succeed
+        last DONE if ! $installer->_continue;  # not succeed, but we should continue other installation.
+    }
 
     unless( $ret ) {
-        $logger->warn("Installation failed");
-        $logger->warn("Reason: package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file");
+        $logger->warn("Installation failed.");
+
         $logger->warn("Vimana does not know how to install this package");
-        return;
-    }
-    else {
-        # succeed
-
+        return $ret;
     }
 
+    $logger->info( "Succeed." );
     return $ret;
+
     # add record:
     # Vimana::Record->add( {
     #     cname => $pkgfile->cname,
@@ -81,10 +131,8 @@ sub install_archive_type {
 
 
 sub run {
-    my ( $self, $package ) = @_;  # $package is a canonicalized name
-
+    my ( $self, $package ) = @_; 
     # XXX: check if we've installed this package
-
     # XXX: check if package files conflict
 
     my $info = Vimana->index->find_package( $package );
@@ -123,7 +171,7 @@ sub run {
     # if it's vimball, install it
     my $ret;
     if( $pkgfile->is_text ) {
-        my $installer = $self->get_installer('text');
+        my $installer = $self->get_installer('text' , { package => $pkgfile });
         $ret = $installer->run( $pkgfile );
     }
     elsif( $pkgfile->is_archive ) {

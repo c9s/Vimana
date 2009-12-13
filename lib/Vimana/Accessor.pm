@@ -2,6 +2,12 @@ package Vimana::Accessor;
 use strict;
 use warnings;
 
+=head2 new
+
+ ->new( {  } );
+
+=cut
+
 sub new {
     my ( $class, $ref ) = @_;
     my $self = bless { }, $class;

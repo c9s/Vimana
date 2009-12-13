@@ -6,7 +6,8 @@ use Vimana::Logger;
 use Vimana::VimballInstall;
 
 sub run {
-    my ( $self, $pkgfile ) = @_;
+    my $self = shift;
+    my $pkgfile = $self->package;
 
     if( $pkgfile->is_vimball ) {
         $logger->info("Found Vimball File");
@@ -30,10 +31,13 @@ sub run {
 
     # guess text filetype here.  (colorscheme, ftplugin ...etc)
 
+    $logger->info( "Inspecting file content for script type." );
     my $type = $self->inspect_text_content;
     if ($type) {
-        $logger->info("Script type found: $type");
+        $logger->info("Script type found: $type.");
+        $logger->info("Installing..");
         $self->copy_to_rtp($type);
+        $logger->info("Done.");
         return 1;
     }
 

@@ -1,6 +1,5 @@
 package Vimana::Installer::Auto;
-use base qw(Vimana::Installer Vimana::Accessor);
-use base qw(Vimana::Accessor);
+use base qw(Vimana::Installer);
 use warnings;
 use strict;
 
@@ -15,13 +14,6 @@ use Vimana::Logger;
 use Vimana::Util;
 use DateTime;
 
-__PACKAGE__->mk_accessors( qw(package) );
-
-sub run {
-    my ($self,$pkgfile) = @_;
-    return $self->install_from_archive( $pkgfile );
-}
-
 sub find_vimball_files {
     my $out = shift;
     my @vimballs;
@@ -32,27 +24,18 @@ sub find_vimball_files {
     return @vimballs;
 }
 
-sub install_from_archive {
-    my $self = shift;
-    my $pkg =  shift;
-
+sub run {
+    my ($self, $out ) = @_;
+    my $pkg = $self->package;
     my @files = $pkg->archive->files;
 
+    print "Archive content:\n";
     for (@files ) {
         print "\t$_\n";
     }
 
-    # my $out = $pkg->extract_to( );
-    my $out = Vimana::Util::tempdir();
-    rmtree [ $out ] if -e $out;
-    mkpath [ $out ];
-    $logger->info("Temporary directory created: $out") ;
-
-    $logger->info("Extracting...") ;
-    $pkg->archive->extract( $out );  
-
     if( $pkg->has_vimball() ) {
-        $logger->info( "vimball files found, trying to install vimballs");
+        $logger->info( "vimball files found, trying to install vimball files");
         use Vimana::VimballInstall;
         my @vimballs = find_vimball_files $out;
         Vimana::VimballInstall->install_vimballs( @vimballs );
@@ -60,7 +43,6 @@ sub install_from_archive {
 
     # check directory structure
     {
-
         # XXX: check vim runtime path subdirs , mv to init script
         $logger->info("Initializing vim runtime directories") ;
         Vimana::Util::init_vim_runtime();
@@ -86,6 +68,7 @@ sub install_from_archive {
     }
 
     $logger->info("Cleaning up temporary directory.");
+
     rmtree [ $out ] if -e $out;
 
     return 1;
