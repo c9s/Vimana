@@ -19,54 +19,8 @@ __PACKAGE__->mk_accessors( qw(package) );
 
 sub run {
     my ($self,$pkgfile) = @_;
-
-    $self->package( $pkgfile );
-
-    if( $pkgfile->is_archive() ) {
-        $logger->info('Archive file');
-        return $self->install_from_archive;
-    }
-    elsif( $pkgfile->is_text() ) {
-        $logger->info('Plain Text file');
-
-        my $type = $self->inspect_text_content;
-        if ($type) {
-            $logger->info("Found script type: $type");
-            return $self->install_to($type);
-        }
-
-        return $self->install_to( 'colors' )
-            if $pkgfile->script_is('color scheme');
-
-        return $self->install_to( 'syntax' )
-            if $pkgfile->script_is('syntax');
-
-        return $self->install_to( 'indent' )
-            if $pkgfile->script_is('indent');
-
-        return $self->install_to( 'ftplugin' )
-            if $pkgfile->script_is('ftplugin');
-
-        return 0;
-    }
-
+    return $self->install_from_archive;
 }
-
-sub install_to {
-    my ( $self , $dir ) = @_;
-    my $file = $self->package->file;
-    my $target = File::Spec->join( runtime_path(), $dir );
-    File::Path::mkpath [ runtime_path() ];
-
-    $logger->info( "Install $file to $target" );
-    my $ret = fcopy( $file => $target );
-    !$ret ? 
-        $logger->error( $! ) :
-        $logger->info("Installed");
-    $ret;
-}
-
-
 
 sub find_vimball_files {
     my $out = shift;
@@ -123,8 +77,7 @@ sub install_from_archive {
             return 0;
         }
         
-        $logger->info('base path:');
-        $logger->info( $_ ) for ( keys %$nodes );
+        $logger->info( "Basepath found: " . $_ ) for ( keys %$nodes );
 
         $self->install_from_nodes( $nodes , runtime_path() );
 
@@ -132,7 +85,7 @@ sub install_from_archive {
         $self->update_vim_doc_tags();
     }
 
-    $logger->info("Clean up temporary directory.");
+    $logger->info("Cleaning up temporary directory.");
     rmtree [ $out ] if -e $out;
 
     return 1;
@@ -186,15 +139,6 @@ sub update_vim_doc_tags {
     system(qq|$vim -c ':helptags $dir'  -c q |);
 }
 
-sub inspect_text_content {
-    my $self = shift;
-    my $content = $self->package->content;
-    return 'colors'   if $content =~ m/^let\s+(g:)?colors_name\s*=/;
-    return 'syntax'   if $content =~ m/^syn[tax]* (?:match|region|keyword)/;
-    return 'compiler' if $content =~ m/^let\s+current_compiler\s*=/;
-    return 'indent'   if $content =~ m/^let\s+b:did_indent/;
-    return undef;
-}
 
 =head1 AUTHOR
 
