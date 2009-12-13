@@ -31,10 +31,13 @@ sub run {
 
     # guess text filetype here.  (colorscheme, ftplugin ...etc)
 
+    $logger->info( "Inspecting file content for script type." );
     my $type = $self->inspect_text_content;
     if ($type) {
-        $logger->info("Script type found: $type");
+        $logger->info("Script type found: $type.");
+        $logger->info("Installing..");
         $self->copy_to_rtp($type);
+        $logger->info("Done.");
         return 1;
     }
 
