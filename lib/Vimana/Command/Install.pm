@@ -71,7 +71,7 @@ sub install_archive_type {
     $logger->info("Changing directory to $tmpdir.");
     chdir $tmpdir;
 
-    return $self->install_by_strategy( $tmpdir );
+    return $self->install_by_strategy( $tmpdir , { cleanup => 1 } );
 
     # add record:
     # my $files = $pkgfile->archive_files();
@@ -84,8 +84,7 @@ sub install_archive_type {
 }
 
 sub install_by_strategy {
-    my $self = shift;
-    my $tmpdir = shift;
+    my ($self,$tmpdir,$args) = @_;
     my $ret;
     my @ins_type = $self->check_strategies( 
         {
@@ -115,7 +114,7 @@ sub install_by_strategy {
     
 DONE:
     for my $ins_type ( @ins_type ) {
-        my $installer = $self->get_installer( $ins_type , {} );
+        my $installer = $self->get_installer( $ins_type , { args => $args } );
         $ret = $installer->run( $tmpdir );
 
         last DONE if $ret;  # succeed
@@ -124,7 +123,6 @@ DONE:
 
     unless( $ret ) {
         $logger->warn("Installation failed.");
-
         $logger->warn("Vimana does not know how to install this package");
         return $ret;
     }
@@ -158,11 +156,11 @@ sub run {
         }
         system(qq{$cmd $uri $dir});
         chdir $dir;
-        return $self->install_by_strategy($dir);
+        return $self->install_by_strategy($dir , { cleanup => 1 });
     }
     elsif( $arg eq '.' ) {
         chdir '.';
-        return $self->install_by_strategy('.');
+        return $self->install_by_strategy('.' , { cleanup => 0 });
     }
     else {
         my $package = $arg;

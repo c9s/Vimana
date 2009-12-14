@@ -83,9 +83,10 @@ sub run {
         $self->update_vim_doc_tags();
     }
 
-    $logger->info("Cleaning up temporary directory.");
-
-    rmtree [ $out ] if -e $out;
+    if( $self->args and $self->args->{cleanup} ) {
+        $logger->info("Cleaning up temporary directory.");
+        rmtree [ $out ] if -e $out;
+    }
 
     return 1;
 }
