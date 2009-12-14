@@ -87,6 +87,9 @@ TESTED CASES
     $ vimaan install gsession.vim
     $ vimana install snipmate
     $ vimana i svg.vim
+    $ vimana i railscasts-theme
+    $ vimana i dark-ruby
+    $ vimana i bufexplorer.zip
 
 SUPPORT AND DOCUMENTATION
 ==========================
