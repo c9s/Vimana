@@ -15,7 +15,6 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/Vimana.pm
 lib/Vimana/Accessor.pm
-lib/Vimana/AutoInstall.pm
 lib/Vimana/Command.pm
 lib/Vimana/Command/Download.pm
 lib/Vimana/Command/Info.pm
