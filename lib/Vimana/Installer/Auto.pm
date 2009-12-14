@@ -24,17 +24,32 @@ sub find_vimball_files {
     return @vimballs;
 }
 
+
+sub find_files {
+    my $self = shift;
+    my @dirs = @_;
+    use File::Find;
+    use File::Spec;
+    my @files;
+    File::Find::find(sub {
+        return if m{\.(?:git|svn)};
+        return if $File::Find::dir =~ m{\.(git|svn)};
+        my $filepath = File::Spec->catfile( $File::Find::dir, $_ );
+        push @files, $filepath if -f $_;
+    } , @dirs );
+    return @files;
+}
+
 sub run {
     my ($self, $out ) = @_;
-    my $pkg = $self->package;
-    my @files = $pkg->archive->files;
+    my @files = $self->find_files( '.' );
 
     print "Archive content:\n";
     for (@files ) {
         print "\t$_\n";
     }
 
-    if( $pkg->has_vimball() ) {
+    if( grep /\.vba$/,@files ) {
         $logger->info( "vimball files found, trying to install vimball files");
         use Vimana::VimballInstall;
         my @vimballs = find_vimball_files $out;
