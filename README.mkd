@@ -94,6 +94,7 @@ TESTED CASES
     $ vimana i railscasts-theme
     $ vimana i dark-ruby
     $ vimana i bufexplorer.zip
+    $ vimana i xml.vim
 
 SUPPORT AND DOCUMENTATION
 ==========================
