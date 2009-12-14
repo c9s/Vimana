@@ -113,7 +113,8 @@ sub find_base_path {
     my $nodes = {};
     for my $p ( @$paths ) {
         if ( $p =~ m{^(.*?/)?(plugin|doc|syntax|indent|colors|autoload|after|ftplugin)/.*?\.(vim|txt)$} ) {
-            $nodes->{ $1 || '' } ++;
+            my $lib = $1 || '.';
+            $nodes->{ $lib } ++ if $lib !~ m{after/};
         }
     }
     return $nodes;
