@@ -123,7 +123,9 @@ sub find_base_path {
 sub update_vim_doc_tags {
     my $vim = find_vim();
     my $dir = File::Spec->join( runtime_path() , 'doc' );
-    system(qq|$vim -c ':helptags $dir'  -c q |);
+    my $cmd = qq{vim -e -s -c ":helptags $dir" -c ":q"};
+    print "\t$cmd\n";
+    system( $cmd );
 }
 
 
