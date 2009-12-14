@@ -39,20 +39,21 @@ sub get_installer {
 
 
 sub check_strategies {
-    my $self = shift;
-    my $pkg = shift;
-    my @sts = @_;
+    my ($self,$pkg,@sts) = @_;
     my @ins_type;
     for my $st ( @sts ) {
         print $st->{name} . ' : ' . $st->{desc} . ' ...';
-        my $method = $st->{method};
-        if( $pkg->$method ) {
-            print " [ found ]\n" ;
-            push @ins_type , $st->{installer};
+        my $deps = $st->{deps};
+        my $found;
+NEXT_TYPE:
+        for ( @$deps ) {
+            if ( -e $_ ) {
+                push @ins_type , $st->{installer};
+                $found = 1;
+                last NEXT_TYPE;
+            }
         }
-        else {
-            print " [ not found ]\n";
-        }
+        print $found ? "[found]\n" : "[not found]\n";
     }
     return @ins_type;
 }
@@ -70,29 +71,41 @@ sub install_archive_type {
     $logger->info("Changing directory to $tmpdir.");
     chdir $tmpdir;
 
-    my $files = $pkgfile->archive_files();
+    return $self->install_by_strategy( $tmpdir );
 
+    # add record:
+    # my $files = $pkgfile->archive_files();
+    # Vimana::Record->add( {
+    #     cname => $pkgfile->cname,
+    #     url  => $pkgfile->url,
+    #     filetype => $pkgfile->filetype,
+    #     files => $files,
+    # });
+}
+
+sub install_by_strategy {
+    my $self = shift;
+    my $tmpdir = shift;
     my $ret;
-    my @ins_type = $self->check_strategies( $pkgfile ,
+    my @ins_type = $self->check_strategies( 
         {
             name => 'Meta',
             desc => q{Check if 'META' or 'VIMMETA' file exists. support for VIM::Packager.},
             installer => 'meta',
-            method => 'has_metafile',
+            deps =>  [qw(VIMMETA META)],
         },
         {
             name => 'Makefile',
             desc => q{Check if makefile exists.},
             installer => 'Makefile',
-            method => 'has_makefile',
+            deps => [qw(makefile Makefile)],
         },
         {
             name => 'Rakefile',
             desc => q{Check if rakefile exists.},
             installer => 'Rakefile',
-            method => 'has_rakefile',
-        },
-    );
+            deps => [qw(rakefile Rakefile)],
+        });
 
     if( @ins_type == 0 ) {
         $logger->warn( "Package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file" );
@@ -100,10 +113,9 @@ sub install_archive_type {
         push @ins_type,'auto';
     }
     
-
 DONE:
     for my $ins_type ( @ins_type ) {
-        my $installer = $self->get_installer( $ins_type , { package => $pkgfile } );
+        my $installer = $self->get_installer( $ins_type , {} );
         $ret = $installer->run( $tmpdir );
 
         last DONE if $ret;  # succeed
@@ -119,69 +131,65 @@ DONE:
 
     $logger->info( "Succeed." );
     return $ret;
-
-    # add record:
-    # Vimana::Record->add( {
-    #     cname => $pkgfile->cname,
-    #     url  => $pkgfile->url,
-    #     filetype => $pkgfile->filetype,
-    #     files => $files,
-    # });
 }
 
 
+
 sub run {
-    my ( $self, $package ) = @_; 
+    my ( $self, $arg ) = @_; 
     # XXX: check if we've installed this package
     # XXX: check if package files conflict
+    if (  $arg =~ m{^git:} ) {
+        my $uri = $arg;
+        unless( $uri =~ m{^git://} ) { 
+                $uri =~ s{^git:}{} }
+        my $dir = Vimana::Util::tempdir();
+        system(qq{git clone $uri $dir});
+        chdir $dir;
+        return $self->install_by_strategy( $dir );
+    }
+    else {
+        my $package = $arg;
 
-    my $info = Vimana->index->find_package( $package );
+        my $info = Vimana->index->find_package( $package );
+        unless( $info ) {
+            $logger->error("package $package not found.");
+            return 0;
+        }
+        my $page = Vimana::VimOnline::ScriptPage->fetch( $info->{script_id} );
+        my $dir = '/tmp' || Vimana::Util::tempdir();
+        my $url = $page->{download};
+        my $filename = $page->{filename};
+        my $target = File::Spec->join( $dir , $filename );
+        $logger->info("Downloading from: $url");;
+        my $pkgfile = Vimana::PackageFile->new( {
+                cname      => $package,
+                file      => $target,
+                url       => $url,
+                info      => $info,
+                page_info => $page,
+        } );
+        return unless $pkgfile->download();
 
-    unless( $info ) {
-        $logger->error("Can not found package: $package");
-        return 0;
+        $pkgfile->detect_filetype();
+        $pkgfile->preprocess( );
+
+        # if it's vimball, install it
+        my $ret;
+        if( $pkgfile->is_text ) {
+            my $installer = $self->get_installer('text' , { package => $pkgfile });
+            $ret = $installer->run( $pkgfile );
+        }
+        elsif( $pkgfile->is_archive ) {
+            $ret = $self->install_archive_type( $pkgfile );
+        }
+        unless( $ret ) {
+            print "Installation Failed.\n";
+            exit 1;
+        }
+        print "Installation Done.\n";
     }
 
-    my $page = Vimana::VimOnline::ScriptPage->fetch( $info->{script_id} );
-
-    my $dir = '/tmp' || Vimana::Util::tempdir();
-
-    my $url = $page->{download};
-    my $filename = $page->{filename};
-    my $target = File::Spec->join( $dir , $filename );
-
-    $logger->info("Downloading from: $url");;
-
-    my $pkgfile = Vimana::PackageFile->new( {
-            cname      => $package,
-            file      => $target,
-            url       => $url,
-            info      => $info,
-            page_info => $page,
-    } );
-
-    return unless $pkgfile->download();
-
-    $pkgfile->detect_filetype();
-    $pkgfile->preprocess( );
-
-
-    # if it's vimball, install it
-    my $ret;
-    if( $pkgfile->is_text ) {
-        my $installer = $self->get_installer('text' , { package => $pkgfile });
-        $ret = $installer->run( $pkgfile );
-    }
-    elsif( $pkgfile->is_archive ) {
-        $ret = $self->install_archive_type( $pkgfile );
-    }
-
-    unless( $ret ) {
-        print "Installation Failed.\n";
-        exit 1;
-    }
-
-    print "Installation Done.\n";
 }
 
 
