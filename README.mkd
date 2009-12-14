@@ -96,8 +96,10 @@ TESTED CASES
     $ vimana i bufexplorer.zip
     $ vimana i xml.vim
     $ vimana i cctree
-    $ vimana i git://github.com/c9s/fastgit.vim.git
-    $ vimana i git@github.com:c9s/fastgit.vim.git
+
+    $ vimana i git:git://github.com/c9s/fastgit.vim.git
+    $ vimana i git:git@github.com:c9s/fastgit.vim.git
+    $ vimana i svn:svn+ssh://path/to/your/repo
 
 SUPPORT AND DOCUMENTATION
 ==========================
