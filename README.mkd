@@ -26,6 +26,10 @@ And now, you can write your own vim meta file
 
 NOTE: Vimana only provides search, info ,install commmands currently.
 
+SCREENSHOT
+===============
+![img](http://cloud.github.com/downloads/c9s/Vimana/Screen_shot_2009-12-14_at_9.13.10_AM.png)
+
 INSTALLATION
 ===============
 
