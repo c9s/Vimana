@@ -88,19 +88,6 @@ sub install_from_nodes {
     }
 }
 
-=head2 i_know_what_to_do
-
-=cut
-
-sub i_know_what_to_do {
-    my $nodes = shift;
-    for my $v ( values %$nodes ) {
-        return 1 if $v > 1;
-    }
-    return 0;  # i am not sure
-}
-
-
 =head2 find_base_path 
 
 =cut
