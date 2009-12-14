@@ -133,24 +133,36 @@ DONE:
     return $ret;
 }
 
-
-
-sub stdlize_gituri  { 
+sub stdlize_uri {
     my $uri = shift;
-    $uri =~ s{^git:}{} unless ( $uri =~ m{^git://} );
-    return $uri;
+    if( $uri =~ s{^(git|svn):}{} )  { 
+        return $1,$uri;
+    }
+    return undef;
 }
+
 
 sub run {
     my ( $self, $arg ) = @_; 
     # XXX: check if we've installed this package
     # XXX: check if package files conflict
-    if (  $arg =~ m{^git:} ) {
-        my $uri = stdlize_gituri $arg;
+    if (  $arg =~ m{^git:} or $arg =~ m{^svn:} ) {
+        my ( $rcs, $uri ) = stdlize_uri $arg;
         my $dir = Vimana::Util::tempdir();
-        system(qq{git clone $uri $dir});
+        my $cmd;
+        if( $rcs eq 'git' )  { 
+            $cmd = 'git clone';
+        }
+        elsif( $rcs eq 'svn' ) {
+            $cmd = 'svn co';
+        }
+        system(qq{$cmd $uri $dir});
         chdir $dir;
         return $self->install_by_strategy($dir);
+    }
+    elsif( $arg eq '.' ) {
+        chdir '.';
+        return $self->install_by_strategy('.');
     }
     else {
         my $package = $arg;
