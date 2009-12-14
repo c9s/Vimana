@@ -14,7 +14,7 @@ Vimana - Vim script manager.
 
 =cut
 
-our $VERSION = 2009.34802 ;
+our $VERSION = 2009.34901 ;
 
 =head1 DESCRIPTION
 
