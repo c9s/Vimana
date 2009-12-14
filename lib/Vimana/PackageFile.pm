@@ -61,7 +61,6 @@ sub download {
 
     unlink $self->file if -e $self->file;
 
-    print "Saving file to " . $self->file . "\n";
     open FH, ">", $self->file or die $@;
     print FH $file_content;
     close FH;
@@ -178,8 +177,7 @@ sub extract_to {
     # my $path ||= Vimana::Util::tempdir();
     rmtree [ $path ] if -e $path;
     mkpath [ $path ];
-    $logger->info("Temporary directory created: $path");
-    $logger->info("Extracting to: $path");
+    print "Extracting to: $path\n";
     return $self->archive->extract($path);
 }
 

@@ -43,9 +43,6 @@ sub run {
 
     # check directory structure
     {
-        # XXX: check vim runtime path subdirs , mv to init script
-        $logger->info("Initializing vim runtime directories") ;
-        Vimana::Util::init_vim_runtime();
 
         my @files;
         File::Find::find(  sub {
@@ -58,6 +55,10 @@ sub run {
             $logger->warn("Can't found base path.");
             return 0;
         }
+
+        # XXX: check vim runtime path subdirs , mv to init script
+        $logger->info("Initializing vim runtime directories") ;
+        Vimana::Util::init_vim_runtime();
         
         $logger->info( "Basepath found: " . $_ ) for ( keys %$nodes );
 
@@ -84,7 +85,6 @@ sub install_from_nodes {
     for my $node  ( grep { $nodes->{ $_ } > 1 } keys %$nodes ) {
         $logger->info("$node => $to");
         my (@ret) = dircopy($node, $to );
-
     }
 }
 

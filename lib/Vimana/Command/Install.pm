@@ -162,8 +162,6 @@ sub run {
 
     return unless $pkgfile->download();
 
-    $logger->info("Stored at: $target");
-
     $pkgfile->detect_filetype();
     $pkgfile->preprocess( );
 
