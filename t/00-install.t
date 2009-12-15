@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use lib 'lib';
 
-use Test::More tests => 15;
+use Test::More tests => 14;
 
 BEGIN {
     $ENV{VIMANA_RUNTIME_PATH} = '/tmp/vimana-test';
