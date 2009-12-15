@@ -25,6 +25,7 @@ sub options {
 
 use Vimana::Installer::Meta;
 use Vimana::Installer::Makefile;
+use Vimana::Installer::Rakefile;
 use Vimana::Installer::Auto;
 use Vimana::Installer::Text;
 
