@@ -8,7 +8,7 @@ sub run {
     my $self = shift;
     my $path = shift;
     if ( -e "rakefile" or -e 'rakefile' ) {
-        $logger->info( "Rakefile found. do rake install.") ;
+        print "Rakefile found. do rake install.\n";
         my $ret = system( "rake install" );
         return 1 if $ret == 0;
     }
