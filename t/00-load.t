@@ -9,7 +9,6 @@ BEGIN {
     use_ok( 'Vimana::PackageFile');
     use_ok( 'Vimana::Index');
     use_ok( 'Vimana::Logger');
-    use_ok( 'Vimana::AutoInstall');
     use_ok( 'Vimana::Util');
 }
 
