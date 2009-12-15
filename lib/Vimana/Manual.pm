@@ -81,35 +81,24 @@ To see more information about "rails.vim" plugin
 
 To install "rails.vim" package:
 
-    $ vimana install rails.vim
+    $ vimana i rails.vim
 
 Check your F<~/.vim/> directory , rails plugin should be installed.
 
 To install "rails.vim" package and enable verbose messages:
 
-    $ vimana install rails.vim -v
+    $ vimana i rails.vim -v
+    $ vimana i autocomplpop
 
-    Download from: http://www.vim.org/scripts/download_script.php?src_id=10297
-    Stored at: /tmp/rails.zip
-    Check if this package contains 'Makefile' file
-    Check if we can install this package via port file
-    Check if we can auto install this package
-    Archive type file
-    FILE: autoload/rails.vim 
-    FILE: plugin/rails.vim 
-    FILE: doc/rails.txt 
-    Temporary directory created: /var/folders/4o/4omYKsGdFEyBuGRUVlwuNU+++TM/-Tmp-/rlBtGJkMZN
-    Extracting...
-    Initializing vim runtime path...
-    base path:
-    /var/folders/4o/4omYKsGdFEyBuGRUVlwuNU+++TM/-Tmp-/rlBtGJkMZN/
-    Copying files...
-    /var/folders/4o/4omYKsGdFEyBuGRUVlwuNU+++TM/-Tmp-/rlBtGJkMZN/ => /Users/c9s/.vim
-    Updating helptags
-    Clean up temporary directory.
-    Done
-    
-    $
+To install from a git repository:
+
+    $ vimana i git:git://path/to/git/repository
+
+To install from current directory:
+
+    $ git clone git://path/to/git/repo.git
+    $ cd repo
+    $ vimana i .  
 
 
 =head1 AUTHOR
