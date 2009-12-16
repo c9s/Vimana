@@ -102,6 +102,7 @@ TESTED CASES
     $ vimana i svn:svn+ssh://path/to/your/repo
 
     $ vimana i jslint.vim
+    $ vimana i fakeclip
 
     $ cd snipmate.git
     $ vimana i .    # install from current path.
