@@ -1,4 +1,6 @@
 # vim:fdm=expr:fdl=1:foldexpr=getline(v\:lnum)=~'^=='?'>1'\:getline(v\:lnum)[0]=~'[*x(]'?'>2'\:getline(v\:lnum)=~'^--'?'<2'\:'='
 
-* support installing packages from git/svn/hg repository
-* support for vim::packager  
+x support installing packages from git/svn/hg repository
+x support for vim::packager  
+* support for bzip archive (need a wrapper class)
+        Archive::Any sucks.
