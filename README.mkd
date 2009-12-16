@@ -101,6 +101,8 @@ TESTED CASES
     $ vimana i git:git@github.com:c9s/fastgit.vim.git
     $ vimana i svn:svn+ssh://path/to/your/repo
 
+    $ vimana i jslint.vim
+
     $ cd snipmate.git
     $ vimana i .    # install from current path.
 
