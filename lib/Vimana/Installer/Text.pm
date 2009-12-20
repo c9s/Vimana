@@ -44,6 +44,16 @@ sub run {
 }
 
 
+=head2 inspect_text_content
+
+you can add something like this to your vim script file:
+
+    " script type: plugin
+
+then the file will be installed into ~/.vim/plugin/
+
+=cut
+
 sub inspect_text_content {
     my $self = shift;
     my $content = $self->package->content;
@@ -51,6 +61,12 @@ sub inspect_text_content {
     return 'syntax'   if $content =~ m/^syn[tax]* (?:match|region|keyword)/;
     return 'compiler' if $content =~ m/^let\s+current_compiler\s*=/;
     return 'indent'   if $content =~ m/^let\s+b:did_indent/;
+
+    if( $content =~ m{^"\s*(?:script\s+type):\s*(\w+)}i ) {
+        my $type = $1;
+        return $type;
+        # return $type if $type =~ m{(?:plugin|ftplugin|ftdetect|syntax|compiler|)};
+    }
     return 0;
 }
 
