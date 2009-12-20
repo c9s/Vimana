@@ -86,16 +86,17 @@ COMMAND ALIAS
 TESTED CASES
 ============
 
-    $ vimana install the-nerd-tree
-    $ vimana install autocomplpop
-    $ vimaan install gsession.vim
-    $ vimana install snipmate
+    $ vimana i the-nerd-tree
+    $ vimana i autocomplpop
+    $ vimaan i gsession.vim
+    $ vimana i snipmate
     $ vimana i svg.vim
     $ vimana i railscasts-theme
     $ vimana i dark-ruby
     $ vimana i bufexplorer.zip
     $ vimana i xml.vim
     $ vimana i cctree
+    $ vimana i markdown-syntax
 
     $ vimana i git:git://github.com/c9s/fastgit.vim.git
     $ vimana i git:git@github.com:c9s/fastgit.vim.git
