@@ -33,6 +33,10 @@ SCREENSHOT
 INSTALLATION
 ===============
 
+To install from CPAN:
+
+    $ sudo cpan Vimana
+
 To install this module, run the following commands:
 
 	perl Makefile.PL
