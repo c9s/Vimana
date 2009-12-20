@@ -40,7 +40,8 @@ __PACKAGE__->mk_accessors( qw(
 
 =cut
 
-sub is_archive { $_[ 0 ]->filetype =~ m{(x-bzip2|x-gzip|x-gtar|zip|rar|tar)} ? 1 : 0; }
+# only add supported archive types
+sub is_archive { $_[ 0 ]->filetype =~ m{(?:x-bzip2|x-gzip|x-gtar|zip|rar|tar)} ? 1 : 0; }
 
 sub is_text { $_[ 0 ]->filetype =~ m{octet-stream} ? 1 : 0 }
 

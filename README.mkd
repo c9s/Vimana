@@ -121,6 +121,10 @@ MAKE YOUR PLUGIN INSTALLABLE
 
         " script type: plugin
 
+uppercase also available:
+
+        " Script Type: plugin
+
 then the script will be installed into `~/.vim/plugin/`.
 
 SUPPORT AND DOCUMENTATION
