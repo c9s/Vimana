@@ -107,6 +107,22 @@ TESTED CASES
     $ cd snipmate.git
     $ vimana i .    # install from current path.
 
+MAKE YOUR PLUGIN INSTALLABLE
+============================
+
+1. use vim runtime directory structure like this:
+
+        foo.tar.gz:
+            plugin/foo.vim
+            syntax/foo.vim
+            doc/foo.txt
+
+2. add type info in your vim script file:
+
+        " script type: plugin
+
+then the script will be installed into `~/.vim/plugin/`.
+
 SUPPORT AND DOCUMENTATION
 ==========================
 
