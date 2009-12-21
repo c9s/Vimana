@@ -42,6 +42,15 @@ sub find_files {
 
 sub run {
     my ($self, $out ) = @_;
+
+    # try to fill the record spec.
+    my $record = {
+        install_type => 'auto',
+        meta => {} ,
+        files => [ ],
+    };
+
+
     my @files = $self->find_files( '.' );
 
     print "Archive content:\n";
@@ -49,12 +58,14 @@ sub run {
         print "\t$_\n";
     }
 
-    if( grep /\.vba$/,@files ) {
-        $logger->info( "vimball files found, trying to install vimball files");
+    my @vba = grep /\.vba/,@files;
+    if( @vba ) {
+        $logger->info( "Found vimball files, try to install vimball files");
         use Vimana::VimballInstall;
-        my @vimballs = find_vimball_files $out;
-        Vimana::VimballInstall->install_vimballs( @vimballs );
+        # my @vimballs = find_vimball_files $out;
+        Vimana::VimballInstall->install_vimballs( @vba );
     }
+
 
     # check directory structure
     {
