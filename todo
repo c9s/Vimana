@@ -12,6 +12,7 @@ x support for vim::packager
         Archive::Any sucks.
 * force install option
 * documentation
+* feature checking
 
 == issues ==
 * should prompt "package can not found." when query a info page of an unknown package.
