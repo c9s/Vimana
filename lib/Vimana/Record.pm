@@ -22,6 +22,7 @@ load package record , returns a hashref which contains:
 
     {
         version => 0.1,
+        generated_by => 'Vimana [Version]'
         meta => {
             author: Cornelius
             email: cornelius.howl@gmail.com
@@ -33,9 +34,8 @@ load package record , returns a hashref which contains:
             version_from: plugin/gsession.vim
             vim_version:
         },
-
         files => [
-            "/Users/c9s/.vim/plugin/gsession.vim",
+            { file => "/Users/c9s/.vim/plugin/gsession.vim", checksum => "md5checksum" }
         ]
     }
 
