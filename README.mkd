@@ -44,6 +44,10 @@ To install this module, run the following commands:
 	make test
 	make install
 
+To have a local version Vimana (install vimana without root permission):
+
+    curl http://cloud.github.com/downloads/c9s/Vimana/vimana-2009-12-21.bin | perl
+
 To install this module from github.com , run the following commands:
 
     git clone git://github.com/c9s/Vimana.git
