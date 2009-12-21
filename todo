@@ -2,5 +2,11 @@
 
 x support installing packages from git/svn/hg repository
 x support for vim::packager  
+* installation record
+    should record file content checksum too. (for removing plugins)
+    if the checksum of a file is mismatched , then we shouldn't unlink the file.
+* support pseudo-names: installed , all ... etc 
+    vimana list installed
+    vimana list all
 * support for bzip archive (need a wrapper class)
         Archive::Any sucks.
