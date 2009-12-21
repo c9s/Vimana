@@ -5,66 +5,63 @@ use Vimana;
 use File::Path;
 use YAML;
 
-sub record_dir { return ( $ENV{VIMANA_BASE} || $ENV{HOME} ) . '/.vimana'; }
+use constant record_dir => ( $ENV{VIM_RECORD_DIR} || File::Spec->join($ENV{HOME},'.vim','record') );
 
-sub record_file {  $_[0]->record_dir . '/index' }
 
-sub load {
-    my $class = shift;
-    my $path =  $class->record_dir;
-    if( ! -e $path ) {
+sub record_path  {
+    my ($class,$pkgname) = @_;
+    if( ! -e record_path ) {
         File::Path::mkpath( $path );
     }
-
-    my $record_file =  $class->record_file;
-    my $record = YAML::LoadFile( $record_file ) if -e $record_file;
-    return $record || {};
+    return File::Spec->join( record_dir , $pkgname );
 }
 
-sub save {
-    my ($class,$new_record)= @_;
-    my $record_file = $class->record_file;
-    YAML::DumpFile( $record_file , $new_record );
-}
+=head2 load
 
+load package record , returns a hashref which contains:
 
-sub find {
-    my ($class,$cname) = @_;
-    my $record = $class->load();
-    return $record->{$cname} if defined $record->{ $cname };
-}
+    {
+        version => 0.1,
+        meta => {
+            author: Cornelius
+            email: cornelius.howl@gmail.com
+            libpath: ./
+            name: gsession.vim
+            script_id: 2885
+            type: plugin
+            version: 0.21
+            version_from: plugin/gsession.vim
+            vim_version:
+        },
 
-sub add {
-    my ( $class, $info ) = @_;
-    my $record = $class->load;
-
-    if( defined $record->{ $info->{cname} } ) {
-        return 0;
-    }
-
-    $record->{  $info->{cname}  } = $info;
-    $class->save( $record );
-    return $record;
-}
-
-=pod
-
-    # XXX: check if cname conflicts
-    sub set {
-        my $class = shift;
-        my %args = @_;
-        my $recordset = $class->get_recordset();
-        $recordset->{ $args{cname} } = {
-            cname => $args{cname} , 
-            files => [ ],
-            type  => undef,
-            install_date  => undef,
-            %args,
-        };
-        $class->set_recordset( $recordset );
+        files => [
+            "/Users/c9s/.vim/plugin/gsession.vim",
+        ]
     }
 
 =cut
 
+sub load {
+    my ($class,$pkgname) = @_;
+    my $record_file =  $class->record_path( $pkgname );
+
+    if( ! -e $record_file ) {
+        print "Package $pkgname record can not found.\n";
+        return ;
+    }
+
+    my $record = YAML::LoadFile( $record_file );
+    unless( $record ) {
+        print "Can not load record\n";
+        return ;
+    }
+    return $record;
+}
+
+sub add {
+    my ( $class, $pkgname , $record ) = @_;
+    my $record_file =  $class->record_path( $pkgname );
+    return YAML::DumpFile( $record_file , $record  );
+}
 
 1;
