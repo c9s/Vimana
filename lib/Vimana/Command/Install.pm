@@ -90,7 +90,7 @@ sub install_by_strategy {
         {
             name => 'Meta',
             desc => q{Check if 'META' or 'VIMMETA' file exists. support for VIM::Packager.},
-            installer => 'meta',
+            installer => 'Meta',
             deps =>  [qw(VIMMETA META)],
         },
         {
