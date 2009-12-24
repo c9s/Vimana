@@ -10,8 +10,8 @@ use constant record_dir => ( $ENV{VIM_RECORD_DIR} || File::Spec->join($ENV{HOME}
 
 sub record_path  {
     my ($class,$pkgname) = @_;
-    if( ! -e record_path ) {
-        File::Path::mkpath( record_path );
+    if( ! -e record_dir ) {
+        File::Path::mkpath( record_dir );
     }
     return File::Spec->join( record_dir , $pkgname );
 }
