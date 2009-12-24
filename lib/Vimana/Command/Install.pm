@@ -39,7 +39,7 @@ sub get_installer {
 
 
 sub check_strategies {
-    my ($self,$pkg,@sts) = @_;
+    my ($self,@sts) = @_;
     my @ins_type;
     for my $st ( @sts ) {
         print $st->{name} . ' : ' . $st->{desc} . ' ...';
