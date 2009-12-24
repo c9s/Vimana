@@ -11,7 +11,7 @@ use constant record_dir => ( $ENV{VIM_RECORD_DIR} || File::Spec->join($ENV{HOME}
 sub record_path  {
     my ($class,$pkgname) = @_;
     if( ! -e record_path ) {
-        File::Path::mkpath( $path );
+        File::Path::mkpath( record_path );
     }
     return File::Spec->join( record_dir , $pkgname );
 }
@@ -23,6 +23,7 @@ load package record , returns a hashref which contains:
     {
         version => 0.1,
         generated_by => 'Vimana [Version]'
+        install_type => 'auto',  # auto , make , rake ... etc
         meta => {
             author: Cornelius
             email: cornelius.howl@gmail.com
