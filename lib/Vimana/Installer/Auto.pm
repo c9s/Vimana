@@ -108,6 +108,8 @@ sub run {
 
 sub install_from_nodes {
     my ($self , $nodes , $to ) = @_;
+
+    # XXX: not to use File::Copy::Recursive
     $logger->info("Copying files...");
     for my $node  ( grep { $nodes->{ $_ } > 1 } keys %$nodes ) {
         $logger->info("$node => $to");

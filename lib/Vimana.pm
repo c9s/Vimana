@@ -5,16 +5,22 @@ use strict;
 use Vimana::Index;
 
 use vars qw($INDEX);
+our $VERSION = 2009.35419 ;
 
+sub index {
+    return $INDEX if $INDEX;
+    $INDEX ||= Vimana::Index->new;
+    $INDEX->init();
+    return $INDEX;
+}
+
+1;
+__END__
 =encoding utf8
 
 =head1 NAME
 
 Vimana - Vim script manager.
-
-=cut
-
-our $VERSION = 2009.35419 ;
 
 =head1 DESCRIPTION
 
@@ -41,20 +47,25 @@ NOTE: Vimana only provides search,info,install commmands currently.
 
 * Getting started from L<Vimana::Manual>.
 
+=head1 USAGE
+
+to update index
+
+    $ vimana update 
+
+check rails.vim plugin info
+
+    $ vimana info rails.vim
+
+to search scripts:
+
+    $ vimana s perl
+
+to install package:
+
+    $ vimana i autocomplpop.vim
+
 =head1 FUNCTIONS
-
-=head2 index
-
-=cut
-
-sub index {
-    return $INDEX if $INDEX;
-    $INDEX ||= Vimana::Index->new;
-    $INDEX->init();
-    return $INDEX;
-}
-
-
 
 =head1 AUTHOR
 
@@ -113,7 +124,4 @@ Copyright 2007 You-An Lin 林佑安 ( Cornelius / c9s ), all rights reserved.
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
-
 =cut
-
-1; # End of Vimana
