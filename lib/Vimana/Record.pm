@@ -3,6 +3,7 @@ use warnings;
 use strict;
 use Vimana;
 use File::Path;
+use Digest::MD5;
 use YAML;
 
 
@@ -61,13 +62,20 @@ sub load {
 
 sub remove {
     my ( $class , $pkgname ) = @_;
-    my $record = $self->load( $pkgname );
+    my $record = $class->load( $pkgname );
+    die unless $record;
+
     my $files = $record->{files};
     print "Removing package $pkgname\n";
-    for my $file ( @$files ) {
-        print "  Removing $file\n";
-        unlink $file;
+    for my $entry ( @$files ) {
+        # XXX: check digest here
+        print "  Removing @{[ $entry->{file} ]}\n";
+        unlink $entry->{file};
     }
+
+    print "Removing record\n";
+    my $file = $class->record_path( $pkgname );
+    unlink $file;
     print "Done\n";
 }
 
@@ -81,6 +89,24 @@ sub add {
     my $record_file =  $class->record_path( $pkgname );
     return 0 if -f $record_file;
     return YAML::DumpFile( $record_file , $record  );
+}
+
+sub mk_file_digest {
+    my ($self,$file) = @_;
+    my $ctx = Digest::MD5->new;
+    $ctx->addfile( $file );
+    return $ctx;
+}
+
+sub mk_file_digests {
+    my $self = shift;
+    my @files = @_;
+    my @e = ();
+    for my $f ( @files ) {
+        my $ctx = $self->mk_file_digest( $f );
+        push @e, { file => $f , checksum => $ctx->hexdigest };
+    }
+    return @e;
 }
 
 1;

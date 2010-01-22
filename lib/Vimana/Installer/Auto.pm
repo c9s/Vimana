@@ -89,12 +89,30 @@ sub run {
 
         my @installed_files = $self->install_from_nodes( $nodes , runtime_path() );
 
-        use Data::Dumper; warn Dumper( \@installed_files );
-
-        # use @installed_files
-
         $logger->info("Updating helptags");
         $self->update_vim_doc_tags();
+
+        # record installed file checksum
+        my @e = Vimana::Record->mk_file_digests( @installed_files );
+
+        Vimana::Record->add( {
+                version => 0.1,    # record spec version
+                generated_by => 'Vimana-' . $Vimana::VERSION,
+                install_type => 'auto',    # auto , make , rake ... etc
+                info         => {},
+                #            meta => {
+                #                author =>  'Cornelius',
+                #                email =>  'cornelius.howl@gmail.com',
+                #                libpath => '',
+                #                name => 'gsession.vim',
+                #                script_id => 2885,
+                #                type => 'plugin'
+                #                version =>  '0.21',
+                #                version_from => 'plugin/gsession.vim'
+                #                vim_version => '',
+                #            },
+                files => \@e,
+        } );
     }
 
     if( $self->args and $self->args->{cleanup} ) {

@@ -13,28 +13,28 @@ File::Path::mkpath [ $ENV{VIM_RECORD_DIR} ];
 my $ret;
 $ret = Vimana::Record->add({
     package => "test.vim",
-    files => [ qw(
-        plugin/xxx
-        plugin/aaa
-    )],
+    files => [ 
+        { file => 'plugin/asfd' , checksum => '123123' },
+        { file => 'plugin/asfd' , checksum => '123123' },
+    ],
 });
 ok( $ret );
 
 $ret = Vimana::Record->add({
     package => "test2.vim",
-    files => [ qw(
-        plugin/asdf
-        plugin/zcxv
-    )],
+    files => [
+        { file => 'plugin/xxx' , checksum => '123123' },
+        { file => 'plugin/xxx' , checksum => '123123' },
+    ],
 });
 ok( $ret );
 
 $ret = Vimana::Record->add({
     package => "test2.vim",
-    files => [ qw(
-        plugin/asdf
-        plugin/zcxv
-    )],
+    files => [ 
+        { file => 'plugin/xxx' , checksum => '123123' },
+        { file => 'plugin/xxx' , checksum => '123123' },
+    ],
 });
 ok( ! $ret );
 
@@ -42,7 +42,9 @@ my $record = Vimana::Record->load('test.vim');
 ok( $record );
 
 is_deeply( $record, {
-            'files' => [ 'plugin/xxx', 'plugin/aaa' ],
+            'files' => [ 
+                { file => 'plugin/asfd' , checksum => '123123' } ,
+                { file => 'plugin/asfd' , checksum => '123123' } ],
             'package' => 'test.vim'
         });
 
