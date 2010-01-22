@@ -66,21 +66,10 @@ sub install_archive_type {
 
     $logger->info( "Extracting to $tmpdir." );
     $pkgfile->extract_to( $tmpdir );
-
-    # chdir
     $logger->info("Changing directory to $tmpdir.");
+
     chdir $tmpdir;
-
     return $self->install_by_strategy( $tmpdir , { cleanup => 1 } );
-
-    # add record:
-    # my $files = $pkgfile->archive_files();
-    # Vimana::Record->add( {
-    #     cname => $pkgfile->cname,
-    #     url  => $pkgfile->url,
-    #     filetype => $pkgfile->filetype,
-    #     files => $files,
-    # });
 }
 
 sub install_by_strategy {
