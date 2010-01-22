@@ -47,7 +47,7 @@ sub load {
     my $record_file =  $class->record_path( $pkgname );
 
     if( ! -e $record_file ) {
-        print "Package $pkgname record can not found.\n";
+        print STDERR "Package $pkgname is not installed.\n";
         return ;
     }
 
@@ -62,7 +62,7 @@ sub load {
 sub remove {
     my ( $class , $pkgname ) = @_;
     my $record = $class->load( $pkgname );
-    die unless $record;
+    return unless $record;
 
     my $files = $record->{files};
     print "Removing package $pkgname\n";
