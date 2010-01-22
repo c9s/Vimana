@@ -5,15 +5,14 @@ use Vimana;
 use File::Path;
 use YAML;
 
-use constant record_dir => ( $ENV{VIM_RECORD_DIR} || File::Spec->join($ENV{HOME},'.vim','record') );
-
 
 sub record_path  {
     my ($class,$pkgname) = @_;
-    if( ! -e record_dir ) {
-        File::Path::mkpath( record_dir );
+    my $record_dir =  $ENV{VIM_RECORD_DIR} || File::Spec->join($ENV{HOME},'.vim','record') ;
+    if( ! -e $record_dir ) {
+        File::Path::mkpath( $record_dir );
     }
-    return File::Spec->join( record_dir , $pkgname );
+    return File::Spec->join( $record_dir , $pkgname );
 }
 
 =head2 load
@@ -43,7 +42,7 @@ load package record , returns a hashref which contains:
 =cut
 
 sub load {
-    my ($class,$pkgname) = @_;
+    my ( $class, $pkgname ) = @_;
     my $record_file =  $class->record_path( $pkgname );
 
     if( ! -e $record_file ) {
@@ -53,15 +52,21 @@ sub load {
 
     my $record = YAML::LoadFile( $record_file );
     unless( $record ) {
-        print "Can not load record\n";
+        print STDERR "Can not load record\n";
         return ;
     }
     return $record;
 }
 
 sub add {
-    my ( $class, $pkgname , $record ) = @_;
+    my ( $class , $record ) = @_;
+    my $pkgname = $record->{package};
+    unless( $pkgname ) {
+        warn "Package name is not declared.";
+    }
+
     my $record_file =  $class->record_path( $pkgname );
+    return 0 if -f $record_file;
     return YAML::DumpFile( $record_file , $record  );
 }
 
