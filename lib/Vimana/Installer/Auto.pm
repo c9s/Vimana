@@ -97,7 +97,7 @@ sub run {
         my @e = Vimana::Record->mk_file_digests( @installed_files );
 
         Vimana::Record->add( {
-                version => 0.1,    # record spec version
+                version => 0.2,    # record spec version
                 generated_by => 'Vimana-' . $Vimana::VERSION,
                 install_type => 'auto',    # auto , make , rake ... etc
                 package => $pkgfile->cname,

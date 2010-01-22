@@ -155,15 +155,17 @@ sub run {
         my $package = $arg;
 
         use Vimana::Record;
-        my $record = Vimana::Record->load( $package );
-        if( $record ) {
-            print STDERR "Package $package is installed. reinstall (upgrade) ? (Y/n) ";
-            my $ans; $ans = <STDIN>;
-            chomp( $ans );
-            if( $ans =~ /n/i ) {
-                return;
-            }
-            else {
+        my $record_file =  Vimana::Record->record_path( $package );
+        if( -f $record_file ) {
+            my $record = Vimana::Record->load( $package );
+            if( $record ) {
+
+                print STDERR "Package $package is installed. reinstall (upgrade) ? (Y/n) ";
+                my $ans; $ans = <STDIN>;
+                chomp( $ans );
+
+                return if $ans =~ /n/i;
+
                 Vimana::Record->remove( $package );
             }
         }

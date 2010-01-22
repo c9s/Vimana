@@ -15,33 +15,47 @@ find installed packages.
 
 sub run {
     my $self = shift;
-    my @dir = ( File::Spec->join( $ENV{HOME}  , '.vim' , 'record' ) );
+    my $dir = File::Spec->join( $ENV{HOME}  , '.vim' , 'record' );
+    my @list;
     File::Find::find( sub { 
         return unless -f $_;
-
-    # $File::Find::dir is the current directory name,
-    # $_ is the current filename within that directory
-    # $File::Find::name is the complete pathname to the file.
-    # 
-    # follow VIM::Packager META data
-    # 
-        my $record = YAML::LoadFile($_);
-        unless( $record ) {
-            print STDERR "ERROR: Record $_ load failed.\n";
-            return;
+        my $file = $_;
+        my $record = YAML::LoadFile($file);
+        if( $record->{package} ) {
+            push @list,$record->{package};
         }
-        unless( $record->{meta} ) {
-            print STDERR "ERROR: Record $_ doesn't contain meta record.\n";
-            return;
+        elsif ( $record->{meta} ) {
+            push @list,$record->{meta}{name};
+=pod
+version 0.1 record format (from VIM::Packager)
+          'files' => [
+                     '/Users/c9s/.vim/ftplugin/vim/omni.vim'
+                   ],
+          'meta' => {
+                    'repository' => 'git://....../',
+                    'version' => '0.1',
+                    'name' => 'vimomni.vim',
+                    'author' => 'Cornelius',
+                    'version_from' => 'ftplugin/vim/omni.vim',
+                    'libpath' => '.',
+                    'email' => 'cornelius.howl@gmail.com',
+                    'vim_version' => {
+                                     'version' => '7.2',
+                                     'op' => '>='
+                                   },
+                    'type' => 'ftplugin'
+                  }
+=cut
+        }
+        else {
+            print STDERR "Unknown record.\n";
+
         }
 
-        unless( $record->{meta}{name} ) {
-            print STDERR "ERROR: Record $_ meta doesn't have package name.\n";
-            return;
-        }
-        print ' ' x 3 . $record->{meta}{name} . "\n";
-
-    } , @dir);
+    } , $dir);
+    for my $item ( @list ) {
+        print $item . "\n";
+    }
 }
 
 
