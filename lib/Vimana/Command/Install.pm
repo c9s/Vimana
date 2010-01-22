@@ -39,7 +39,7 @@ sub get_installer {
 
 
 sub check_strategies {
-    my ($self,$pkg,@sts) = @_;
+    my ($self,@sts) = @_;
     my @ins_type;
     for my $st ( @sts ) {
         print $st->{name} . ' : ' . $st->{desc} . ' ...';
@@ -66,31 +66,20 @@ sub install_archive_type {
 
     $logger->info( "Extracting to $tmpdir." );
     $pkgfile->extract_to( $tmpdir );
-
-    # chdir
     $logger->info("Changing directory to $tmpdir.");
+
     chdir $tmpdir;
-
-    return $self->install_by_strategy( $tmpdir , { cleanup => 1 } );
-
-    # add record:
-    # my $files = $pkgfile->archive_files();
-    # Vimana::Record->add( {
-    #     cname => $pkgfile->cname,
-    #     url  => $pkgfile->url,
-    #     filetype => $pkgfile->filetype,
-    #     files => $files,
-    # });
+    return $self->install_by_strategy( $pkgfile, $tmpdir , { cleanup => 1 } );
 }
 
 sub install_by_strategy {
-    my ($self,$tmpdir,$args) = @_;
+    my ($self,$pkgfile,$tmpdir,$args) = @_;
     my $ret;
     my @ins_type = $self->check_strategies( 
         {
             name => 'Meta',
             desc => q{Check if 'META' or 'VIMMETA' file exists. support for VIM::Packager.},
-            installer => 'meta',
+            installer => 'Meta',
             deps =>  [qw(VIMMETA META)],
         },
         {
@@ -115,7 +104,7 @@ sub install_by_strategy {
 DONE:
     for my $ins_type ( @ins_type ) {
         my $installer = $self->get_installer( $ins_type , { args => $args } );
-        $ret = $installer->run( $tmpdir );
+        $ret = $installer->run( $pkgfile, $tmpdir );
 
         last DONE if $ret;  # succeed
         last DONE if ! $installer->_continue;  # not succeed, but we should continue other installation.
@@ -156,14 +145,28 @@ sub run {
         }
         system(qq{$cmd $uri $dir});
         chdir $dir;
-        return $self->install_by_strategy($dir , { cleanup => 1 });
+        return $self->install_by_strategy( undef, $dir, { cleanup => 1 } );
     }
     elsif( $arg eq '.' ) {
         chdir '.';
-        return $self->install_by_strategy('.' , { cleanup => 0 });
+        return $self->install_by_strategy( undef, '.', { cleanup => 0 } );
     }
     else {
         my $package = $arg;
+
+        use Vimana::Record;
+        my $record = Vimana::Record->load( $package );
+        if( $record ) {
+            print STDERR "Package $package is installed. reinstall (upgrade) ? (Y/n) ";
+            my $ans; $ans = <STDIN>;
+            chomp( $ans );
+            if( $ans =~ /n/i ) {
+                return;
+            }
+            else {
+                Vimana::Record->remove( $package );
+            }
+        }
 
         my $info = Vimana->index->find_package( $package );
         unless( $info ) {

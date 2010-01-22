@@ -23,6 +23,7 @@ requires
     'Test::More'     => 0,
     'URI'            => 1.37,
     'YAML'           => 0,
+    'Digest::MD5'    => 0,
     ;
 
 include('ExtUtils::AutoInstall');

@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 # use re 'debug';
-use File::Copy::Recursive qw(fcopy rcopy dircopy fmove rmove dirmove);
+use Vimana::Recursive qw(dircopy_files);
 use File::Spec;
 use File::Path qw'mkpath rmtree';
 use Archive::Any;
@@ -24,7 +24,6 @@ sub find_vimball_files {
     return @vimballs;
 }
 
-
 sub find_files {
     my $self = shift;
     my @dirs = @_;
@@ -41,7 +40,16 @@ sub find_files {
 }
 
 sub run {
-    my ($self, $out ) = @_;
+    my ( $self, $pkgfile, $out ) = @_;
+
+    # XXX: try to fill the record spec.
+    my $record = {
+        install_type => 'auto',
+        meta => {} ,
+        files => [ ],
+    };
+
+
     my @files = $self->find_files( '.' );
 
     print "Archive content:\n";
@@ -49,12 +57,14 @@ sub run {
         print "\t$_\n";
     }
 
-    if( grep /\.vba$/,@files ) {
-        $logger->info( "vimball files found, trying to install vimball files");
+    my @vba = grep /\.vba/,@files;
+    if( @vba ) {
+        $logger->info( "Found vimball files, try to install vimball files");
         use Vimana::VimballInstall;
-        my @vimballs = find_vimball_files $out;
-        Vimana::VimballInstall->install_vimballs( @vimballs );
+        # my @vimballs = find_vimball_files $out;
+        Vimana::VimballInstall->install_vimballs( @vba );
     }
+
 
     # check directory structure
     {
@@ -77,10 +87,34 @@ sub run {
         
         $logger->info( "Basepath found: " . $_ ) for ( keys %$nodes );
 
-        $self->install_from_nodes( $nodes , runtime_path() );
+        my @installed_files = $self->install_from_nodes( $nodes , runtime_path() );
 
         $logger->info("Updating helptags");
         $self->update_vim_doc_tags();
+
+        # record installed file checksum
+        print "Making checksum...\n";
+        my @e = Vimana::Record->mk_file_digests( @installed_files );
+
+        Vimana::Record->add( {
+                version => 0.1,    # record spec version
+                generated_by => 'Vimana-' . $Vimana::VERSION,
+                install_type => 'auto',    # auto , make , rake ... etc
+                package => $pkgfile->cname,
+                files => \@e,
+
+                #            meta => {
+                #                author =>  'Cornelius',
+                #                email =>  'cornelius.howl@gmail.com',
+                #                libpath => '',
+                #                name => 'gsession.vim',
+                #                script_id => 2885,
+                #                type => 'plugin'
+                #                version =>  '0.21',
+                #                version_from => 'plugin/gsession.vim'
+                #                vim_version => '',
+                #            },
+        } );
     }
 
     if( $self->args and $self->args->{cleanup} ) {
@@ -98,10 +132,12 @@ sub run {
 sub install_from_nodes {
     my ($self , $nodes , $to ) = @_;
     $logger->info("Copying files...");
-    for my $node  ( grep { $nodes->{ $_ } > 1 } keys %$nodes ) {
-        $logger->info("$node => $to");
-        my (@ret) = dircopy($node, $to );
+    my @copied = ();
+    for my $basedir  ( grep { $nodes->{ $_ } > 1 } keys %$nodes ) {
+        $logger->info("$basedir => $to");
+        push @copied , dircopy_files($basedir, $to );
     }
+    return @copied;
 }
 
 =head2 find_base_path 

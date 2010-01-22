@@ -62,7 +62,8 @@ sub download {
 
     unlink $self->file if -e $self->file;
 
-    open FH, ">", $self->file or die $@;
+    print "Saving file to @{[ $self->file ]} \n";
+    open FH, ">", $self->file or die $!;
     print FH $file_content;
     close FH;
 

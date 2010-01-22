@@ -15,11 +15,13 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/Vimana.pm
 lib/Vimana/Accessor.pm
+lib/Vimana/Archive.pm
 lib/Vimana/Command.pm
 lib/Vimana/Command/Download.pm
 lib/Vimana/Command/Info.pm
 lib/Vimana/Command/Install.pm
 lib/Vimana/Command/Installed.pm
+lib/Vimana/Command/Remove.pm
 lib/Vimana/Command/Search.pm
 lib/Vimana/Command/Update.pm
 lib/Vimana/Command/Upgrade.pm
@@ -35,6 +37,7 @@ lib/Vimana/Logger.pm
 lib/Vimana/Manual.pm
 lib/Vimana/PackageFile.pm
 lib/Vimana/Record.pm
+lib/Vimana/Recursive.pm
 lib/Vimana/Util.pm
 lib/Vimana/VimballInstall.pm
 lib/Vimana/VimOnline.pm
@@ -42,11 +45,8 @@ lib/Vimana/VimOnline/ScriptPage.pm
 lib/Vimana/VimOnline/Search.pm
 Makefile.PL
 MANIFEST			This list of files
-MANIFEST.bak
 MANIFEST.SKIP
 META.yml
-plan
-README
 README.mkd
 t/00-commands.t
 t/00-install.t
@@ -60,5 +60,5 @@ t/data/rails.zip
 t/installer-makefile-2.t
 t/installer-makefile-3.t
 t/installer-makefile.t
-test.sh
 todo
+utils/build_shipwright.sh

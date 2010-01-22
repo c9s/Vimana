@@ -5,8 +5,7 @@ use strict;
 
 # XXX: check if we have rake command installed.
 sub run {
-    my $self = shift;
-    my $path = shift;
+    my ($self,$pkgfile,$path)=@_;
     if ( -e "rakefile" or -e 'rakefile' ) {
         print "Rakefile found. do rake install.\n";
         my $ret = system( "rake install" );
