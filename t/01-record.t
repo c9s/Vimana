@@ -1,19 +1,18 @@
 #!/usr/bin/env perl 
 use lib 'lib';
-use Test::More tests => 8;
-# use Test::More skip_all => "skip";
+use Test::More tests => 6;
 use File::Path;
 
 BEGIN {
     use_ok('Vimana::Record');
-    $ENV{VIMANA_BASE} = '/tmp/vimana_test'
+    $ENV{VIM_RECORD_DIR} = '/tmp/vimana_test'
 }
 
-File::Path::mkpath [ $ENV{VIMANA_BASE} ];
+File::Path::mkpath [ $ENV{VIM_RECORD_DIR} ];
 
-my $ret ;
+my $ret;
 $ret = Vimana::Record->add({
-    cname => "test.vim",
+    package => "test.vim",
     files => [ qw(
         plugin/xxx
         plugin/aaa
@@ -22,7 +21,7 @@ $ret = Vimana::Record->add({
 ok( $ret );
 
 $ret = Vimana::Record->add({
-    cname => "test2.vim",
+    package => "test2.vim",
     files => [ qw(
         plugin/asdf
         plugin/zcxv
@@ -31,7 +30,7 @@ $ret = Vimana::Record->add({
 ok( $ret );
 
 $ret = Vimana::Record->add({
-    cname => "test2.vim",
+    package => "test2.vim",
     files => [ qw(
         plugin/asdf
         plugin/zcxv
@@ -39,30 +38,14 @@ $ret = Vimana::Record->add({
 });
 ok( ! $ret );
 
-my $record = Vimana::Record->load();
+my $record = Vimana::Record->load('test.vim');
 ok( $record );
 
 is_deeply( $record, {
-        'test.vim' => {
             'files' => [ 'plugin/xxx', 'plugin/aaa' ],
-            'cname' => 'test.vim'
-        },
-        'test2.vim' => {
-            cname => "test2.vim",
-            files => [ qw(
-                plugin/asdf
-                plugin/zcxv
-            )],
-        }
-    } );
-{
-    my $find = Vimana::Record->find('test.vim');
-    ok( $find );
-}
+            'package' => 'test.vim'
+        });
 
-{
-    my $find = Vimana::Record->find('test2.vim');
-    ok( $find );
+END {
+    File::Path::rmtree [ $ENV{VIM_RECORD_DIR} ];
 }
-
-File::Path::rmtree [ $ENV{VIMANA_BASE} ];
