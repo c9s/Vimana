@@ -19,6 +19,7 @@ sub record_path  {
 
 load package record , returns a hashref which contains:
 
+spec:
     {
         version => 0.1,
         generated_by => 'Vimana [Version]'
@@ -56,6 +57,18 @@ sub load {
         return ;
     }
     return $record;
+}
+
+sub remove {
+    my ( $class , $pkgname ) = @_;
+    my $record = $self->load( $pkgname );
+    my $files = $record->{files};
+    print "Removing package $pkgname\n";
+    for my $file ( @$files ) {
+        print "  Removing $file\n";
+        unlink $file;
+    }
+    print "Done\n";
 }
 
 sub add {
