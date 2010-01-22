@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 # use re 'debug';
-use Vimana::Recursive qw(dircopy);
+use Vimana::Recursive qw(dircopy_files);
 use File::Spec;
 use File::Path qw'mkpath rmtree';
 use Archive::Any;
@@ -89,6 +89,8 @@ sub run {
         $logger->info( "Basepath found: " . $_ ) for ( keys %$nodes );
 
         my @installed_files = $self->install_from_nodes( $nodes , runtime_path() );
+
+        # use @installed_files
 
         $logger->info("Updating helptags");
         $self->update_vim_doc_tags();
