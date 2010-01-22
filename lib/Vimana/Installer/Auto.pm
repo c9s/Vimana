@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 # use re 'debug';
-use File::Copy::Recursive qw(fcopy rcopy dircopy fmove rmove dirmove);
+use Vimana::Recursive qw(dircopy);
 use File::Spec;
 use File::Path qw'mkpath rmtree';
 use Archive::Any;
@@ -88,7 +88,7 @@ sub run {
         
         $logger->info( "Basepath found: " . $_ ) for ( keys %$nodes );
 
-        $self->install_from_nodes( $nodes , runtime_path() );
+        my @installed_files = $self->install_from_nodes( $nodes , runtime_path() );
 
         $logger->info("Updating helptags");
         $self->update_vim_doc_tags();
@@ -108,13 +108,13 @@ sub run {
 
 sub install_from_nodes {
     my ($self , $nodes , $to ) = @_;
-
-    # XXX: not to use File::Copy::Recursive
     $logger->info("Copying files...");
-    for my $node  ( grep { $nodes->{ $_ } > 1 } keys %$nodes ) {
+    my @copied = ();
+    for my $basedir  ( grep { $nodes->{ $_ } > 1 } keys %$nodes ) {
         $logger->info("$node => $to");
-        my (@ret) = dircopy($node, $to );
+        push @copied , dircopy_files($node, $to );
     }
+    return @copied;
 }
 
 =head2 find_base_path 
