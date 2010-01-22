@@ -40,9 +40,9 @@ sub find_files {
 }
 
 sub run {
-    my ($self, $out ) = @_;
+    my ( $self, $pkgfile, $out ) = @_;
 
-    # try to fill the record spec.
+    # XXX: try to fill the record spec.
     my $record = {
         install_type => 'auto',
         meta => {} ,
@@ -93,13 +93,16 @@ sub run {
         $self->update_vim_doc_tags();
 
         # record installed file checksum
+        print "Making checksum...\n";
         my @e = Vimana::Record->mk_file_digests( @installed_files );
 
         Vimana::Record->add( {
                 version => 0.1,    # record spec version
                 generated_by => 'Vimana-' . $Vimana::VERSION,
                 install_type => 'auto',    # auto , make , rake ... etc
-                info         => {},
+                package => $pkgfile->cname,
+                files => \@e,
+
                 #            meta => {
                 #                author =>  'Cornelius',
                 #                email =>  'cornelius.howl@gmail.com',
@@ -111,7 +114,6 @@ sub run {
                 #                version_from => 'plugin/gsession.vim'
                 #                vim_version => '',
                 #            },
-                files => \@e,
         } );
     }
 

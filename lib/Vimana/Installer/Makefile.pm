@@ -5,8 +5,7 @@ use warnings;
 use strict;
 
 sub run {
-    my $self = shift;
-    my $path = shift;
+    my ($self,$pkgfile,$path)=@_;
     if ( -e "Makefile" or -e 'makefile' ) {
         $logger->info( "Makefile found. do make install.") ;
         my $ret = system( "make install" );

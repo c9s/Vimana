@@ -3,14 +3,13 @@ use warnings;
 use strict;
 use Vimana;
 use File::Path;
-use Digest::MD5;
+use Digest::MD5 qw(md5_hex);
 use YAML;
 
-
 sub record_path  {
-    my ($class,$pkgname) = @_;
+    my ( $class, $pkgname ) = @_;
     my $record_dir =  $ENV{VIM_RECORD_DIR} || File::Spec->join($ENV{HOME},'.vim','record') ;
-    if( ! -e $record_dir ) {
+    if( ! -d $record_dir ) {
         File::Path::mkpath( $record_dir );
     }
     return File::Spec->join( $record_dir , $pkgname );
@@ -83,7 +82,7 @@ sub add {
     my ( $class , $record ) = @_;
     my $pkgname = $record->{package};
     unless( $pkgname ) {
-        warn "Package name is not declared.";
+        die "Package name is not declared.";
     }
 
     my $record_file =  $class->record_path( $pkgname );
@@ -93,9 +92,12 @@ sub add {
 
 sub mk_file_digest {
     my ($self,$file) = @_;
-    my $ctx = Digest::MD5->new;
-    $ctx->addfile( $file );
-    return $ctx;
+    open my $fh , "<" , $file;
+    binmode $fh,':bytes';
+    local $/;
+    my $content = <$fh>;
+    close $fh;
+    return md5_hex( $content );
 }
 
 sub mk_file_digests {
@@ -104,7 +106,8 @@ sub mk_file_digests {
     my @e = ();
     for my $f ( @files ) {
         my $ctx = $self->mk_file_digest( $f );
-        push @e, { file => $f , checksum => $ctx->hexdigest };
+        # print " $ctx: $f\n";
+        push @e, { file => $f , checksum => $ctx };
     }
     return @e;
 }

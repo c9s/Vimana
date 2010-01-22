@@ -6,8 +6,7 @@ use Vimana::Logger;
 use Vimana::VimballInstall;
 
 sub run {
-    my $self = shift;
-    my $pkgfile = $self->package;
+    my ($self,$pkgfile) = @_;
 
     if( $pkgfile->is_vimball ) {
         $logger->info("Found Vimball File");

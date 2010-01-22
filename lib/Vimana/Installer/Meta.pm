@@ -7,8 +7,7 @@ use strict;
 use constant _continue => 1;
 
 sub run {
-    my $self = shift;
-    my $path = shift;
+    my ($self,$pkgfile,$path)=@_;
 
     # try to require VIM::Packager
     eval(q|require VIM::Packager;|);
