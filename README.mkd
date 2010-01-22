@@ -80,6 +80,10 @@ to download:
 
     $ vimana download markdown-syntax.vim
 
+to remove a package:
+
+    $ vimana remove fuzzyfinder
+
 to list installed packages:
 
     $ vimana installed
