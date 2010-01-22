@@ -154,6 +154,20 @@ sub run {
     else {
         my $package = $arg;
 
+        use Vimana::Record;
+        my $record = Vimana::Record->load( $package );
+        if( $record ) {
+            print STDERR "Package $package is installed. reinstall (upgrade) ? (Y/n) ";
+            my $ans; $ans = <STDIN>;
+            chomp( $ans );
+            if( $ans =~ /n/i ) {
+                return;
+            }
+            else {
+                Vimana::Record->remove( $package );
+            }
+        }
+
         my $info = Vimana->index->find_package( $package );
         unless( $info ) {
             $logger->error("package $package not found.");

@@ -68,7 +68,7 @@ sub remove {
     print "Removing package $pkgname\n";
     for my $entry ( @$files ) {
         # XXX: check digest here
-        print "  Removing @{[ $entry->{file} ]}\n";
+        print "\tRemoving @{[ $entry->{file} ]}\n";
         unlink $entry->{file};
     }
 
