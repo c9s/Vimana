@@ -24,7 +24,6 @@ sub find_vimball_files {
     return @vimballs;
 }
 
-
 sub find_files {
     my $self = shift;
     my @dirs = @_;
@@ -90,6 +89,8 @@ sub run {
 
         my @installed_files = $self->install_from_nodes( $nodes , runtime_path() );
 
+        use Data::Dumper; warn Dumper( \@installed_files );
+
         # use @installed_files
 
         $logger->info("Updating helptags");
@@ -113,8 +114,8 @@ sub install_from_nodes {
     $logger->info("Copying files...");
     my @copied = ();
     for my $basedir  ( grep { $nodes->{ $_ } > 1 } keys %$nodes ) {
-        $logger->info("$node => $to");
-        push @copied , dircopy_files($node, $to );
+        $logger->info("$basedir => $to");
+        push @copied , dircopy_files($basedir, $to );
     }
     return @copied;
 }
