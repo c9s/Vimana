@@ -2,9 +2,10 @@ package Vimana::Record;
 use warnings;
 use strict;
 use Vimana;
+use JSON;
 use File::Path;
 use Digest::MD5 qw(md5_hex);
-use YAML;
+#use YAML;
 
 sub record_path  {
     my ( $class, $pkgname ) = @_;
@@ -51,7 +52,13 @@ sub load {
         return ;
     }
 
-    my $record = YAML::LoadFile( $record_file );
+    open FH , "<" , $record_file;
+    local $/;
+    my $json = <FH>;
+    close FH;
+
+    #YAML::LoadFile( $record_file );
+    my $record = from_json( $json );
     unless( $record ) {
         print STDERR "Can not load record\n";
         return ;
@@ -87,7 +94,12 @@ sub add {
 
     my $record_file =  $class->record_path( $pkgname );
     return 0 if -f $record_file;
-    return YAML::DumpFile( $record_file , $record  );
+
+    open FH , ">" , $record_file;
+    print FH to_json( $record );
+    close FH;
+    
+    #return YAML::DumpFile( $record_file , $record  );
 }
 
 sub mk_file_digest {
