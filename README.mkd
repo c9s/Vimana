@@ -154,6 +154,9 @@ IRC Channel:
 
 You can also look for information at:
 
+    vim-addon-manager : another vim script manager (which is written in VimL).
+        http://github.com/MarcWeber/vim-addon-manager
+
     RT, CPAN's request tracker
         http://rt.cpan.org/NoAuth/Bugs.html?Dist=Vimana
 
