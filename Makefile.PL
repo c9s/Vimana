@@ -24,6 +24,7 @@ requires
     'URI'            => 1.37,
     'YAML'           => 0,
     'Digest::MD5'    => 0,
+    'JSON' => 0,
     ;
 
 include('ExtUtils::AutoInstall');
