@@ -18,19 +18,14 @@ sub options {
 sub run {
     my ( $self, @keywords ) = @_;
 
-    unless( @keywords ) {
-        warn "Please specify keyword";
-        exit 0; 
-    }
-
     my $index = Vimana->index();
     my $plugins = $index->read_index();
 
     unless( $plugins ) {
-        print "Can not found index. Fetching..\n";
+        print "Updating index..\n";
         my $result = Vimana::VimOnline::Search->fetch(
                 keyword => '',
-                show_me => 3000,
+                show_me => 5000,
                 order_by => 'creation_date',
                 direction => 'ascending'
         );
@@ -40,8 +35,13 @@ sub run {
     }
 
 
-    my $keyword = $keywords[0]; # FIXME:
-    my @result = map { ( $_->{description} =~ /$keyword/ or $_->{plugin_name} =~ /$keyword/ ) ? $_ : ()  } values %$plugins;
+    my $keyword;
+    $keyword = pop @keywords if @keywords;
+
+    my @result = values %$plugins;
+    @result = map { ( $_->{description} =~ /$keyword/ or $_->{plugin_name} =~ /$keyword/ ) ? $_ : ()  } @result if $keyword;
+
+    @result = map { $_->{type} =~ /@{[ $self->{script_type} ]}/i ? $_ : ()  } @result if $self->{script_type};
 
     my $max_width = 6;
     map { $max_width = length $_->{plugin_name} if length $_->{plugin_name} > $max_width }  @result;
