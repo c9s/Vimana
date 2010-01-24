@@ -13,7 +13,7 @@ sub options {
 
 sub run {
     my ( $self, $package ) = @_;
-    Vimana::Record->remove( $package );
+    Vimana::Record->remove( $package , $self->{force} );
 }
 
 1;

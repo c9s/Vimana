@@ -5,7 +5,7 @@ use Vimana;
 use JSON;
 use File::Path;
 use Digest::MD5 qw(md5_hex);
-#use YAML;
+use YAML;
 
 sub record_path  {
     my ( $class, $pkgname ) = @_;
@@ -58,11 +58,19 @@ sub load {
     my $json = <FH>;
     close FH;
 
-    #YAML::LoadFile( $record_file );
-    my $record = from_json( $json );
-    unless( $record ) {
-        print STDERR "Can not load record. Use -f or --force option to remove.\n";
-        return;
+    my $record;
+    eval {
+        $record = from_json( $json );
+    };
+    if( $@ ) {
+        print STDERR $@;
+
+        $record = YAML::LoadFile( $record_file );
+
+        unless( $record ) {
+            print STDERR "Can not load record. Use -f or --force option to remove.\n";
+            return;
+        }
     }
     return $record;
 }
@@ -71,13 +79,13 @@ sub load {
 sub _remove_record {
     my ($self,$pkgname) = @_;
     print "Removing record\n";
-    my $file = $class->record_path( $pkgname );
+    my $file = $self->record_path( $pkgname );
     return unlink $file;
 }
 
 sub remove {
-    my ( $class, $pkgname , $force ) = @_;
-    my $record = $class->load($pkgname);
+    my ( $self, $pkgname , $force ) = @_;
+    my $record = $self->load($pkgname);
 
     if( !$record and $force ) {
         # force remove record file.
