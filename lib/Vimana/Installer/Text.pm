@@ -15,34 +15,28 @@ sub run {
         return 1;
     }
 
-DONE: 
-    {
-        # known types (depends on the information that vim.org provides.
-        return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path ,  'colors' ) )
-            if $pkgfile->script_is('color scheme');
-
-        return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path ,  'syntax' ) )
-            if $pkgfile->script_is('syntax');
-
-        return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path , 'indent' ) )
-            if $pkgfile->script_is('indent');
-
-        return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path , 'ftplugin' ) )
-            if $pkgfile->script_is('ftplugin');
-
-        # guess text filetype here.  (colorscheme, ftplugin ...etc)
-
+    my $installed;  # boolean
+    my $type = $pkgfile->script_type();
+    if( $type ) {
+        $installed = $pkgfile->copy_to_rtp( 
+            File::Spec->join( $self->runtime_path ,  $type ) );
+    }
+    else {
+        # can't found script ype,
+        # inspect text filetype here.  (colorscheme, ftplugin ...etc)
         $logger->info( "Inspecting file content for script type." );
         my $type = $self->inspect_text_content;
         if ($type) {
             $logger->info("Script type found: $type.");
             $logger->info("Installing..");
-            $self->copy_to_rtp( File::Spec->join( $self->runtime_path, $type ) );
-            $logger->info("Done.");
-            return 1;
+            $installed = $self->copy_to_rtp(
+                File::Spec->join( $self->runtime_path, $type ) );
+        }
+        else {
+            $logger->info("Can't guess script type.");
         }
     }
-
+    return $installed;
 }
 
 
