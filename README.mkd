@@ -92,6 +92,10 @@ to remove a package:
 
     $ vimana remove fuzzyfinder
 
+to force remove a package:
+
+    $ vimana remove -f fuzzyfinder
+
 to list installed packages:
 
     $ vimana installed
