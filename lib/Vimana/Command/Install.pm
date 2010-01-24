@@ -65,7 +65,7 @@ sub install_archive_type {
 }
 
 sub install_by_strategy {
-    my ($self,$pkgfile,$tmpdir,$args) = @_;
+    my ( $self, $pkgfile, $tmpdir, $args ) = @_;
     my $ret;
     my @ins_type = $self->check_strategies( 
         {
@@ -95,6 +95,10 @@ sub install_by_strategy {
     
 DONE:
     for my $ins_type ( @ins_type ) {
+
+        # $args: (hashref)
+        #   cleanup (boolean)
+        #   runtime_path (string)
         my $installer = $self->get_installer( $ins_type , { args => $args } );
         $ret = $installer->run( $pkgfile, $tmpdir );
 
