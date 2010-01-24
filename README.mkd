@@ -72,6 +72,14 @@ to install snipmate.vim package:
 
     $ vimana install snipmate
 
+to install snipmate.vim package to the other runtime path:
+
+    $ vimana i snipmate -r ~/.vim-other-rtp
+
+    # or
+
+    $ vimana install snipmate --runtime-path ~/.vim-other-rtp
+
 to install rails.vim package:
 
     $ vimana install rails.vim
