@@ -68,6 +68,18 @@ to search jifty script
 
     $ vimana search rails
 
+to search colorscheme:
+
+    $ vimana search -t color
+
+to search ftplugin:
+
+    $ vimana search -t ftplugin
+
+to search ftplugin and "abc" keyword:
+
+    $ vimana search -t ftplugin abc
+
 to install snipmate.vim package:
 
     $ vimana install snipmate
