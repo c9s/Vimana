@@ -62,15 +62,6 @@ NEXT_TYPE:
 sub install_archive_type {
     my ($self, $pkgfile) = @_;
 
-    # extract to a path 
-    my $tmpdir = Vimana::Util::tempdir();
-
-    $logger->info( "Extracting to $tmpdir." );
-    $pkgfile->extract_to( $tmpdir );
-    $logger->info("Changing directory to $tmpdir.");
-
-    chdir $tmpdir;
-    return $self->install_by_strategy( $pkgfile, $tmpdir , { cleanup => 1 } );
 }
 
 sub install_by_strategy {
@@ -134,6 +125,9 @@ sub run {
     my ( $self, $arg ) = @_; 
     # XXX: check if we've installed this package
     # XXX: check if package files conflict
+
+    # XXX: $self->{runtime_path}
+
     if (  $arg =~ m{^git:} or $arg =~ m{^svn:} ) {
         my ( $rcs, $uri ) = stdlize_uri $arg;
         my $dir = Vimana::Util::tempdir();
@@ -146,11 +140,11 @@ sub run {
         }
         system(qq{$cmd $uri $dir});
         chdir $dir;
-        return $self->install_by_strategy( undef, $dir, { cleanup => 1 } );
+        return $self->install_by_strategy( undef, $dir, { cleanup => 1 , runtime_path => $self->{runtime_path} } );
     }
     elsif( $arg eq '.' ) {
         chdir '.';
-        return $self->install_by_strategy( undef, '.', { cleanup => 0 } );
+        return $self->install_by_strategy( undef, '.', { cleanup => 0  , runtime_path => $self->{runtime_path} } );
     }
     else {
         my $package = $arg;
@@ -197,11 +191,25 @@ sub run {
         # if it's vimball, install it
         my $ret;
         if( $pkgfile->is_text ) {
+
+            # XXX: need to record. and support runtime_path.
+
             my $installer = $self->get_installer('text' , { package => $pkgfile });
             $ret = $installer->run( $pkgfile );
+
         }
         elsif( $pkgfile->is_archive ) {
-            $ret = $self->install_archive_type( $pkgfile );
+
+            # extract to a path 
+            my $tmpdir = Vimana::Util::tempdir();
+
+            $logger->info( "Extracting to $tmpdir." );
+            $pkgfile->extract_to( $tmpdir );
+            $logger->info("Changing directory to $tmpdir.");
+
+            chdir $tmpdir;
+            $ret = $self->install_by_strategy( $pkgfile, $tmpdir , { cleanup => 1 , runtime_path => $self->{runtime_path} } );
+
         }
         unless( $ret ) {
             print "Installation Failed.\n";
