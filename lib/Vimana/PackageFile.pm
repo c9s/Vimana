@@ -51,6 +51,7 @@ sub is_vimball {  $_[0]->file =~ m/\.vba$/  }
 sub script_type {
     my $self = shift;
     return 'colors' if $self->info->{type} eq 'color scheme' ;
+    return undef if $self->info->{type} eq 'utility';
     return $self->info->{type};
 }
 
