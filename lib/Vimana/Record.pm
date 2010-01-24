@@ -21,6 +21,7 @@ sub record_path  {
 load package record , returns a hashref which contains:
 
 spec:
+
     {
         version => 0.1,
         generated_by => 'Vimana [Version]'
@@ -66,22 +67,35 @@ sub load {
     return $record;
 }
 
+
+sub _remove_record {
+    my ($self,$pkgname) = @_;
+    print "Removing record\n";
+    my $file = $class->record_path( $pkgname );
+    return unlink $file;
+}
+
 sub remove {
-    my ( $class , $pkgname ) = @_;
-    my $record = $class->load( $pkgname );
+    my ( $class, $pkgname , $force ) = @_;
+    my $record = $class->load($pkgname);
+
+    if( !$record and $force ) {
+        # force remove record file.
+        $self->_remove_record( $pkgname );
+        return;
+    }
+
     return unless $record;
 
     my $files = $record->{files};
     print "Removing package $pkgname\n";
-    for my $entry ( @$files ) {
+    for my $entry (@$files) {
         # XXX: check digest here
         print "\tRemoving @{[ $entry->{file} ]}\n";
         unlink $entry->{file};
     }
 
-    print "Removing record\n";
-    my $file = $class->record_path( $pkgname );
-    unlink $file;
+    $self->_remove_record( $pkgname );
     print "Done\n";
 }
 
