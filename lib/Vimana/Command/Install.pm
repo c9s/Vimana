@@ -20,6 +20,7 @@ sub options {
         'ai|auto-install'     => 'auto_install',
         'pi|port-install'     => 'port_install',
         'mi|makefile-install' => 'makefile_install',
+        'r|runtime-path'      => 'runtime_path',
     );
 }
 
