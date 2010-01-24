@@ -15,12 +15,10 @@ sub run {
         return 1;
     }
 
-    my $installed;  # boolean
     my $target;
     my $type = $pkgfile->script_type();
     if( $type ) {
-        $target = File::Spec->join( $self->runtime_path , $type );
-        $installed = $pkgfile->copy_to_rtp( $target );
+        $target = $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path , $type ));
     }
     else {
         # can't found script ype,
@@ -28,17 +26,16 @@ sub run {
         $logger->info( "Inspecting file content for script type." );
         $type = $self->inspect_text_content;
         if ($type) {
-            $target = File::Spec->join( $self->runtime_path, $type );
             $logger->info("Script type found: $type.");
             $logger->info("Installing..");
-            $installed = $self->copy_to_rtp( $target );
+            $target = $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path, $type ));
         }
         else {
             $logger->info("Can't guess script type.");
         }
     }
 
-    if( $installed and $type and $target ) {
+    if( $type and $target ) {
         # make record:
         my @e = Vimana::Record->mk_file_digests( $target );
         Vimana::Record->add( {
@@ -48,7 +45,7 @@ sub run {
                 package => $pkgfile->cname,
                 files => \@e } );
     }
-    return $installed;
+    return $target;
 }
 
 

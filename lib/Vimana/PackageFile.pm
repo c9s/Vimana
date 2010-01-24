@@ -155,10 +155,13 @@ sub copy_to {
 
     $logger->info( "Copying $src to $path" );
     my $ret = File::Copy::copy( $src => $path );
-    $ret 
-        ?  $logger->info("Done")
-        :  $logger->error( $! ) ;
-    $ret;
+    if( $ret ) {
+        my (@parts)= File::Spec->splitpath( $src );
+        return File::Spec->join($path,$parts[2]);
+    }
+
+    $logger->error( $! );
+    return;
 }
 
 
