@@ -15,29 +15,32 @@ sub run {
         return 1;
     }
 
-    # known types (depends on the information that vim.org provides.
-    return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path ,  'colors' ) )
-        if $pkgfile->script_is('color scheme');
+DONE: 
+    {
+        # known types (depends on the information that vim.org provides.
+        return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path ,  'colors' ) )
+            if $pkgfile->script_is('color scheme');
 
-    return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path ,  'syntax' ) )
-        if $pkgfile->script_is('syntax');
+        return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path ,  'syntax' ) )
+            if $pkgfile->script_is('syntax');
 
-    return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path , 'indent' ) )
-        if $pkgfile->script_is('indent');
+        return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path , 'indent' ) )
+            if $pkgfile->script_is('indent');
 
-    return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path , 'ftplugin' ) )
-        if $pkgfile->script_is('ftplugin');
+        return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path , 'ftplugin' ) )
+            if $pkgfile->script_is('ftplugin');
 
-    # guess text filetype here.  (colorscheme, ftplugin ...etc)
+        # guess text filetype here.  (colorscheme, ftplugin ...etc)
 
-    $logger->info( "Inspecting file content for script type." );
-    my $type = $self->inspect_text_content;
-    if ($type) {
-        $logger->info("Script type found: $type.");
-        $logger->info("Installing..");
-        $self->copy_to_rtp( File::Spec->join( $self->runtime_path, $type ) );
-        $logger->info("Done.");
-        return 1;
+        $logger->info( "Inspecting file content for script type." );
+        my $type = $self->inspect_text_content;
+        if ($type) {
+            $logger->info("Script type found: $type.");
+            $logger->info("Installing..");
+            $self->copy_to_rtp( File::Spec->join( $self->runtime_path, $type ) );
+            $logger->info("Done.");
+            return 1;
+        }
     }
 
 }
@@ -60,7 +63,6 @@ sub inspect_text_content {
     if( $content =~ m{^"\s*(?:script\s+type):\s*(\w+)}i ) {
         my $type = $1;
         return $type;
-        # return $type if $type =~ m{(?:plugin|ftplugin|ftdetect|syntax|compiler|)};
     }
 
     return 'colors'   if $content =~ m/^let\s+(g:)?colors_name\s*=/;
