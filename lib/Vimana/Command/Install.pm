@@ -201,10 +201,12 @@ sub run {
         my $ret;
         if( $pkgfile->is_text ) {
 
-            # XXX: need to record. and support runtime_path.
-
-            my $installer = $self->get_installer('text' , { package => $pkgfile });
+            # XXX: need to record.
+            my $installer = $self->get_installer('text' , { 
+                    package => $pkgfile , 
+                    runtime_path => $self->{runtime_path} } );
             $ret = $installer->run( $pkgfile );
+
 
         }
         elsif( $pkgfile->is_archive ) {
