@@ -14,31 +14,6 @@ use Vimana::Logger;
 use Vimana::Util;
 use DateTime;
 
-sub find_vimball_files {
-    my $out = shift;
-    my @vimballs;
-    File::Find::find(  sub {
-            return unless -f $_;
-            push @vimballs , File::Spec->join($File::Find::dir , $_ ) if /\.vba$/;
-        } , $out );
-    return @vimballs;
-}
-
-sub find_files {
-    my $self = shift;
-    my @dirs = @_;
-    use File::Find;
-    use File::Spec;
-    my @files;
-    File::Find::find(sub {
-        return if m{\.(?:git|svn)};
-        return if $File::Find::dir =~ m{\.(git|svn)};
-        my $filepath = File::Spec->catfile( $File::Find::dir, $_ );
-        push @files, $filepath if -f $_;
-    } , @dirs );
-    return @files;
-}
-
 sub run {
     my ( $self, $pkgfile, $out ) = @_;
 
@@ -65,7 +40,6 @@ sub run {
         Vimana::VimballInstall->install_vimballs( @vba );
     }
 
-
     # check directory structure
     {
 
@@ -83,11 +57,11 @@ sub run {
 
         # XXX: check vim runtime path subdirs , mv to init script
         $logger->info("Initializing vim runtime directories") ;
-        Vimana::Util::init_vim_runtime();
+        Vimana::Util::init_vim_runtime( $self->runtime_path );
         
         $logger->info( "Basepath found: " . $_ ) for ( keys %$nodes );
 
-        my @installed_files = $self->install_from_nodes( $nodes , runtime_path() );
+        my @installed_files = $self->install_from_nodes( $nodes , $self->runtime_path );
 
         $logger->info("Updating helptags");
         $self->update_vim_doc_tags();
@@ -117,7 +91,7 @@ sub run {
         } );
     }
 
-    if( $self->args and $self->args->{cleanup} ) {
+    if( $self->cleanup ) {
         $logger->info("Cleaning up temporary directory.");
         rmtree [ $out ] if -e $out;
     }
@@ -157,12 +131,40 @@ sub find_base_path {
 }
 
 sub update_vim_doc_tags {
+    my $self = shift;
     my $vim = find_vim();
-    my $dir = File::Spec->join( runtime_path() , 'doc' );
+    my $dir = File::Spec->join( $self->runtime_path , 'doc' );
     my $cmd = qq{vim -e -s -c ":helptags $dir" -c ":q"};
     print "\t$cmd\n";
     system( $cmd );
 }
+
+sub find_vimball_files {
+    my $out = shift;
+    my @vimballs;
+    File::Find::find(  sub {
+            return unless -f $_;
+            push @vimballs , File::Spec->join($File::Find::dir , $_ ) if /\.vba$/;
+        } , $out );
+    return @vimballs;
+}
+
+sub find_files {
+    my $self = shift;
+    my @dirs = @_;
+    use File::Find;
+    use File::Spec;
+    my @files;
+    File::Find::find(sub {
+        return if m{\.(?:git|svn)};
+        return if $File::Find::dir =~ m{\.(git|svn)};
+        my $filepath = File::Spec->catfile( $File::Find::dir, $_ );
+        push @files, $filepath if -f $_;
+    } , @dirs );
+    return @files;
+}
+
+
 
 
 =head1 AUTHOR

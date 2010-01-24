@@ -159,15 +159,14 @@ sub copy_to {
 }
 
 
-=head2 $pkgfile->copy_to_rtp( $type )
+=head2 $pkgfile->copy_to_rtp( $dir )
 
 copy to vim runtime path
 
 =cut
 
 sub copy_to_rtp {
-    my ( $self, $type ) = @_ ;
-    my $target = File::Spec->join( runtime_path(), $type );
+    my ( $self, $target ) = @_ ;
     return $self->copy_to($target);
 }
 

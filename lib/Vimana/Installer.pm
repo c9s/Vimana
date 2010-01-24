@@ -6,7 +6,7 @@ use Vimana::Logger;
 
 use constant _continue => 0;
 
-__PACKAGE__->mk_accessors( qw(package args) );
+__PACKAGE__->mk_accessors( qw(package cleanup runtime_path) );
 
 sub run { }
 

@@ -6,7 +6,7 @@ use Vimana::Logger;
 use Vimana::VimballInstall;
 
 sub run {
-    my ($self,$pkgfile) = @_;
+    my ( $self, $pkgfile ) = @_;
 
     if( $pkgfile->is_vimball ) {
         $logger->info("Found Vimball File");
@@ -16,16 +16,16 @@ sub run {
     }
 
     # known types (depends on the information that vim.org provides.
-    return $pkgfile->copy_to_rtp( 'colors' )
+    return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path ,  'colors' ) )
         if $pkgfile->script_is('color scheme');
 
-    return $pkgfile->copy_to_rtp( 'syntax' )
+    return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path ,  'syntax' ) )
         if $pkgfile->script_is('syntax');
 
-    return $pkgfile->copy_to_rtp( 'indent' )
+    return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path , 'indent' ) )
         if $pkgfile->script_is('indent');
 
-    return $pkgfile->copy_to_rtp( 'ftplugin' )
+    return $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path , 'ftplugin' ) )
         if $pkgfile->script_is('ftplugin');
 
     # guess text filetype here.  (colorscheme, ftplugin ...etc)
@@ -35,7 +35,7 @@ sub run {
     if ($type) {
         $logger->info("Script type found: $type.");
         $logger->info("Installing..");
-        $self->copy_to_rtp($type);
+        $self->copy_to_rtp( File::Spec->join( $self->runtime_path, $type ) );
         $logger->info("Done.");
         return 1;
     }

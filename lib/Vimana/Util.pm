@@ -3,8 +3,8 @@ use warnings;
 use strict;
 use base qw(Exporter::Lite);
 use File::Type;
-our @EXPORT = qw(canonical_script_name runtime_path find_vim);
-our @EXPORT_OK = qw(findbin find_vim tempdir);
+our @EXPORT = qw(canonical_script_name find_vim);
+our @EXPORT_OK = qw(findbin find_vim runtime_path tempdir);
 
 sub canonical_script_name {
     my $name = shift;
@@ -60,12 +60,13 @@ sub runtime_path {
 use File::Spec;
 use File::Path qw'mkpath rmtree';
 sub init_vim_runtime {
+    my $runtime_path = shift || runtime_path() ;
     my $paths = [ ];
 
 #   filetype.vim
 #   scripts.vim
 #   menu.vim
-    push @$paths , File::Spec->join( runtime_path , $_ )
+    push @$paths , File::Spec->join( $runtime_path , $_ )
         for ( qw(
                 after
                 autoload
