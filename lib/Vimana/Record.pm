@@ -61,8 +61,8 @@ sub load {
     #YAML::LoadFile( $record_file );
     my $record = from_json( $json );
     unless( $record ) {
-        print STDERR "Can not load record\n";
-        return ;
+        print STDERR "Can not load record. Use -f or --force option to remove.\n";
+        return;
     }
     return $record;
 }
