@@ -47,9 +47,12 @@ sub is_text { $_[ 0 ]->filetype =~ m{octet-stream} ? 1 : 0 }
 
 sub is_vimball {  $_[0]->file =~ m/\.vba$/  }
 
-sub script_type { $_[ 0 ]->info->{type}   }
-
-sub script_is { $_[ 0 ]->script_type eq $_[1] }
+# known types (depends on the information that vim.org provides.
+sub script_type {
+    my $self = shift;
+    return 'colors' if $self->info->{type} eq 'color scheme' ;
+    return $self->info->{type};
+}
 
 sub download {
     my $self = shift;
