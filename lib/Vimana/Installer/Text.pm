@@ -64,6 +64,8 @@ sub inspect_text_content {
     return 'compiler' if $content =~ m/^let\s+current_compiler\s*=/;
     return 'indent'   if $content =~ m/^let\s+b:did_indent/;
 
+    # XXX: inspect more types.
+
     return 0;
 }
 
