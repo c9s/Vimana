@@ -1,11 +1,10 @@
 package Vimana;
-
 use warnings;
 use strict;
 use Vimana::Index;
 
 use vars qw($INDEX);
-our $VERSION = 2010.02301 ;
+our $VERSION = 2010.02418 ;
 
 sub index {
     return $INDEX if $INDEX;

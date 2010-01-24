@@ -13,7 +13,6 @@ requires
     'Archive::Any'          => 0,
     'DateTime'              => 0,
     'Exporter::Lite'        => 0,
-    'File::Copy::Recursive' => 0.38,  # XXX: remove this dependency
     'File::Path'     => 2.07,
     'File::Spec'     => 0,
     'File::Type'     => 0,

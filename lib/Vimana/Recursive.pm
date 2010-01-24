@@ -504,11 +504,11 @@ __END__
 
 =head1 NAME
 
-File::Copy::Recursive - Perl extension for recursively copying files and directories
+Vimana::Recursive - Perl extension for recursively copying files and directories
 
 =head1 SYNOPSIS
 
-  use File::Copy::Recursive qw(fcopy rcopy dircopy fmove rmove dirmove);
+  use Vimana::Recursive qw(fcopy rcopy dircopy fmove rmove dirmove);
 
   fcopy($orig,$new[,$buf]) or die $!;
   rcopy($orig,$new[,$buf]) or die $!;
@@ -550,9 +550,9 @@ In list context it returns the number of files and directories, number of direct
   my $num_of_files_and_dirs = dircopy($orig,$new);
   my($num_of_files_and_dirs,$num_of_dirs,$depth_traversed) = dircopy($orig,$new);
   
-Normally it stops and return's if a copy fails, to continue on regardless set $File::Copy::Recursive::SkipFlop to true.
+Normally it stops and return's if a copy fails, to continue on regardless set $Vimana::Recursive::SkipFlop to true.
 
-    local $File::Copy::Recursive::SkipFlop = 1;
+    local $Vimana::Recursive::SkipFlop = 1;
 
 That way it will copy everythgingit can ina directory and won't stop because of permissions, etc...
 
@@ -568,7 +568,7 @@ This function lets you specify a pattern suitable for perl's glob() as the first
 
 It returns and array whose items are array refs that contain the return value of each rcopy() call.
 
-It forces behavior as if $File::Copy::Recursive::CPRFComp is true.
+It forces behavior as if $Vimana::Recursive::CPRFComp is true.
 
 =head2 fmove()
 
@@ -595,7 +595,7 @@ So if you:
    rmove('foo/bar/baz', '/etc/');
    # "baz" is removed from foo/bar after it is successfully copied to /etc/
    
-   local $File::Copy::Recursive::Remvbase = 1;
+   local $Vimana::Recursive::Remvbase = 1;
    rmove('foo/bar/baz','/etc/');
    # if baz is successfully copied to /etc/ :
    # first "baz" is removed from foo/bar
@@ -629,7 +629,7 @@ Removes a given path recursively. It removes the *entire* path so be carefull!!!
 
 Returns 2 if the given path is not a directory.
 
-  File::Copy::Recursive::pathrm('foo/bar/baz') or die $!;
+  Vimana::Recursive::pathrm('foo/bar/baz') or die $!;
   # foo no longer exists
 
 Same as:
@@ -640,34 +640,34 @@ Same as:
 
 An optional second argument makes it call pathempty() before any rmdir()'s when set to true.
 
-  File::Copy::Recursive::pathrm('foo/bar/baz', 1) or die $!;
+  Vimana::Recursive::pathrm('foo/bar/baz', 1) or die $!;
   # foo no longer exists
 
 Same as:PFSCheck
 
-  File::Copy::Recursive::pathempty('foo/bar/baz') or die $!;
+  Vimana::Recursive::pathempty('foo/bar/baz') or die $!;
   rmdir 'foo/bar/baz' or die $!;
-  File::Copy::Recursive::pathempty('foo/bar/') or die $!;
+  Vimana::Recursive::pathempty('foo/bar/') or die $!;
   rmdir 'foo/bar' or die $!;
-  File::Copy::Recursive::pathempty('foo/') or die $!;
+  Vimana::Recursive::pathempty('foo/') or die $!;
   rmdir 'foo' or die $!;
 
-An optional third argument acts like $File::Copy::Recursive::NoFtlPth, again probably not a good idea.
+An optional third argument acts like $Vimana::Recursive::NoFtlPth, again probably not a good idea.
 
 =head4 pathempty()
 
 Recursively removes the given directory's contents so it is empty. returns 2 if argument is not a directory, 1 on successfully emptying the directory.
 
-   File::Copy::Recursive::pathempty($pth) or die $!;
+   Vimana::Recursive::pathempty($pth) or die $!;
    # $pth is now an empty directory
 
 =head4 pathmk()
 
 Creates a given path recursively. Creates foo/bar/baz even if foo does not exist.
 
-   File::Copy::Recursive::pathmk('foo/bar/baz') or die $!;
+   Vimana::Recursive::pathmk('foo/bar/baz') or die $!;
 
-An optional second argument if true acts just like $File::Copy::Recursive::NoFtlPth, which means you'd never get your die() if something went wrong. Again, probably a *bad* idea.
+An optional second argument if true acts just like $Vimana::Recursive::NoFtlPth, which means you'd never get your die() if something went wrong. Again, probably a *bad* idea.
 
 =head4 pathrmdir()
 
@@ -678,35 +678,35 @@ Just removes the top directory the path given instead of the entire path like pa
 
 By default a quiet attempt is made to change the new file or directory to the mode of the old one.
 To turn this behavior off set
-  $File::Copy::Recursive::KeepMode
+  $Vimana::Recursive::KeepMode
 to false;
 
 =head2 Managing Depth
 
 You can set the maximum depth a directory structure is recursed by setting:
-  $File::Copy::Recursive::MaxDepth 
+  $Vimana::Recursive::MaxDepth 
 to a whole number greater than 0.
 
 =head2 SymLinks
 
 If your system supports symlinks then symlinks will be copied as symlinks instead of as the target file.
 Perl's symlink() is used instead of File::Copy's copy()
-You can customize this behavior by setting $File::Copy::Recursive::CopyLink to a true or false value.
+You can customize this behavior by setting $Vimana::Recursive::CopyLink to a true or false value.
 It is already set to true or false dending on your system's support of symlinks so you can check it with an if statement to see how it will behave:
 
-    if($File::Copy::Recursive::CopyLink) {
+    if($Vimana::Recursive::CopyLink) {
         print "Symlinks will be preserved\n";
     } else {
         print "Symlinks will not be preserved because your system does not support it\n";
     }
 
-If symlinks are being copied you can set $File::Copy::Recursive::BdTrgWrn to true to make it carp when it copies a link whose target does not exist. Its false by default.
+If symlinks are being copied you can set $Vimana::Recursive::BdTrgWrn to true to make it carp when it copies a link whose target does not exist. Its false by default.
 
-    local $File::Copy::Recursive::BdTrgWrn  = 1;
+    local $Vimana::Recursive::BdTrgWrn  = 1;
 
 =head2 Removing existing target file or directory before copying.
 
-This can be done by setting $File::Copy::Recursive::RMTrgFil or $File::Copy::Recursive::RMTrgDir for file or directory behavior respectively.
+This can be done by setting $Vimana::Recursive::RMTrgFil or $Vimana::Recursive::RMTrgDir for file or directory behavior respectively.
 
 0 = off (This is the default)
 
@@ -714,11 +714,11 @@ This can be done by setting $File::Copy::Recursive::RMTrgFil or $File::Copy::Rec
 
 2 = return if removal fails
 
-    local $File::Copy::Recursive::RMTrgFil = 1;
+    local $Vimana::Recursive::RMTrgFil = 1;
     fcopy($orig, $target) or die $!;
     # if it fails it does warn() and keeps going
 
-    local $File::Copy::Recursive::RMTrgDir = 2;
+    local $Vimana::Recursive::RMTrgDir = 2;
     dircopy($orig, $target) or die $!;
     # if it fails it does your "or die"
 
@@ -727,13 +727,13 @@ This should be unnecessary most of the time but its there if you need it :)
 =head2 Turning off stat() check
 
 By default the files or directories are checked to see if they are the same (IE linked, or two paths (absolute/relative or different relative paths) to the same file) by comparing the file's stat() info. 
-It's a very efficient check that croaks if they are and shouldn't be turned off but if you must for some weird reason just set $File::Copy::Recursive::PFSCheck to a false value. ("PFS" stands for "Physical File System")
+It's a very efficient check that croaks if they are and shouldn't be turned off but if you must for some weird reason just set $Vimana::Recursive::PFSCheck to a false value. ("PFS" stands for "Physical File System")
 
 =head2 Emulating cp -rf dir1/ dir2/
 
 By default dircopy($dir1,$dir2) will put $dir1's contents right into $dir2 whether $dir2 exists or not.
 
-You can make dircopy() emulate cp -rf by setting $File::Copy::Recursive::CPRFComp to true.
+You can make dircopy() emulate cp -rf by setting $Vimana::Recursive::CPRFComp to true.
 
 NOTE: This only emulates -f in the sense that it does not prompt. It does not remove the target file or directory if it exists.
 If you need to do that then use the variables $RMTrgFil and $RMTrgDir described in "Removing existing target file or directory before copying" above.
@@ -747,7 +747,7 @@ So assuming 'foo/file':
     # if bar does not exist the result is bar/file
     # if bar does exist the result is bar/file
 
-    $File::Copy::Recursive::CPRFComp = 1;
+    $Vimana::Recursive::CPRFComp = 1;
     dircopy('foo', 'bar') or die $!;
     # if bar does not exist the result is bar/file
     # if bar does exist the result is bar/foo/file
@@ -758,7 +758,7 @@ You can also specify a star for cp -rf glob type behavior:
     # if bar does not exist the result is bar/file
     # if bar does exist the result is bar/file
 
-    $File::Copy::Recursive::CPRFComp = 1;
+    $Vimana::Recursive::CPRFComp = 1;
     dircopy('foo/*', 'bar') or die $!;
     # if bar does not exist the result is bar/file
     # if bar does exist the result is bar/file
@@ -771,7 +771,7 @@ If you want to allow:
 
   cp -rf . foo/
 
-type behavior set $File::Copy::Recursive::CopyLoop to true.
+type behavior set $Vimana::Recursive::CopyLoop to true.
 
 This is false by default so that a check is done to see if the source directory will contain the target directory and croaks to avoid this problem.
 
