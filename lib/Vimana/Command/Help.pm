@@ -14,10 +14,25 @@ sub run {
     Avaliable Commands:
 
         update          - update index for searching.
+
         install (i)     - install package
+
+            install [plugin]
+
         remove  (r)     - remove package
+            
+            remove [plugin] 
+
         search  (s)     - search packages
+
+            search [keyword]
+
         help            - show this help
+
+            help [command]
+            help [topic]
+
+    Help Topics:
 
     
 END
