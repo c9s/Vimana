@@ -67,7 +67,7 @@ sub run {
         $self->update_vim_doc_tags();
 
         # record installed file checksum
-        print "Making checksum...\n";
+        print STDERR "Making checksum...\n";
         my @e = Vimana::Record->mk_file_digests( @installed_files );
 
         Vimana::Record->add( {
