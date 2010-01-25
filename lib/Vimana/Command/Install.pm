@@ -131,9 +131,17 @@ sub run {
     # XXX: $self->{runtime_path}
 
     if( $self->{runtime_path} ) {
-        print STDERR "You are using runtime path option\n";
-        print STDERR "you might need to add below configuration to your vimrc file\n";
-        print STDERR "   set runtimepath+=@{[ $self->{runtime_path} ]}\n\n";
+        print STDERR <<END
+    You are using runtime path option.
+
+    To load the plugin , you might need to add below configuration to your vimrc file
+        set runtimepath+=@{[ $self->{runtime_path} ]}
+
+    See vim documentation for runtimepath option.
+
+        :help 'runtimepath'
+
+END
     }
 
     $self->{runtime_path} ||= Vimana::Util::runtime_path();
