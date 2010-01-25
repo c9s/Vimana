@@ -68,3 +68,20 @@ sub run {
 
 
 1;
+__END__
+
+=head1 NAME
+
+Vimana::Command::Search - search vim plugins.
+
+=head1 SYNOPSIS
+
+    $ vimana search [keyword]
+
+=head1 OPTIONS
+
+=head1 DESCRIPTION
+
+
+
+
