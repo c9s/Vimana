@@ -59,15 +59,12 @@ Vimana::Command::Download - download a vim plugin package.
 
 =head1 SYNOPSIS
 
+    $ vimana download [plugin]
 
+    $ vimana d [plugin]
 
 =head1 OPTIONS
 
-
-
 =head1 DESCRIPTION
-
-
-
 
 
