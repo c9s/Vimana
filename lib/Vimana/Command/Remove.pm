@@ -17,3 +17,21 @@ sub run {
 }
 
 1;
+__END__
+
+
+=head1 NAME
+
+Vimana::Command::Remove - {Description}
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+=head1 FUNCTION
+
+=head1 AUTHOR
+
+
+
+
