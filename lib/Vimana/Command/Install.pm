@@ -234,7 +234,20 @@ sub run {
 
 }
 
-
-
-
 1;
+
+=head1 NAME
+
+Vimana::Command::Install - install a vim plugin package.
+
+=head1 SYNOPSIS
+
+    $ vimana install [plugin]
+
+=head1 OPTIONS
+
+    -v    : verbose
+
+=head1 DESCRIPTION
+
+
