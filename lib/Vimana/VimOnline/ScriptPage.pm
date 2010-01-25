@@ -16,6 +16,9 @@ sub fetch {
     my ( $class, $id ) = @_;
     my $uri  = page_uri($id);
     my $html = LWP::Simple::get($uri);
+    unless( $html ) {
+        die "Can't retrieve vim.org content.\n";
+    }
     return $class->parse($html);
 }
 
