@@ -10,12 +10,9 @@ require Vimana::VimOnline::ScriptPage;
 use Vimana::Logger;
 use Vimana::PackageFile;
 
-sub options {
-    (
-        'v|verbose'           => 'verbose',
-    );
-}
-
+sub options { (
+    'v|verbose'           => 'verbose',
+) }
 
 sub run {
     my ( $self, $package ) = @_;
@@ -53,3 +50,24 @@ sub run {
 
 
 1;
+__DATA__
+
+
+=head1 NAME
+
+Vimana::Command::Download - download a vim plugin package.
+
+=head1 SYNOPSIS
+
+
+
+=head1 OPTIONS
+
+
+
+=head1 DESCRIPTION
+
+
+
+
+
