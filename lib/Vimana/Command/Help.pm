@@ -4,39 +4,47 @@ use strict;
 use base qw(App::CLI::Command);
 
 sub run {
+    my ($self,$topic) = @_;
 
-    print <<END
+    # if $arg is topic
 
-    Usage:
+    # if $arg is command
+    if (my $cmd = eval { Vimana::Command->get_cmd ($topic) }) {
+        $cmd->usage(1);
+    }
+    else {
 
-        \$ vimana [command] [arguments]
+        print <<END;
 
-    Avaliable Commands:
+        Usage:
 
-        update          - update index for searching.
+            \$ vimana [command] [arguments]
 
-        install (i)     - install package
+        Avaliable Commands:
 
-            install [plugin]
+            update          - update index for searching.
 
-        remove  (r)     - remove package
-            
-            remove [plugin] 
+            install (i)     - install package
 
-        search  (s)     - search packages
+                install [plugin]
 
-            search [keyword]
+            remove  (r)     - remove package
+                
+                remove [plugin] 
 
-        help            - show this help
+            search  (s)     - search packages
 
-            help [command]
-            help [topic]
+                search [keyword]
 
-    Help Topics:
+            help            - show this help
 
+                help [command]
+                help [topic]
 
+        Help Topics:
 
 END
+    }
 
 }
 

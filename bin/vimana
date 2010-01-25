@@ -9,7 +9,7 @@ $|++;
 my $cmd = shift @ARGV;
 
 if (!$cmd or $cmd =~ /^-{0,2}[Hh](?:elp)?$/) {
-    Vimana::Command->invoke( 'help' , undef , @ARGV );
+    Vimana::Command->invoke( 'help' , @ARGV );
     exit 0;
 }
 
