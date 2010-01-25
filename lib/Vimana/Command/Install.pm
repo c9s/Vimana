@@ -130,6 +130,12 @@ sub run {
 
     # XXX: $self->{runtime_path}
 
+    if( $self->{runtime_path} ) {
+        print STDERR "You are using runtime path option\n";
+        print STDERR "you might need to add below configuration to your vimrc file\n";
+        print STDERR "   set runtimepath+=@{[ $self->{runtime_path} ]}\n\n";
+    }
+
     $self->{runtime_path} ||= Vimana::Util::runtime_path();
 
     print STDERR "Plugin will be installed to vim runtime path: " . $self->{runtime_path} . "\n";
