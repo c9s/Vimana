@@ -3,12 +3,29 @@ use strict;
 use warnings;
 use Vimana;
 use Vimana::Command;
+use Getopt::Long;
 
 $|++;
 my $cmd = shift @ARGV;
-my $ret = Vimana::Command->invoke( $cmd, @ARGV );
 
-exit (defined $ret ? $ret : 1);
+if (!$cmd or $cmd =~ /^-{0,2}[Hh](?:elp)?$/) {
+    Vimana::Command->invoke( 'help' , undef , @ARGV );
+    exit 0;
+}
+
+{
+    my $show_version;
+    local *ARGV = [$cmd || ''];
+    GetOptions ('v|version' => \$show_version) or exit;
+
+    if ($show_version || ($cmd && $cmd eq 'version')) {
+	printf ( "Vimana - version %f\n", $Vimana::VERSION );
+	exit 0;
+    }
+}
+
+
+Vimana::Command->invoke( $cmd, @ARGV );
 
 =encoding utf8
 
