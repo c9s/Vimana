@@ -4,6 +4,7 @@ use strict;
 use base qw(App::CLI::Command);
 use YAML;
 use Vimana::Logger;
+use Vimana::Record;
 use Vimana::PackageFile;
 use File::Find;
 
@@ -14,47 +15,26 @@ find installed packages.
 =cut
 
 sub run {
-    my $self = shift;
-    my $dir = File::Spec->join( $ENV{HOME}  , '.vim' , 'record' );
-    my @list;
-    File::Find::find( sub { 
-        return unless -f $_;
-        my $file = $_;
-        my $record = YAML::LoadFile($file);
-        if( $record->{package} ) {
-            push @list,$record->{package};
-        }
-        elsif ( $record->{meta} ) {
-            push @list,$record->{meta}{name};
-=pod
-version 0.1 record format (from VIM::Packager)
-          'files' => [
-                     '/Users/c9s/.vim/ftplugin/vim/omni.vim'
-                   ],
-          'meta' => {
-                    'repository' => 'git://....../',
-                    'version' => '0.1',
-                    'name' => 'vimomni.vim',
-                    'author' => 'Cornelius',
-                    'version_from' => 'ftplugin/vim/omni.vim',
-                    'libpath' => '.',
-                    'email' => 'cornelius.howl@gmail.com',
-                    'vim_version' => {
-                                     'version' => '7.2',
-                                     'op' => '>='
-                                   },
-                    'type' => 'ftplugin'
-                  }
-=cut
-        }
-        else {
-            print STDERR "Unknown record.\n";
+    my ($self,$arg) = @_;
+
+    unless( $arg )  {
+        my $record_dir = Vimana::Record->record_dir();
+        my @list;
+        File::Find::find( sub { 
+            return unless -f $_;
+            my $pkgname = $_;
+            my $data = Vimana::Record->load( $pkgname );
+            print $data->{package} . ' ' . $data->{install_type} . "\n";
+        }, $record_dir );
+    }
+    else {
+        my $data = Vimana::Record->load( $arg );
+        print "Package: " . $data->{package} . "\n";
+        print "Files:\n";
+        for my $entry (  @{ $data->{files} } ) {
+            print "\t" .  $entry->{file} . "\n";
 
         }
-
-    } , $dir);
-    for my $item ( @list ) {
-        print $item . "\n";
     }
 }
 

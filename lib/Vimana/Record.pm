@@ -7,9 +7,14 @@ use File::Path;
 use Digest::MD5 qw(md5_hex);
 use YAML;
 
+
+sub record_dir {
+    return (  $ENV{VIM_RECORD_DIR} || File::Spec->join($ENV{HOME},'.vim','record')  );
+}
+
 sub record_path  {
     my ( $class, $pkgname ) = @_;
-    my $record_dir =  $ENV{VIM_RECORD_DIR} || File::Spec->join($ENV{HOME},'.vim','record') ;
+    my $record_dir =  $class->record_dir();
     if( ! -d $record_dir ) {
         File::Path::mkpath( $record_dir );
     }
