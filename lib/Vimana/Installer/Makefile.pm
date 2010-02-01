@@ -8,9 +8,10 @@ sub run {
     my ($self,$pkgfile,$path)=@_;
 
     my $makefile;
-    for(qw(Makefile Makefile.pure)) {
+    for(qw(Makefile makefile)) {
         $makefile = $_ if -e $_ ;
     }
+
     if ( $makefile ) {
         $logger->info( "Makefile found. do make install.") ;
         my $ret = system( "make install -f $makefile" );
