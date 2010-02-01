@@ -6,9 +6,14 @@ use strict;
 
 sub run {
     my ($self,$pkgfile,$path)=@_;
-    if ( -e "Makefile" or -e 'makefile' ) {
+
+    my $makefile;
+    for(qw(Makefile Makefile.pure)) {
+        $makefile = $_ if -e $_ ;
+    }
+    if ( $make ) {
         $logger->info( "Makefile found. do make install.") ;
-        my $ret = system( "make install" );
+        my $ret = system( "make install -f $makefile" );
         return 1 if $ret == 0;
     }
 
