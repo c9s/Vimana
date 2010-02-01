@@ -69,7 +69,6 @@ sub run {
         # record installed file checksum
         print STDERR "Making checksum...\n";
         my @e = Vimana::Record->mk_file_digests( @installed_files );
-
         Vimana::Record->add( {
                 version => 0.2,    # record spec version
                 generated_by => 'Vimana-' . $Vimana::VERSION,
@@ -107,9 +106,17 @@ sub install_from_nodes {
     my ($self , $nodes , $to ) = @_;
     $logger->info("Copying files...");
     my @copied = ();
+    use Cwd;
     for my $basedir  ( grep { $nodes->{ $_ } > 1 } keys %$nodes ) {
         $logger->info("$basedir => $to");
-        push @copied , dircopy_files($basedir, $to );
+
+        opendir(my $dh, $basedir ) || die "can't opendir $basedir: $!";
+        my @dirs = grep { -d File::Spec->join($basedir,$_) and $_ ne '.' and $_ ne '..' } readdir($dh);
+        closedir $dh;
+
+        for ( @dirs ) {
+            push @copied , dircopy_files( File::Spec->join($basedir,$_), File::Spec->join($to,$_)  );
+        }
     }
     return @copied;
 }
