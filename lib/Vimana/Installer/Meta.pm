@@ -22,7 +22,7 @@ sub run {
 
     return 0 if $ret != 0;
 
-    $ret = system( 'make install' );
+    $ret = system( 'make install -f Makefile.vimp' );
     return 1 if $ret == 0;
 }
 
