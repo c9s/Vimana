@@ -11,7 +11,7 @@ sub run {
     for(qw(Makefile Makefile.pure)) {
         $makefile = $_ if -e $_ ;
     }
-    if ( $make ) {
+    if ( $makefile ) {
         $logger->info( "Makefile found. do make install.") ;
         my $ret = system( "make install -f $makefile" );
         return 1 if $ret == 0;
