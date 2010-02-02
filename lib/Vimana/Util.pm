@@ -29,9 +29,10 @@ sub get_mine_type {
 sub findbin {
     my $which = shift;
     my $path = $ENV{PATH};
-    my @paths = split /:/,$path;
+    my @paths = $^O eq 'MSWin32' ? split /;/,$path : split /:/,$path;
     for ( @paths ) {
         my $bin = $_ . '/' . $which;
+        $bin .= '.exe' if $^O eq 'MSWin32';
         return $bin if( -x $bin ) ;
     }
 }
