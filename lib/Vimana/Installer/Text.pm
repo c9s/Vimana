@@ -24,7 +24,7 @@ sub run {
         # can't found script ype,
         # inspect text filetype here.  (colorscheme, ftplugin ...etc)
         $logger->info( "Inspecting file content for script type." );
-        $type = $self->inspect_text_content;
+        $type = $self->inspect_text_content( $self->package->content );
         if ($type) {
             $logger->info("Script type found: $type.");
             $logger->info("Installing..");
@@ -60,10 +60,8 @@ then the file will be installed into ~/.vim/plugin/
 =cut
 
 sub inspect_text_content {
-    my $self = shift;
-    my $content = $self->package->content;
-
-    if( $content =~ m{^"\s*(?:script\s+type):\s*(\w+)}i ) {
+    my ($self,$content) = @_;
+    if( $content =~ m{^"\s*script\s+type:\s*(\w+)}im ) {
         my $type = $1;
         return $type;
     }
