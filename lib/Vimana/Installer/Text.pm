@@ -63,15 +63,14 @@ sub inspect_text_content {
     my $self = shift;
     my $content = $self->package->content;
 
-    if( $content =~ m{^"\s*(?:script\s+type):\s*(\w+)}i ) {
-        my $type = $1;
-        return $type;
+    if( $content =~ /^"\s*(?:script\s+type):\s*(\w+)/im ) {
+        return $1;
     }
 
-    return 'colors'   if $content =~ m/^let\s+(g:)?colors_name\s*=/;
-    return 'syntax'   if $content =~ m/^syn[tax]* (?:match|region|keyword)/;
-    return 'compiler' if $content =~ m/^let\s+current_compiler\s*=/;
-    return 'indent'   if $content =~ m/^let\s+b:did_indent/;
+    return 'colors'   if $content =~ /^let\s+(g:)?colors_name\s*=/m;
+    return 'syntax'   if $content =~ /^syn[tax]* (?:match|region|keyword)/m;
+    return 'compiler' if $content =~ /^let\s+current_compiler\s*=/m;
+    return 'indent'   if $content =~ /^let\s+b:did_indent/m;
 
     # XXX: inspect more types.
 

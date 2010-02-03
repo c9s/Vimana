@@ -3,6 +3,7 @@ use warnings;
 use strict;
 use base qw(Exporter::Lite);
 use File::Type;
+use File::Spec;
 our @EXPORT = qw(canonical_script_name find_vim);
 our @EXPORT_OK = qw(findbin find_vim runtime_path tempdir);
 
@@ -17,7 +18,7 @@ sub canonical_script_name {
 }
 
 sub tempdir {
-    return  "/tmp/vimana-" . join '',map { [ 'a' .. 'z' ]->[ int rand(26) ] }  1 .. 6;
+    return File::Spec->tmpdir() . "/vimana-" . join '',map { [ 'a' .. 'z' ]->[ int rand(26) ] }  1 .. 6;
 }
 
 sub get_mine_type {
@@ -51,14 +52,13 @@ runtime path.
 
 sub runtime_path {
     # return File::Spec->join( $ENV{HOME} , 'vim-test' );
-    return $ENV{VIMANA_RUNTIME_PATH} || File::Spec->join( $ENV{HOME} , '.vim' );
+    return $ENV{VIMANA_RUNTIME_PATH} || File::Spec->join( $ENV{HOME} , $^O eq 'MSWin32' ? 'vimfiles' : '.vim' );
 }
 
 =head2 init_vim_runtime 
 
 =cut
 
-use File::Spec;
 use File::Path qw'mkpath rmtree';
 sub init_vim_runtime {
     my $runtime_path = shift || runtime_path() ;
