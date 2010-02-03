@@ -1,7 +1,7 @@
 package Vimana::Record;
 use warnings;
 use strict;
-use Vimana;
+use Vimana::Util;
 use JSON;
 use File::Path;
 use Digest::MD5 qw(md5_hex);
@@ -9,7 +9,7 @@ use YAML;
 
 
 sub record_dir {
-    return (  $ENV{VIM_RECORD_DIR} || File::Spec->join($ENV{HOME},'.vim','record')  );
+    return (  $ENV{VIM_RECORD_DIR} || File::Spec->join(Vimana::Util::runtime_path(),'record')  );
 }
 
 sub record_path  {

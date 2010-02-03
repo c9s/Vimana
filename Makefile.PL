@@ -13,7 +13,8 @@ requires
     'Archive::Any'   => 0,
     'DateTime'       => 0,
     'Exporter::Lite' => 0,
-    'File::Path'     => 2.07,
+    'File::HomeDir'  => 0,
+    'File::Path'     => 0,
     'File::Spec'     => 0,
     'File::Type'     => 0,
     'Getopt::Long'   => 0,
@@ -30,8 +31,12 @@ include('ExtUtils::AutoInstall');
 auto_install();
 auto_provides();
 
-my $ret = qx( vim --version );
-die "Can not found Vim , Please install Vim on your system" unless $ret =~ /^VIM - Vi IMproved/ ;
+my $ret;
+{
+    local $ENV{LANG} = 'C';
+    $ret = qx( vim --version );
+    die "Can not found Vim , Please install Vim on your system" unless $ret =~ /^VIM - Vi IMproved/ ;
+}
 
 print "Vim found:\n" . '-' x 10 . "\n";
 my @lines = split("\n", $ret );

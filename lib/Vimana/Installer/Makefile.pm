@@ -1,6 +1,7 @@
 package Vimana::Installer::Makefile;
 use base qw(Vimana::Installer);
 use Vimana::Logger;
+use Config;
 use warnings;
 use strict;
 
@@ -14,7 +15,7 @@ sub run {
 
     if ( $makefile ) {
         $logger->info( "Makefile found. do make install.") ;
-        my $ret = system( "make install -f $makefile" );
+        my $ret = system( "$Config{make} install -f $makefile" );
         return 1 if $ret == 0;
     }
 

@@ -73,6 +73,7 @@ sub fetch {
     my $content;
     unless( $content ) {
         my $ua = LWP::UserAgent->new;
+        $ua->env_proxy;
         my $response = $ua->get( $uri );
         # XXX: catch exception 
 
