@@ -3,6 +3,7 @@ use warnings;
 use strict;
 
 use Vimana::Logger;
+use Vimana::Util;
 use base qw(Vimana::Accessor);
 __PACKAGE__->mk_accessors( qw(cache) );
 
@@ -24,7 +25,6 @@ sub find_package_like {
     return undef;
 }
 
-use Vimana::Util;
 sub find_package {
     my ($self, $findname ) = @_;
     my $index = $self->read_index();
@@ -36,7 +36,7 @@ sub find_package {
 use File::Path;
 
 sub index_file {
-    my $dir = $ENV{HOME} . "/.vimana";
+    my $dir = Vimana::Util::homedir() . "/.vimana";
     File::Path::mkpath [ $dir ];
     return $dir . "/index";
 }

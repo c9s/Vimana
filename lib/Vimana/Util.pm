@@ -4,6 +4,7 @@ use strict;
 use base qw(Exporter::Lite);
 use File::Type;
 use File::Spec;
+use File::HomeDir;
 our @EXPORT = qw(canonical_script_name find_vim);
 our @EXPORT_OK = qw(findbin find_vim runtime_path tempdir);
 
@@ -42,6 +43,9 @@ sub find_vim {
     return $ENV{VIMPATH} || findbin('vim');
 }
 
+sub homedir {
+    return File::HomeDir->my_home;
+}
 
 =head2 runtime_path
 
@@ -52,7 +56,7 @@ runtime path.
 
 sub runtime_path {
     # return File::Spec->join( $ENV{HOME} , 'vim-test' );
-    return $ENV{VIMANA_RUNTIME_PATH} || File::Spec->join( $ENV{HOME} , $^O eq 'MSWin32' ? 'vimfiles' : '.vim' );
+    return $ENV{VIMANA_RUNTIME_PATH} || File::Spec->join( homedir() , $^O eq 'MSWin32' ? 'vimfiles' : '.vim' );
 }
 
 =head2 init_vim_runtime 
