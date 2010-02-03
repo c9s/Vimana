@@ -50,9 +50,15 @@ sub is_vimball {  $_[0]->file =~ m/\.vba$/  }
 # known types (depends on the information that vim.org provides.
 sub script_type {
     my $self = shift;
-    return 'colors' if $self->info->{type} eq 'color scheme' ;
-    return undef if $self->info->{type} =~ m/(?:utility|patch)/;
-    return $self->info->{type};
+
+    if( $self->info->{type} ) {
+        return 'colors' if $self->info->{type} eq 'color scheme' ;
+        return undef if $self->info->{type} =~ m/(?:utility|patch)/;
+        return $self->info->{type};
+    }
+    else {
+        return undef;
+    }
 }
 
 sub download {
