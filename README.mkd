@@ -126,6 +126,7 @@ COMMAND ALIAS
 TESTED CASES
 ============
 
+    $ vimana i hypergit.vim
     $ vimana i the-nerd-tree
     $ vimana i autocomplpop
     $ vimaan i gsession.vim
@@ -146,6 +147,7 @@ TESTED CASES
 
     $ vimana i jslint.vim
     $ vimana i fakeclip
+
 
     $ vimana remove fakeclip
 
