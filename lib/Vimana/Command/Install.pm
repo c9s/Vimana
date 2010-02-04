@@ -4,6 +4,7 @@ package Vimana::Command::Install;
 use base qw(App::CLI::Command);
 use URI;
 use LWP::Simple qw();
+use File::Path qw(mkpath);
 
 require Vimana::VimOnline;
 require Vimana::VimOnline::ScriptPage;
@@ -211,11 +212,12 @@ END
             return 0;
         }
         my $page = Vimana::VimOnline::ScriptPage->fetch( $info->{script_id} );
-        my $dir = '/tmp' || Vimana::Util::tempdir();
+        my $dir = Vimana::Util::tempdir();
         my $url = $page->{download};
         my $filename = $page->{filename};
         my $target = File::Spec->join( $dir , $filename );
         $logger->info("Downloading from: $url");;
+        mkpath $dir;
         my $pkgfile = Vimana::PackageFile->new( {
                 cname      => $package,
                 file      => $target,

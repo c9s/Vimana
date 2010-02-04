@@ -2,7 +2,9 @@ package Vimana::Installer::Text;
 use warnings;
 use strict;
 use base qw(Vimana::Installer);
+use Vimana;
 use Vimana::Logger;
+use Vimana::Record;
 use Vimana::VimballInstall;
 
 sub run {
@@ -66,10 +68,10 @@ sub inspect_text_content {
         return $type;
     }
 
-    return 'colors'   if $content =~ m/^let\s+(g:)?colors_name\s*=/;
-    return 'syntax'   if $content =~ m/^syn[tax]* (?:match|region|keyword)/;
-    return 'compiler' if $content =~ m/^let\s+current_compiler\s*=/;
-    return 'indent'   if $content =~ m/^let\s+b:did_indent/;
+    return 'colors'   if $content =~ /^let\s+(g:)?colors_name\s*=/m;
+    return 'syntax'   if $content =~ /^syn[tax]* (?:match|region|keyword)/m;
+    return 'compiler' if $content =~ /^let\s+current_compiler\s*=/m;
+    return 'indent'   if $content =~ /^let\s+b:did_indent/m;
 
     # XXX: inspect more types.
 

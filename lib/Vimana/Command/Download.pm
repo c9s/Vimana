@@ -27,8 +27,6 @@ sub run {
 
     my $page = Vimana::VimOnline::ScriptPage->fetch( $info->{script_id} );
 
-    my $dir = '/tmp' || tempdir( DIR => '/tmp' );
-
     my $url = $page->{download};
     my $filename = $page->{filename};
 
