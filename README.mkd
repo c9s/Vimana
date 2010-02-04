@@ -137,6 +137,8 @@ TESTED CASES
     $ vimana i xml.vim
     $ vimana i cctree
     $ vimana i markdown-syntax
+    $ vimana i gist.vim
+    $ vimana i googlereader.vim
 
     $ vimana i git:git://github.com/c9s/fastgit.vim.git
     $ vimana i git:git@github.com:c9s/fastgit.vim.git
@@ -145,8 +147,16 @@ TESTED CASES
     $ vimana i jslint.vim
     $ vimana i fakeclip
 
+    $ vimana remove fakeclip
+
     $ cd snipmate.git
     $ vimana i .    # install from current path.
+
+
+    $ vimana installed   # list installed scripts
+
+    $ vimana installed gist.vim  # list installed content of gist.vim
+
 
 MAKE YOUR PLUGIN INSTALLABLE
 ============================
