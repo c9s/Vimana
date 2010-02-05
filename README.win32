@@ -1,13 +1,22 @@
+# vim:filetype=mkd:
+
+INSTALL
+=======
+
+Download stawberry perl:
+    http://strawberryperl.com/
 
 
+Open cmd from prompt window:
 
-download mingw:
-http://www.mingw.org/
-http://sourceforge.net/projects/mingw/files/
-http://sourceforge.net/projects/mingw/files/Automated%20MinGW%20Installer/MinGW%205.1.6/MinGW-5.1.6.exe/download
+    cmd.exe
 
-download stawberry perl:
-http://strawberryperl.com/
+    C:\> cpan
+    cpan> notest install Vimana  # save time
 
 
-# notest install Vimana  # save time
+For Developing
+==============
+    Download mingw:
+    http://www.mingw.org/
+    http://sourceforge.net/projects/mingw/files/
