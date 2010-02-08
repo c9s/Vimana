@@ -1,5 +1,4 @@
-
-
+use warnings;
 use strict;
 use inc::Module::Install;
 name 'Vimana';
@@ -39,6 +38,7 @@ print join( "\n" , splice(  @lines , 0 , 3 ) ) , "\n";
 print '-' x 10 . "\n";
 
 repository 'http://github.com/c9s/Vimana';
+
 WriteAll( sign => 0 );
 
 1;
