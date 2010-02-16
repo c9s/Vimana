@@ -112,6 +112,10 @@ to list installed packages:
 
     $ vimana installed
 
+to list installed package content:
+
+    $ vimana installed snipmate
+
 COMMAND ALIAS
 =============
 
@@ -122,6 +126,7 @@ COMMAND ALIAS
 TESTED CASES
 ============
 
+    $ vimana i hypergit.vim
     $ vimana i the-nerd-tree
     $ vimana i autocomplpop
     $ vimaan i gsession.vim
@@ -133,6 +138,8 @@ TESTED CASES
     $ vimana i xml.vim
     $ vimana i cctree
     $ vimana i markdown-syntax
+    $ vimana i gist.vim
+    $ vimana i googlereader.vim
 
     $ vimana i git:git://github.com/c9s/fastgit.vim.git
     $ vimana i git:git@github.com:c9s/fastgit.vim.git
@@ -141,8 +148,17 @@ TESTED CASES
     $ vimana i jslint.vim
     $ vimana i fakeclip
 
+
+    $ vimana remove fakeclip
+
     $ cd snipmate.git
     $ vimana i .    # install from current path.
+
+
+    $ vimana installed   # list installed scripts
+
+    $ vimana installed gist.vim  # list installed content of gist.vim
+
 
 MAKE YOUR PLUGIN INSTALLABLE
 ============================

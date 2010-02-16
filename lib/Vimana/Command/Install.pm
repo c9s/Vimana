@@ -43,19 +43,33 @@ sub get_installer {
 sub check_strategies {
     my ($self,@sts) = @_;
     my @ins_type;
+
+NEXT_ST:
     for my $st ( @sts ) {
         print $st->{name} . ' : ' . $st->{desc} . ' ...';
+
+
+        if( defined $st->{bin} ) {
+            for my $bin ( @{  $st->{bin} } ){
+                my $binpath = qx{which $bin};
+                chomp $binpath;
+                next NEXT_ST unless $binpath;
+            }
+        }
+
         my $deps = $st->{deps};
         my $found;
-NEXT_TYPE:
+NEXT_DEP_FILE:
         for ( @$deps ) {
             next unless -e $_;
+            
+            
 
             push @ins_type , $st->{installer};
             $found = 1;
-            last NEXT_TYPE;
+            last NEXT_DEP_FILE;
         }
-        print $found ? "[found]\n" : "[not found]\n";
+        print $found ? "ok\n" : "not ok\n";
     }
     return @ins_type;
 }
@@ -69,6 +83,7 @@ sub install_by_strategy {
             desc => q{Check if 'META' or 'VIMMETA' file exists. support for VIM::Packager.},
             installer => 'Meta',
             deps =>  [qw(VIMMETA META)],
+            bin =>  [qw(vim-packager)],
         },
         {
             name => 'Makefile',
