@@ -1,30 +1,30 @@
 Vimana
 ======
 
-Vimana is an easy to use system for searching , installing, and downloading vim
+Vimana is an easy to use system for searching, installing, and downloading vim
 script.
 
 Vimana provides a command-line interface such like aptitude program on
-Debian linux, for you to search , download , install , upgrade scripts from
+Debian linux, for you to search, download, install, upgrade scripts from
 http://www.vim.org (vimonline site).
 
 Vimana can install a vim script package to your vim runtime path automatically
-by inspecting the content of archive file or vim script. for example , if an
-archive file contains 'syntax','plugin','indent' directory , then these files
-should be installed to ~/.vim/ directory.   if it is a vim color scheme ,
+by inspecting the content of archive file or vim script. for example, if an
+archive file contains 'syntax','plugin','indent' directory, then these files
+should be installed to ~/.vim/ directory.   if it is a vim color scheme,
 then it should be put into ~/.vim/colors/ and prompt for setting the
 installed colorscheme as default.
 
-rakefile , makefile , vim meta and vimball installation is supported.
+rakefile, makefile, vim meta and vimball installation is supported.
 
 for scripts have its own doc, Vimana will try to update helptags after installation.
 
 And now, you can write your own vim meta file
-(VIM::Packager) or makefile , rakefile for installer.
+(VIM::Packager) or makefile, rakefile for installer.
 
 ( In some modern Indian languages, vimāna or vimān means "aircraft". )
 
-NOTE: Vimana only provides search, info ,install commmands currently.
+NOTE: Vimana only provides search, info,install commmands currently.
 
 SCREENSHOT
 ===============
@@ -48,7 +48,7 @@ To have a local version Vimana (install vimana without root permission):
 
     curl http://cloud.github.com/downloads/c9s/Vimana/vimana-2009-12-21.bin | perl
 
-To install this module from github.com , run the following commands:
+To install this module from github.com, run the following commands:
 
     git clone git://github.com/c9s/Vimana.git
     cd Vimana
