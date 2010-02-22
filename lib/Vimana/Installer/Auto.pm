@@ -90,10 +90,6 @@ sub run {
         } );
     }
 
-    if( $self->cleanup ) {
-        $logger->info("Cleaning up temporary directory.");
-        rmtree [ $out ] if -e $out;
-    }
 
     return 1;
 }

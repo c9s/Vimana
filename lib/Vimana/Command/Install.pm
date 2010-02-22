@@ -4,6 +4,7 @@ package Vimana::Command::Install;
 use base qw(App::CLI::Command);
 use URI;
 use LWP::Simple qw();
+use File::Path qw(rmtree);
 
 require Vimana::VimOnline;
 require Vimana::VimOnline::ScriptPage;
@@ -74,8 +75,13 @@ NEXT_DEP_FILE:
     return @ins_type;
 }
 
+use Cwd;
+
 sub install_by_strategy {
     my ( $self, $pkgfile, $tmpdir, $args ) = @_;
+
+    my $prev_dir = getcwd();
+    chdir($tmpdir);
     my $ret;
     my @ins_type = $self->check_strategies( 
         {
@@ -124,6 +130,12 @@ DONE:
         $logger->warn("Installation failed.");
         $logger->warn("Vimana does not know how to install this package");
         return $ret;
+    }
+
+    chdir($prev_dir);
+    if( $args->{cleanup} ) {
+        $logger->info("Cleaning up temporary directory.");
+        rmtree [ $tmpdir ] if -e $tmpdir;
     }
 
     $logger->info( "Succeed." );
@@ -175,13 +187,11 @@ END
             $cmd = 'svn co';
         }
         system(qq{$cmd $uri $dir});
-        chdir $dir;
         return $self->install_by_strategy( undef, $dir, 
             { cleanup => 1 , 
               runtime_path => $self->{runtime_path} } );
     }
     elsif( $arg eq '.' ) {
-        chdir '.';
         return $self->install_by_strategy( undef, '.',
             { cleanup => 0  , 
               runtime_path => $self->{runtime_path} } );
@@ -249,7 +259,6 @@ END
             $pkgfile->extract_to( $tmpdir );
             $logger->info("Changing directory to $tmpdir.");
 
-            chdir $tmpdir;
             $ret = $self->install_by_strategy( $pkgfile, $tmpdir,
                 { cleanup => 1, 
                   runtime_path => $self->{runtime_path} } );
