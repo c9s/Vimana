@@ -12,6 +12,10 @@ sub run {
     my ( $self, $package ) = @_;
     my $index = Vimana->index;
     my $info = $index->find_package( $package );
+    unless ( $info->{script_id} ) {
+        warn "No script named $package. Trying $package.vim ..";
+        $info = $index->find_package( "$package.vim" );
+    }
     require Vimana::VimOnline::ScriptPage;
 
     my $script_info = Vimana::VimOnline::ScriptPage->fetch( $info->{script_id} ) ;

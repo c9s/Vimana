@@ -83,7 +83,9 @@ sub init_vim_runtime {
                 syntax
                 tutor    ) );
 
-    mkpath $paths;
+	for my $path ( @$paths ) {
+		mkpath $path unless -e $path;
+	}
 }
 
 
