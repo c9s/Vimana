@@ -1,30 +1,31 @@
 Vimana
 ======
 
-Vimana is an easy to use system for searching , installing, and downloading vim
+Vimana is an easy to use system for searching, installing, and downloading vim
 script.
 
 Vimana provides a command-line interface such like aptitude program on
-Debian linux, for you to search , download , install , upgrade scripts from
-http://www.vim.org (vimonline site).
+Debian linux, for you to search, download, install, upgrade scripts from
+<http://www.vim.org> (vim online site).
 
 Vimana can install a vim script package to your vim runtime path automatically
-by inspecting the content of archive file or vim script. for example , if an
-archive file contains 'syntax','plugin','indent' directory , then these files
-should be installed to ~/.vim/ directory.   if it is a vim color scheme ,
-then it should be put into ~/.vim/colors/ and prompt for setting the
-installed colorscheme as default.
+by inspecting the content of archive file or vim script. for example, if an
+archive file contains 'syntax', 'plugin', 'indent' directory, then these files
+should be installed to ~/.vim/ directory. if it is a vim color scheme, then it
+should be put into ~/.vim/colors/ and prompt for setting the installed
+colorscheme as default.
 
-rakefile , makefile , vim meta and vimball installation is supported.
+Rakefile, makefile, vim meta and vimball installation are supported.
 
-for scripts have its own doc, Vimana will try to update helptags after installation.
+For scripts have their own docs, Vimana will try to update helptags after the
+installations.
 
-And now, you can write your own vim meta file
-(VIM::Packager) or makefile , rakefile for installer.
+And now, you can write your own vim meta file (VIM::Packager) or makefile,
+rakefile for installer.
 
-( In some modern Indian languages, vimāna or vimān means "aircraft". )
+(In some modern Indian languages, vimāna or vimān means "aircraft".)
 
-NOTE: Vimana only provides search, info ,install commmands currently.
+NOTE: Vimana only provides search, info, and install commmands currently.
 
 SCREENSHOT
 ===============
@@ -39,33 +40,33 @@ To install from CPAN:
 
 To install this module, run the following commands:
 
-	perl Makefile.PL
-	make
-	make test
-	make install
+    $ perl Makefile.PL
+    $ make
+    $ make test
+    $ make install
 
 To have a local version Vimana (install vimana without root permission):
 
-    curl http://cloud.github.com/downloads/c9s/Vimana/vimana-2009-12-21.bin | perl
+    $ curl http://cloud.github.com/downloads/c9s/Vimana/vimana-2009-12-21.bin | perl
 
-To install this module from github.com , you need to clone the repository 
+To install this module from github.com , you need to clone the repository
 (For people who uses cpan first time, please run this command:
 
     $ sudo bash cpan-setup.sh
 
 then run the following commands (you will need root permission):
 
-    git clone git://github.com/c9s/Vimana.git
-    cd Vimana
-    perl Makefile.PL 
-    sudo make install
+    $ git clone git://github.com/c9s/Vimana.git
+    $ cd Vimana
+    $ perl Makefile.PL
+    $ sudo make install
 
 USAGE
 ========
 
 to update index
 
-    $ vimana update 
+    $ vimana update
 
 to search jifty script
 
