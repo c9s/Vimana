@@ -62,7 +62,7 @@ then the file will be installed into ~/.vim/plugin/
 
 sub inspect_text_content {
     my ($self,$content) = @_;
-    if( $content =~ m{^"\s*script\s+type:\s*(\w+)}im ) {
+    if( $content =~ m{^"\s*script\s*type:\s*(\w+)}im  ){
         my $type = $1;
         return $type;
     }
