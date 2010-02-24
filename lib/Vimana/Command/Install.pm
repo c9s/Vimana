@@ -85,17 +85,19 @@ sub install_by_strategy {
     my $ret;
     my @ins_type = $self->check_strategies( 
         {
+            name => 'Makefile',
+            desc => q{Check if makefile exists.},
+            installer => 'Makefile',
+            deps => [qw(makefile Makefile)],
+        },
+        # because Meta file would overwrite "Makefile" file. so put Meta file
+        # after Makefile strategy
+        {
             name => 'Meta',
             desc => q{Check if 'META' or 'VIMMETA' file exists. support for VIM::Packager.},
             installer => 'Meta',
             deps =>  [qw(VIMMETA META)],
             bin =>  [qw(vim-packager)],
-        },
-        {
-            name => 'Makefile',
-            desc => q{Check if makefile exists.},
-            installer => 'Makefile',
-            deps => [qw(makefile Makefile)],
         },
         {
             name => 'Rakefile',
