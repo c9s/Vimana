@@ -17,3 +17,4 @@ x support for vim::packager
 
 == issues ==
 * should prompt "package can not found." when query a info page of an unknown package.
+* package doensn't have a cname if you install from a git uti.
