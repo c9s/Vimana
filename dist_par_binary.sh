@@ -1,3 +1,7 @@
 #!/bin/bash
-pp -cd _deps_cache -P -I lib -o vimana bin/vimana 
-scp vimana oulixe.us:/var/www/vimana
+pp -P -cd _deps_cache -I lib -o vimana-macosx bin/vimana 
+./vimana-macosx search rail
+./vimana-macosx update
+./vimana-macosx install snipmate
+read -p 'SCP?'
+scp vimana-macosx oulixe.us:/var/www/vimana-macosx
