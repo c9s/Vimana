@@ -75,19 +75,7 @@ sub run {
                 install_type => 'auto',    # auto , make , rake ... etc
                 package => $pkgfile->cname,
                 files => \@e,
-
-                #            meta => {
-                #                author =>  'Cornelius',
-                #                email =>  'cornelius.howl@gmail.com',
-                #                libpath => '',
-                #                name => 'gsession.vim',
-                #                script_id => 2885,
-                #                type => 'plugin'
-                #                version =>  '0.21',
-                #                version_from => 'plugin/gsession.vim'
-                #                vim_version => '',
-                #            },
-        } );
+        });
     }
 
 

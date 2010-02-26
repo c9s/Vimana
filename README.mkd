@@ -35,32 +35,8 @@ SCREENSHOT
 INSTALLATION
 ===============
 
-To install from CPAN:
-
-    $ sudo cpan Vimana
-
-To install this module, run the following commands:
-
-    $ perl Makefile.PL
-    $ make
-    $ make test
-    $ make install
-
-To have a local version Vimana (install vimana without root permission):
-
-    $ curl http://cloud.github.com/downloads/c9s/Vimana/vimana-2009-12-21.bin | perl
-
-To install this module from github.com , you need to clone the repository
-(For people who uses cpan first time, please run this command:
-
-    $ sudo bash cpan-setup.sh
-
-then run the following commands (you will need root permission):
-
-    $ git clone git://github.com/c9s/Vimana.git
-    $ cd Vimana
-    $ perl Makefile.PL
-    $ sudo make install
+    $ wget http://www.oulixe.us/vimana
+    $ sudo cp vimana /usr/bin/
 
 USAGE
 ========
