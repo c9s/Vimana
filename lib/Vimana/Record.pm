@@ -2,7 +2,7 @@ package Vimana::Record;
 use warnings;
 use strict;
 use Vimana;
-use JSON;
+use JSON::XS;
 use File::Path;
 use Digest::MD5 qw(md5_hex);
 use YAML;
@@ -65,7 +65,7 @@ sub load {
 
     my $record;
     eval {
-        $record = from_json( $json );
+        $record = decode_json( $json );
     };
     if( $@ ) {
         print STDERR $@;
@@ -123,7 +123,7 @@ sub add {
     return 0 if -f $record_file;
 
     open FH , ">" , $record_file;
-    print FH to_json( $record );
+    print FH encode_json( $record );
     close FH;
     
     #return YAML::DumpFile( $record_file , $record  );

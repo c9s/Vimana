@@ -3,6 +3,12 @@ use strict;
 use warnings;
 use Vimana;
 use Vimana::Command;
+require Vimana::Record;
+require Vimana::Command::Search;
+require Vimana::Command::Install;
+require Vimana::Command::Update;
+require JSON::XS;
+
 use Getopt::Long;
 
 $|++;
