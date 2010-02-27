@@ -35,8 +35,31 @@ SCREENSHOT
 INSTALLATION
 ===============
 
-    $ wget http://www.oulixe.us/vimana
-    $ sudo cp vimana /usr/bin/
+For First Time CPAN Users:
+* Install miyagawa's cpanminus , which doesnt require any complex configurations.
+
+    $ git clone git://github.com/miyagawa/cpanminus.git
+    $ cd cpanminus
+    $ perl Makefile.PL
+    $ make install
+
+    Or if dont have permission, you can try this way:
+
+    $ cd ~/bin
+    $ wget http://xrl.us/cpanm
+    $ chmod +x cpanm
+
+* Run cpanmius to install 
+
+    $ cpanm Vimana
+
+    or 
+
+    $ cpanm http://github.com/c9s/Vimana/tarball/master
+
+For CPAN Users:
+
+    $ sudo cpan Vimana
 
 USAGE
 ========
