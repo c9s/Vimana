@@ -1,6 +1,9 @@
 .cvsignore
+_deps_cache
 bin/vimana
 Changes
+cpan-setup.sh
+dist_par_binary.sh
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm
 inc/Module/Install/AutoInstall.pm
@@ -18,6 +21,8 @@ lib/Vimana/Accessor.pm
 lib/Vimana/Archive.pm
 lib/Vimana/Command.pm
 lib/Vimana/Command/Download.pm
+lib/Vimana/Command/Help.pm
+lib/Vimana/Command/Help.pm.org
 lib/Vimana/Command/Info.pm
 lib/Vimana/Command/Install.pm
 lib/Vimana/Command/Installed.pm
@@ -45,6 +50,7 @@ lib/Vimana/VimOnline/ScriptPage.pm
 lib/Vimana/VimOnline/Search.pm
 Makefile.PL
 MANIFEST			This list of files
+MANIFEST.bak
 MANIFEST.SKIP
 META.yml
 README.mkd
@@ -56,9 +62,14 @@ t/00-update.t
 t/01-package.t
 t/01-record.t
 t/accessor.t
+t/data/gist.vim
 t/data/rails.zip
 t/installer-makefile-2.t
 t/installer-makefile-3.t
 t/installer-makefile.t
+t/text.t
 todo
 utils/build_shipwright.sh
+xt/installer-makefile-2.t
+xt/installer-makefile-3.t
+xt/installer-makefile.t
