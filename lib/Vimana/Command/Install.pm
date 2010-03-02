@@ -249,8 +249,6 @@ END
                     package => $pkgfile , 
                     runtime_path => $self->{runtime_path} } );
             $ret = $installer->run( $pkgfile );
-
-
         }
         elsif( $pkgfile->is_archive ) {
 
