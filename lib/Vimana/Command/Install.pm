@@ -161,11 +161,12 @@ sub run {
     # XXX: $self->{runtime_path}
 
     if( $self->{runtime_path} ) {
-        print STDERR <<END
+        print STDERR <<END;
     You are using runtime path option.
 
-    To load the plugin , you might need to add below configuration to your vimrc file
-        set runtimepath+=@{[ $self->{runtime_path} ]}
+    To load the plugin , you will need to add below configuration to your vimrc file
+
+        :set runtimepath+=@{[ $self->{runtime_path} ]}
 
     See vim documentation for runtimepath option.
 
@@ -207,11 +208,15 @@ END
             my $record = Vimana::Record->load( $package );
             if( $record ) {
 
-                print STDERR "Package $package is installed. reinstall (upgrade) ? (Y/n) ";
-                my $ans; $ans = <STDIN>;
-                chomp( $ans );
-
-                return if $ans =~ /n/i;
+                if( $self->{assume_yes} ) {
+                    print STDERR "Package $package is installed. removing...\n";
+                }
+                else {
+                    print STDERR "Package $package is installed. reinstall (upgrade) ? (Y/n) ";
+                    my $ans; $ans = <STDIN>;
+                    chomp( $ans );
+                    return if $ans =~ /n/i;
+                }
 
                 Vimana::Record->remove( $package );
             }
