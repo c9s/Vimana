@@ -16,32 +16,56 @@ sub run {
 
         print <<END;
 
-        Usage:
+Usage:
 
-            \$ vimana [command] [arguments]
+    \$ vimana [command] [arguments]
 
-        Avaliable Commands:
+Avaliable Commands:
 
-            update          - update index for searching.
+    update          - update index for searching.
 
-            install (i)     - install package
+    install (i)     - install package
 
-                install [plugin]
+        install [options] [plugin name]
 
-            remove  (r)     - remove package
-                
-                remove [plugin] 
+        Options:
 
-            search  (s)     - search packages
+            -r,--runtime-path [path]      
+                install to [path] runtime path.
+                you might need to add 'runtimepath' option 
+                in your .vimrc file.
 
-                search [keyword]
+            -v,--verbose                  
+                verbose message
 
-            help            - show this help
+            -y,--yes                      
+                assume yes
 
-                help [command]
-                help [topic]
+            -f,--force                    
+                force install
 
-        Help Topics:
+    installed       - list installed packages.
+
+    remove  (r)     - remove package
+        
+        remove [options] [plugin] 
+
+
+        Options:
+
+            -f,--force
+                force remove
+
+    search  (s)     - search packages
+
+        search [keyword]
+
+    help            - show this help
+
+        help [command]
+        help [topic]
+
+Help Topics:
 
 END
     }

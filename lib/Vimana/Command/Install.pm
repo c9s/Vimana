@@ -5,6 +5,7 @@ use base qw(App::CLI::Command);
 use URI;
 use LWP::Simple qw();
 use File::Path qw(rmtree);
+use Cwd;
 
 require Vimana::VimOnline;
 require Vimana::VimOnline::ScriptPage;
@@ -19,9 +20,9 @@ sub options { (
         'v|verbose'           => 'verbose',
         'y|yes'               => 'assume_yes',
         'f|force'             => 'force_install',
+
         'ai|auto-install'     => 'auto_install', 
                 # XXX: auto-install should optional and not by default.
-        'pi|port-install'     => 'port_install',
         'mi|makefile-install' => 'makefile_install',
         'r|runtime-path=s'    => 'runtime_path',
 ) }
@@ -75,7 +76,6 @@ NEXT_DEP_FILE:
     return @ins_type;
 }
 
-use Cwd;
 
 sub install_by_strategy {
     my ( $self, $pkgfile, $tmpdir, $args ) = @_;
@@ -164,8 +164,9 @@ sub run {
         print STDERR <<END;
     You are using runtime path option.
 
-    To load the plugin , you might need to add below configuration to your vimrc file
-        set runtimepath+=@{[ $self->{runtime_path} ]}
+    To load the plugin , you will need to add below configuration to your vimrc file
+
+        :set runtimepath+=@{[ $self->{runtime_path} ]}
 
     See vim documentation for runtimepath option.
 
@@ -207,11 +208,15 @@ END
             my $record = Vimana::Record->load( $package );
             if( $record ) {
 
-                print STDERR "Package $package is installed. reinstall (upgrade) ? (Y/n) ";
-                my $ans; $ans = <STDIN>;
-                chomp( $ans );
-
-                return if $ans =~ /n/i;
+                if( $self->{assume_yes} ) {
+                    print STDERR "Package $package is installed. removing...\n";
+                }
+                else {
+                    print STDERR "Package $package is installed. reinstall (upgrade) ? (Y/n) ";
+                    my $ans; $ans = <STDIN>;
+                    chomp( $ans );
+                    return if $ans =~ /n/i;
+                }
 
                 Vimana::Record->remove( $package );
             }
@@ -288,6 +293,10 @@ Vimana::Command::Install - install a vim plugin package.
 =head1 OPTIONS
 
     -v    : verbose
+
+    -f    : force install
+
+    -r    : runtime path
 
 =head1 DESCRIPTION
 
