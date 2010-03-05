@@ -8,26 +8,19 @@ Vimana::Manual - Getting started
 
 =head1 INTRODUCTION
 
-Vimana provides varied kinds of installation strategy. 
+Vimana is an easy to use system for searching , installing, and downloading vim
+script.
 
-To install a vim plugin, Vimana downloads the file from vim.org , then detects
-the downloaded file type.
+Vimana provides a command-line interface such like C<aptitude> programe on
+Debian linux, for you to search , download , install , upgrade scripts from
+L<http://www.vim.org> (vimonline site).
 
-if the downloaded file is a Vimball script, Vimana calls Vim to run the Vimball
-script to install. if it's a colorscheme or syntax file , then copy the
-files into your ~/.vim/colors/ or ~/.vim/syntax/ directory.
-
-If it's an archive file (zip, bzip,rar .. etc) , Vimana looks into the archive
-file, see if it contains a 'Makefile' file, then use the Makefile file to
-install a plugin.
-
-if it doesn't contain a 'Makefile' file.  Vimana looks into the directory tree, 
-see if it contains 'doc','plugin','syntax' directories and vim scripts, 
-if so , copy these files into your vim runtime directory recursively.
-
-* if the downloaded file is not a Vimball script and not a colorscheme or syntax
-file and doesn't contains a Makefile file or 'doc','plugin','syntax',
-Vimana will ask you to install the plugin manually.
+Vimana can install a vim script package to your vim runtime path automatically
+by inspecting the content of archive file or vim script. For example , if an
+archive file contains 'syntax','plugin','indent' directory , then these files
+should be installed to F<~/.vim/> directory (default vim runtime directory).   
+if it's a vim color scheme , then it should be put into F<~/.vim/colors/>,
+or Vimana will inspect the script type tag in script file.
 
 =head1 REQUIREMENT
 
