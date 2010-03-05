@@ -26,21 +26,36 @@ Avaliable Commands:
 
     install (i)     - install package
 
-        install [plugin]
+        install [options] [plugin]
 
-        -r,--runtime-path [path]      install to [path] runtime path.
-                                        you might need to add 'runtimepath' option 
-                                        in your .vimrc file.
 
-        -v,--verbose                  verbose
+        Options:
 
-        -y,--yes                      assume yes
+            -r,--runtime-path [path]      
+                install to [path] runtime path.
+                you might need to add 'runtimepath' option 
+                in your .vimrc file.
 
-        -f,--force                    force install
+            -v,--verbose                  
+                verbose message
+
+            -y,--yes                      
+                assume yes
+
+            -f,--force                    
+                force install
+
+    installed       - list installed packages.
 
     remove  (r)     - remove package
         
-        remove [plugin] 
+        remove [options] [plugin] 
+
+
+        Options:
+
+            -f,--force
+                force remove
 
     search  (s)     - search packages
 
