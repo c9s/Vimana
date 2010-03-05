@@ -25,7 +25,10 @@ sub run {
         # can't found script ype,
         # inspect text filetype here.  (colorscheme, ftplugin ...etc)
         $logger->info( "Inspecting file content for script type." );
-        $type = $self->inspect_text_content( $self->package->content );
+
+        my $arg = $self->inspect_text_content2( $self->package->content );
+        $type = $arg->{type};
+
         if ($type) {
             $logger->info("Script type found: $type.");
             $logger->info("Installing..");
@@ -104,10 +107,5 @@ sub inspect_text_content2 {
 
     return $arg;
 }
-
-
-
-
-
 
 1;
