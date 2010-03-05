@@ -160,6 +160,8 @@ sub run {
 
     # XXX: $self->{runtime_path}
 
+    my $verbose = $self->{verbose};
+
     if( $self->{runtime_path} ) {
         print STDERR <<END;
     You are using runtime path option.
@@ -233,7 +235,9 @@ END
         my $url = $page->{download};
         my $filename = $page->{filename};
         my $target = File::Spec->join( $dir , $filename );
-        $logger->info("Downloading from: $url");;
+
+        print STDERR "Downloading from: $url\n" if $verbose;
+
         my $pkgfile = Vimana::PackageFile->new( {
                 cname      => $package,
                 file      => $target,
@@ -261,9 +265,11 @@ END
             # extract to a path 
             my $tmpdir = Vimana::Util::tempdir();
 
-            $logger->info( "Extracting to $tmpdir." );
+            print STDERR "Extracting to $tmpdir.\n" if $verbose;
+
             $pkgfile->extract_to( $tmpdir );
-            $logger->info("Changing directory to $tmpdir.");
+
+            print STDERR "Changing directory to $tmpdir.\n" if $verbose;
 
             $ret = $self->install_by_strategy( $pkgfile, $tmpdir,
                 { cleanup => 1, 
