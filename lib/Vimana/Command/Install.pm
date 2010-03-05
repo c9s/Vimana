@@ -107,7 +107,7 @@ sub install_by_strategy {
         });
 
     if( @ins_type == 0 ) {
-        $logger->warn( "Package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file" );
+        print "Package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file\n";
         print "No availiable strategy, try to auto-install.\n" if $verbose;
         push @ins_type,'auto';
     }
@@ -121,15 +121,15 @@ DONE:
         #       runtime_path (string)
         #
         my $installer = $self->get_installer( $ins_type, $args );
-        $ret = $installer->run( $pkgfile, $tmpdir );
+        $ret = $installer->run( $pkgfile, $tmpdir , $verbose );
 
         last DONE if $ret;  # succeed
         last DONE if ! $installer->_continue;  # not succeed, but we should continue other installation.
     }
 
     unless( $ret ) {
-        print STDERR "Installation failed.\n";
-        print STDERR "Vimana does not know how to install this package\n";
+        print "Installation failed.\n";
+        print "Vimana does not know how to install this package\n";
         # XXX: provide more usable help message.
         return $ret;
     }
@@ -140,7 +140,6 @@ DONE:
         rmtree [ $tmpdir ] if -e $tmpdir;
     }
 
-    print "Installtion Done.";
     return $ret;
 }
 
@@ -285,6 +284,7 @@ END
             print "Installation Failed.\n";
             exit 1;
         }
+
         print "Installation Done.\n";
     }
 
