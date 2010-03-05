@@ -161,7 +161,7 @@ sub run {
     # XXX: $self->{runtime_path}
 
     if( $self->{runtime_path} ) {
-        print STDERR <<END
+        print STDERR <<END;
     You are using runtime path option.
 
     To load the plugin , you might need to add below configuration to your vimrc file
