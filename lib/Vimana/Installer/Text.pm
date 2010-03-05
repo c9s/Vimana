@@ -92,13 +92,13 @@ sub inspect_text_content2 {
         # XXX: inspect more types.
     }
 
-    if( $content =~ m{^"\s*(?:script\s*)?(?:deps|dependency|dependencies):\s*(.*)} ) {
+    if( $content =~ m{^"\s*(?:script\s*)?(?:deps|dependency|dependencies):\s*(.*)}im ) {
         my $deps_str = $1;
         my @deps = split /\s*,\s*/,$deps_str;
         $arg->{deps} = \@deps;
     }
 
-    if( $content =~ m{^"\s*version:\s*([.0-9]+)} ) {
+    if( $content =~ m{^"\s*(?:script\s*)?version:\s*([.0-9]+)}im ) {
         $arg->{version} = $1;
     }
 
