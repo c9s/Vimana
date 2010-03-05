@@ -12,6 +12,19 @@ sub run {
     # remove old install
     # install new one.
 
+=pod
+
+    Vimana->install( 'package name' );
+
+    Vimana->install_from_url( 'url' );
+
+    Vimana->install_from_rcs( 'git:......' );
+
+    Vimana->install_from_dir( '/path/to/plugin' );
+
+=cut
+
+
 }
 
 
