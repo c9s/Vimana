@@ -114,7 +114,6 @@ sub install_by_strategy {
     
 DONE:
     for my $ins_type ( @ins_type ) {
-        #
         # $args: (hashref)
         #   is used for Vimana::Installer::*->new( { args => $args } );
         #   
@@ -129,8 +128,9 @@ DONE:
     }
 
     unless( $ret ) {
-        $logger->warn("Installation failed.");
-        $logger->warn("Vimana does not know how to install this package");
+        print STDERR "Installation failed.\n";
+        print STDERR "Vimana does not know how to install this package\n";
+        # XXX: provide more usable help message.
         return $ret;
     }
 
