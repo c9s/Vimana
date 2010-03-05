@@ -26,8 +26,7 @@ Avaliable Commands:
 
     install (i)     - install package
 
-        install [options] [plugin]
-
+        install [options] [plugin name]
 
         Options:
 
