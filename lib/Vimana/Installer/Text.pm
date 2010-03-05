@@ -73,9 +73,36 @@ sub inspect_text_content {
     return 'indent'   if $content =~ m/^let\s+b:did_indent/;
 
     # XXX: inspect more types.
-
     return 0;
 }
+
+
+sub inspect_text_content2 {
+    my ($self,$content) = @_;
+    my $arg =  {};
+    if( $content =~ m{^"\s*script\s*type:\s*(\w+)}im  ){
+        my $type = $1;
+        $arg->{type} = $type;
+    }
+    else {
+        $arg->{type} = 'colors'   if $content =~ m/^let\s+(g:)?colors_name\s*=/;
+        $arg->{type} = 'syntax'   if $content =~ m/^syn[tax]* (?:match|region|keyword)/;
+        $arg->{type} = 'compiler' if $content =~ m/^let\s+current_compiler\s*=/;
+        $arg->{type} = 'indent'   if $content =~ m/^let\s+b:did_indent/;
+        # XXX: inspect more types.
+    }
+
+    if( $content =~ m{^"\s*script\s*(?:deps|dependency|dependencies):\s*(.*)} ) {
+        my $deps_str = $1;
+        my @deps = split /\s*,\s*/,$deps_str;
+        $arg->{deps} = \@deps;
+    }
+    return $arg;
+}
+
+
+
+
 
 
 1;
