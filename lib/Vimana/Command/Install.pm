@@ -19,9 +19,9 @@ sub options { (
         'v|verbose'           => 'verbose',
         'y|yes'               => 'assume_yes',
         'f|force'             => 'force_install',
+
         'ai|auto-install'     => 'auto_install', 
                 # XXX: auto-install should optional and not by default.
-        'pi|port-install'     => 'port_install',
         'mi|makefile-install' => 'makefile_install',
         'r|runtime-path=s'    => 'runtime_path',
 ) }
