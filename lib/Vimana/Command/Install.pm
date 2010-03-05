@@ -180,6 +180,7 @@ END
     print STDERR "Plugin will be installed to vim runtime path: " . $self->{runtime_path} . "\n";
 
     if (  $arg =~ m{^git:} or $arg =~ m{^svn:} ) {
+        # XXX: check 'git' or 'svn' binary here.
         my ( $rcs, $uri ) = stdlize_uri $arg;
         my $dir = Vimana::Util::tempdir();
         my $cmd;
