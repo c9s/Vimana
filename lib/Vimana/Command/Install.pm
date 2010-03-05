@@ -177,9 +177,11 @@ sub run {
 END
     }
 
-    $self->{runtime_path} ||= Vimana::Util::runtime_path();
+    my $rtp = $self->{runtime_path} 
+        || Vimana::Util::runtime_path();
 
-    print STDERR "Plugin will be installed to vim runtime path: " . $self->{runtime_path} . "\n";
+    print STDERR "Plugin will be installed to vim runtime path: " . 
+                    $rtp . "\n" if $self->{runtime_path};
 
     if (  $arg =~ m{^git:} or $arg =~ m{^svn:} ) {
         # XXX: check 'git' or 'svn' binary here.
@@ -195,12 +197,12 @@ END
         system(qq{$cmd $uri $dir});
         return $self->install_by_strategy( undef, $dir, 
             { cleanup => 1 , 
-              runtime_path => $self->{runtime_path} } );
+              runtime_path => $rtp } );
     }
     elsif( $arg eq '.' ) {
         return $self->install_by_strategy( undef, '.',
             { cleanup => 0  , 
-              runtime_path => $self->{runtime_path} } );
+              runtime_path => $rtp } );
     }
     else {
         my $package = $arg;
@@ -231,7 +233,10 @@ END
             return 0;
         }
         my $page = Vimana::VimOnline::ScriptPage->fetch( $info->{script_id} );
+
+        # XXX: dont use '/tmp', use a better temp dir function.
         my $dir = '/tmp' || Vimana::Util::tempdir();
+
         my $url = $page->{download};
         my $filename = $page->{filename};
         my $target = File::Spec->join( $dir , $filename );
@@ -257,7 +262,7 @@ END
             # XXX: need to record.
             my $installer = $self->get_installer('text' , { 
                     package => $pkgfile , 
-                    runtime_path => $self->{runtime_path} } );
+                    runtime_path => $rtp } );
             $ret = $installer->run( $pkgfile );
         }
         elsif( $pkgfile->is_archive ) {
@@ -273,7 +278,7 @@ END
 
             $ret = $self->install_by_strategy( $pkgfile, $tmpdir,
                 { cleanup => 1, 
-                  runtime_path => $self->{runtime_path} } );
+                  runtime_path => $rtp } );
 
         }
         unless( $ret ) {
