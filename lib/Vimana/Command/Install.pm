@@ -78,7 +78,7 @@ NEXT_DEP_FILE:
 
 
 sub install_by_strategy {
-    my ( $self, $pkgfile, $tmpdir, $args ) = @_;
+    my ( $self, $pkgfile, $tmpdir, $args , $verbose ) = @_;
 
     my $prev_dir = getcwd();
     chdir($tmpdir);
@@ -108,7 +108,7 @@ sub install_by_strategy {
 
     if( @ins_type == 0 ) {
         $logger->warn( "Package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file" );
-        $logger->info( "No availiable strategy, try to auto-install." );
+        print "No availiable strategy, try to auto-install.\n" if $verbose;
         push @ins_type,'auto';
     }
     
@@ -136,11 +136,11 @@ DONE:
 
     chdir($prev_dir);
     if( $args->{cleanup} ) {
-        $logger->info("Cleaning up temporary directory.");
+        print "Cleaning up temporary directory.\n" if $verbose;
         rmtree [ $tmpdir ] if -e $tmpdir;
     }
 
-    $logger->info( "Succeed." );
+    print "Installtion Done.";
     return $ret;
 }
 
@@ -197,12 +197,12 @@ END
         system(qq{$cmd $uri $dir});
         return $self->install_by_strategy( undef, $dir, 
             { cleanup => 1 , 
-              runtime_path => $rtp } );
+              runtime_path => $rtp } , $verbose );
     }
     elsif( $arg eq '.' ) {
         return $self->install_by_strategy( undef, '.',
             { cleanup => 0  , 
-              runtime_path => $rtp } );
+              runtime_path => $rtp } , $verbose );
     }
     else {
         my $package = $arg;
@@ -278,7 +278,7 @@ END
 
             $ret = $self->install_by_strategy( $pkgfile, $tmpdir,
                 { cleanup => 1, 
-                  runtime_path => $rtp } );
+                  runtime_path => $rtp } , $verbose );
 
         }
         unless( $ret ) {
