@@ -83,13 +83,12 @@ sub load {
 
 sub _remove_record {
     my ($self,$pkgname) = @_;
-    print "Removing record\n";
     my $file = $self->record_path( $pkgname );
     return unlink $file;
 }
 
 sub remove {
-    my ( $self, $pkgname , $force ) = @_;
+    my ( $self, $pkgname , $force , $verbose ) = @_;
     my $record = $self->load($pkgname);
 
     if( !$record and $force ) {
@@ -104,12 +103,10 @@ sub remove {
     print "Removing package $pkgname\n";
     for my $entry (@$files) {
         # XXX: check digest here
-        print "\tRemoving @{[ $entry->{file} ]}\n";
+        print "\tRemoving @{[ $entry->{file} ]}\n" if $verbose;
         unlink $entry->{file};
     }
-
     $self->_remove_record( $pkgname );
-    print "Done\n";
 }
 
 sub add {
