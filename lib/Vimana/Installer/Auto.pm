@@ -15,7 +15,7 @@ use Vimana::Util;
 use DateTime;
 
 sub run {
-    my ( $self, $pkgfile, $out ) = @_;
+    my ( $self, $pkgfile, $out , $verbose ) = @_;
 
     # XXX: try to fill the record spec.
     my $record = {
@@ -27,9 +27,12 @@ sub run {
 
     my @files = $self->find_files( '.' );
 
-    print "Archive content:\n";
-    for (@files ) {
-        print "\t$_\n";
+
+    if ( $verbose ) {
+        print "Archive content:\n";
+        for (@files ) {
+            print "\t$_\n";
+        }
     }
 
     my @vba = grep /\.vba/,@files;
@@ -56,18 +59,20 @@ sub run {
         }
 
         # XXX: check vim runtime path subdirs , mv to init script
-        $logger->info("Initializing vim runtime directories") ;
+        print "Initializing vim runtime directories\n" if $verbose;
         Vimana::Util::init_vim_runtime( $self->runtime_path );
         
-        $logger->info( "Basepath found: " . $_ ) for ( keys %$nodes );
+        if( $verbose ) {
+            print "Basepath found: " . $_ . "\n" for ( keys %$nodes );
+        }
 
         my @installed_files = $self->install_from_nodes( $nodes , $self->runtime_path );
 
-        $logger->info("Updating helptags");
-        $self->update_vim_doc_tags();
+        print "Updating helptags\n" if $verbose;
+        $self->update_vim_doc_tags( $verbose );
 
         # record installed file checksum
-        print STDERR "Making checksum...\n";
+        print "Making checksum...\n" if $verbose;
         my @e = Vimana::Record->mk_file_digests( @installed_files );
         Vimana::Record->add( {
                 version => 0.2,    # record spec version
@@ -123,10 +128,11 @@ sub find_base_path {
 
 sub update_vim_doc_tags {
     my $self = shift;
+    my $verbose = shift;
     my $vim = find_vim();
     my $dir = File::Spec->join( $self->runtime_path , 'doc' );
     my $cmd = qq{vim -e -s -c ":helptags $dir" -c ":q"};
-    print "\t$cmd\n";
+    print "\t$cmd\n" if $verbose;
     system( $cmd );
 }
 
