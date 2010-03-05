@@ -22,7 +22,7 @@ sub run {
         $target = $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path , $type ));
     }
     else {
-        # can't found script ype,
+        # Can't found script ype,
         # inspect text filetype here.  (colorscheme, ftplugin ...etc)
         $logger->info( "Inspecting file content for script type." );
 
@@ -69,6 +69,8 @@ sub inspect_text_content {
         my $type = $1;
         return $type;
     }
+
+    warn 'inspect_text_content deprecated.';
 
     return 'colors'   if $content =~ m/^let\s+(g:)?colors_name\s*=/;
     return 'syntax'   if $content =~ m/^syn[tax]* (?:match|region|keyword)/;
