@@ -28,8 +28,6 @@ To install Vimana , please make sure you are in Unix-Like system.  Vimana
 supports Unix-like system only. for example, Linux , Mac OS , BSD .. etc. these
 perl-installed system.
 
-* Windows is not supported yet.
-
 =head1 INSTALLATION
 
 At first , please make sure that you have L<CPAN> or L<CPANPLUS> installed.

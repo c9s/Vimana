@@ -222,7 +222,7 @@ END
                     return if $ans =~ /n/i;
                 }
 
-                Vimana::Record->remove( $package );
+                Vimana::Record->remove( $package , undef , $verbose );
             }
         }
 
