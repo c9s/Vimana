@@ -1,7 +1,6 @@
 package Vimana::PackageFile;
 use warnings;
 use strict;
-use Vimana::Logger;
 use Vimana::Util;
 use Archive::Any;
 use LWP::Simple qw();
@@ -66,7 +65,7 @@ sub download {
 
     my $file_content = LWP::Simple::get( $self->url );
     unless( $file_content ) {
-        $logger->error('Can not download file');
+        print "Can not download file\n";
         return 0;
     }
 
@@ -168,7 +167,7 @@ sub copy_to {
         return File::Spec->join($path,$parts[2]);
     }
 
-    $logger->error( $! );
+    print STDERR $! if $!;
     return;
 }
 
