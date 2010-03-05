@@ -5,6 +5,7 @@ use base qw(App::CLI::Command);
 use URI;
 use LWP::Simple qw();
 use File::Path qw(rmtree);
+use Cwd;
 
 require Vimana::VimOnline;
 require Vimana::VimOnline::ScriptPage;
@@ -75,7 +76,6 @@ NEXT_DEP_FILE:
     return @ins_type;
 }
 
-use Cwd;
 
 sub install_by_strategy {
     my ( $self, $pkgfile, $tmpdir, $args ) = @_;
@@ -288,6 +288,10 @@ Vimana::Command::Install - install a vim plugin package.
 =head1 OPTIONS
 
     -v    : verbose
+
+    -f    : force install
+
+    -r    : runtime path
 
 =head1 DESCRIPTION
 
