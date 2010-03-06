@@ -33,7 +33,7 @@ has runtime_path =>
 has cmd =>
     is => 'rw';
 
-__PACKAGE__->mk_accessors( qw(package cleanup runtime_path) );
+# __PACKAGE__->mk_accessors( qw(package cleanup runtime_path) );
 
 =pod
 
@@ -59,10 +59,8 @@ sub get_installer {
 }
 
 sub install_by_strategy {
-    my ( $self, $pkgfile, $tmpdir, $args , $verbose ) = @_;
+    my ( $self, $pkg, $tmpdir, $args , $verbose ) = @_;
 
-    my $prev_dir = getcwd();
-    chdir($tmpdir);
     my $ret;
     my @ins_type = $self->check_strategies( 
         {
@@ -102,7 +100,7 @@ DONE:
         #       runtime_path (string)
         #
         my $installer = $self->get_installer( $ins_type, $args );
-        $ret = $installer->run( $pkgfile, $tmpdir , $verbose );
+        $ret = $installer->run( $tmpdir , $verbose );
 
         last DONE if $ret;  # succeed
         last DONE if ! $installer->_continue;  # not succeed, but we should continue other installation.
@@ -115,11 +113,10 @@ DONE:
         return $ret;
     }
 
-    chdir($prev_dir);
-    if( $args->{cleanup} ) {
-        print "Cleaning up temporary directory.\n" if $verbose;
-        rmtree [ $tmpdir ] if -e $tmpdir;
-    }
+#     if( $args->{cleanup} ) {
+#         print "Cleaning up temporary directory.\n" if $verbose;
+#         rmtree [ $tmpdir ] if -e $tmpdir;
+#     }
 
     return $ret;
 }
@@ -164,7 +161,6 @@ sub check_strategies {
 #     return undef;
 # }
 
-
 sub runtime_path_warn {
     my ($self,$cmd) = @_;
     print <<END;
@@ -188,11 +184,12 @@ sub install_from_vcs { }
 sub install_from_path { }
 
 sub install {
-    my ( $self, $arg, $cmd ) = @_;
-    my $package = $arg;
+    my ( $self, $package , $cmd ) = @_;
+    $cmd ||= {};
+
     my $verbose = $cmd->{verbose};
     if( $cmd->{runtime_path} ) {
-        $class->runtime_path_warn( $cmd );
+        $self->runtime_path_warn( $cmd );
     }
 
     my $rtp = $cmd->{runtime_path} 
@@ -242,20 +239,21 @@ sub install {
         print STDERR ".";
         print $cbargs $$dataref;
         return undef;
-    }
+    };
 
     # Download File
-    print "Downloading from $url\n" if $verbose;
+    print "Downloading plugin from $url\n" if $verbose;
+
     my $http = new HTTP::Lite;
     open DL, ">" , $target;
-    my $res = $http->request($url, $savetofile, DL );
+    my $res = $http->request($url, $savetofile, \*DL );
     close DL;
     print "\n";
 
     my $filetype = File::Type->new->checktype_filename( $target );
 
     # text filetype
-    if( $filetype =~ m{octet-stream} } ) {
+    if( $filetype =~ m{octet-stream} ) {
 
         # XXX: need to record.
         my $installer = $self->get_installer('text' , { 
@@ -273,14 +271,13 @@ sub install {
         my $cwd = getcwd();
         chdir $install_temp;
 
-        my $ret = $self->install_by_strategy( $pkgfile, $tmpdir,
+        my $ret = $self->install_by_strategy( $pkg , $install_temp,
             { cleanup => 1, 
                 runtime_path => $rtp } , $verbose );
 
         chdir $cwd;
     }
 }
-
 
 1;
 

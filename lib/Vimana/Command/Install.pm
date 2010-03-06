@@ -30,7 +30,7 @@ sub options { (
 use Vimana::Installer;
 
 sub run {
-    my ($cmd,$arg) = @_;
+    my ( $cmd, $arg ) = @_;
     if( $arg =~ m{^https?://} ) {
         Vimana::Installer->install_from_url( $arg , $cmd );
     }

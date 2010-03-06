@@ -15,7 +15,7 @@ use Vimana::Util;
 use DateTime;
 
 sub run {
-    my ( $self, $pkgfile, $out , $verbose ) = @_;
+    my ( $self, $out , $verbose ) = @_;
 
     # XXX: try to fill the record spec.
     my $record = {
@@ -24,10 +24,7 @@ sub run {
         files => [ ],
     };
 
-
     my @files = $self->find_files( '.' );
-
-
     if ( $verbose ) {
         print "Archive content:\n";
         for (@files ) {
@@ -78,7 +75,7 @@ sub run {
                 version => 0.2,    # record spec version
                 generated_by => 'Vimana-' . $Vimana::VERSION,
                 install_type => 'auto',    # auto , make , rake ... etc
-                package => $pkgfile->cname,
+                package => $self->package->{package_name},
                 files => \@e,
         });
     }

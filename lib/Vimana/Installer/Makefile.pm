@@ -5,7 +5,7 @@ use warnings;
 use strict;
 
 sub run {
-    my ($self,$pkgfile,$path)=@_;
+    my ($self,$path,$verbose)=@_;
 
     my $makefile;
     for(qw(Makefile makefile)) {
