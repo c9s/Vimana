@@ -21,8 +21,8 @@ sub options { (
         'y|yes'               => 'assume_yes',
         'f|force'             => 'force_install',
 
+        # XXX: auto-install should optional and not by default.
         'ai|auto-install'     => 'auto_install', 
-                # XXX: auto-install should optional and not by default.
         'mi|makefile-install' => 'makefile_install',
         'r|runtime-path=s'    => 'runtime_path',
 ) }
@@ -46,11 +46,9 @@ sub check_strategies {
     my ($self,@sts) = @_;
     my @ins_type;
 
-NEXT_ST:
+    NEXT_ST:
     for my $st ( @sts ) {
         print $st->{name} . ' : ' . $st->{desc} . ' ...';
-
-
         if( defined $st->{bin} ) {
             for my $bin ( @{  $st->{bin} } ){
                 my $binpath = qx{which $bin};
@@ -61,7 +59,7 @@ NEXT_ST:
 
         my $deps = $st->{deps};
         my $found;
-NEXT_DEP_FILE:
+    NEXT_DEP_FILE:
         for ( @$deps ) {
             next unless -e $_;
             
@@ -75,7 +73,6 @@ NEXT_DEP_FILE:
     }
     return @ins_type;
 }
-
 
 sub install_by_strategy {
     my ( $self, $pkgfile, $tmpdir, $args , $verbose ) = @_;
@@ -151,6 +148,22 @@ sub stdlize_uri {
     return undef;
 }
 
+sub run2 {
+    my ($self,$arg) = @_;
+    my $ret;
+    if( $arg =~ m{^https?://} ) {
+        Vimana::Installer->install_from_url( $arg );
+    }
+    elsif( $arg =~ m{^(?:git|svn):} ) {
+        Vimana::Installer->install_from_vcs( $arg );
+    }
+    elsif( $arg =~ m{^[a-zA-Z0-9._-]+$} ) {
+        Vimana::Installer->install(  $arg ); # from vim.org
+    }
+    elsif( $arg eq '.' or $arg =~ m{file://} ) {
+        Vimana::Installer->install_from_path( $arg );
+    }
+}
 
 sub run {
     my ( $self, $arg ) = @_; 
