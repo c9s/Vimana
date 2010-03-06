@@ -3,6 +3,7 @@ use base qw(Vimana::Accessor);
 use warnings;
 use strict;
 use Vimana::Logger;
+use File::Temp 'tempdir';
 use constant _continue => 0;
 
 __PACKAGE__->mk_accessors( qw(package cleanup runtime_path) );
@@ -56,6 +57,20 @@ sub install {
         Vimana::Record->remove( $package , undef , $verbose );
     }
 
+    my $info = Vimana->index->find_package( $package );
+    unless( $info ) {
+        print STDERR "Package $package not found.\n";
+        return 0;
+    }
+    my $page = Vimana::VimOnline::ScriptPage->fetch( $info->{script_id} );
+
+    my $dir = tempdir( CLEANUP => 1 );
+
+    my $url = $page->{download};
+    my $filename = $page->{filename};
+    my $target = File::Spec->join( $dir , $filename );
+
+    # Download File
 
 }
 
