@@ -92,6 +92,11 @@ To install from current directory:
     $ vimana i .  
 
 
+=head1 Environment Variables
+
+    VIMANA_TEMP
+    VIMANA_RUNTIMEPATH
+
 =head1 AUTHOR
 
 You-An Lin 林佑安 ( Cornelius / c9s ) C<< <cornelius.howl at gmail.com> >>

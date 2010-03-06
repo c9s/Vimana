@@ -64,14 +64,11 @@ sub load {
     close FH;
 
     my $record;
-    eval {
-        $record = decode_json( $json );
-    };
+    eval { $record = decode_json( $json ) };
     if( $@ ) {
+        # try to load YAML. (old record file)
         print STDERR $@;
-
         $record = YAML::LoadFile( $record_file );
-
         unless( $record ) {
             print STDERR "Can not load record. Use -f or --force option to remove.\n";
             return;
