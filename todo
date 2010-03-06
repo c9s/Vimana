@@ -2,7 +2,7 @@
 
 x support installing packages from git/svn/hg repository
 x support for vim::packager  
-* installation record
+x installation record
     should record file content checksum too. (for removing plugins)
     if the checksum of a file is mismatched , then we shouldn't unlink the file.
 * support pseudo-names: installed , all ... etc 
@@ -12,7 +12,7 @@ x support for vim::packager
         Archive::Any sucks.
 * force install option
 * documentation
-* package upgrade
+* command for upgrading packages
 * feature checking
 
 == issues ==
