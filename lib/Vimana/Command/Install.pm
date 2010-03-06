@@ -27,130 +27,10 @@ sub options { (
         'r|runtime-path=s'    => 'runtime_path',
 ) }
 
-use Vimana::Installer::Meta;
-use Vimana::Installer::Makefile;
-use Vimana::Installer::Rakefile;
-use Vimana::Installer::Auto;
-use Vimana::Installer::Text;
+use Vimana::Installer;
 
-# XXX: mv this method into Vimana::Installer , maybe
-
-# @args: will pass to Vimana::Installer::* Class.
-sub get_installer {
-    my ( $self, $type, @args ) = @_;
-    my $class = qq{Vimana::Installer::} . ucfirst($type);
-    return $class->new( @args );
-}
-
-sub check_strategies {
-    my ($self,@sts) = @_;
-    my @ins_type;
-
-    NEXT_ST:
-    for my $st ( @sts ) {
-        print $st->{name} . ' : ' . $st->{desc} . ' ...';
-        if( defined $st->{bin} ) {
-            for my $bin ( @{  $st->{bin} } ){
-                my $binpath = qx{which $bin};
-                chomp $binpath;
-                next NEXT_ST unless $binpath;
-            }
-        }
-
-        my $deps = $st->{deps};
-        my $found;
-    NEXT_DEP_FILE:
-        for ( @$deps ) {
-            next unless -e $_;
-            
-            
-
-            push @ins_type , $st->{installer};
-            $found = 1;
-            last NEXT_DEP_FILE;
-        }
-        print $found ? "ok\n" : "not ok\n";
-    }
-    return @ins_type;
-}
-
-sub install_by_strategy {
-    my ( $self, $pkgfile, $tmpdir, $args , $verbose ) = @_;
-
-    my $prev_dir = getcwd();
-    chdir($tmpdir);
-    my $ret;
-    my @ins_type = $self->check_strategies( 
-        {
-            name => 'Makefile',
-            desc => q{Check if makefile exists.},
-            installer => 'Makefile',
-            deps => [qw(makefile Makefile)],
-        },
-        # because Meta file would overwrite "Makefile" file. so put Meta file
-        # after Makefile strategy
-        {
-            name => 'Meta',
-            desc => q{Check if 'META' or 'VIMMETA' file exists. support for VIM::Packager.},
-            installer => 'Meta',
-            deps =>  [qw(VIMMETA META)],
-            bin =>  [qw(vim-packager)],
-        },
-        {
-            name => 'Rakefile',
-            desc => q{Check if rakefile exists.},
-            installer => 'Rakefile',
-            deps => [qw(rakefile Rakefile)],
-        });
-
-    if( @ins_type == 0 ) {
-        print "Package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file\n";
-        print "No availiable strategy, try to auto-install.\n" if $verbose;
-        push @ins_type,'auto';
-    }
-    
-DONE:
-    for my $ins_type ( @ins_type ) {
-        # $args: (hashref)
-        #   is used for Vimana::Installer::*->new( { args => $args } );
-        #   
-        #       cleanup (boolean)
-        #       runtime_path (string)
-        #
-        my $installer = $self->get_installer( $ins_type, $args );
-        $ret = $installer->run( $pkgfile, $tmpdir , $verbose );
-
-        last DONE if $ret;  # succeed
-        last DONE if ! $installer->_continue;  # not succeed, but we should continue other installation.
-    }
-
-    unless( $ret ) {
-        print "Installation failed.\n";
-        print "Vimana does not know how to install this package\n";
-        # XXX: provide more usable help message.
-        return $ret;
-    }
-
-    chdir($prev_dir);
-    if( $args->{cleanup} ) {
-        print "Cleaning up temporary directory.\n" if $verbose;
-        rmtree [ $tmpdir ] if -e $tmpdir;
-    }
-
-    return $ret;
-}
-
-sub stdlize_uri {
-    my $uri = shift;
-    if( $uri =~ s{^(git|svn):}{} )  { 
-        return $1,$uri;
-    }
-    return undef;
-}
-
-sub run2 {
-    my ($self,$arg) = @_;
-    my $ret;
+sub run {
+    my ($cmd,$arg) = @_;
     if( $arg =~ m{^https?://} ) {
         Vimana::Installer->install_from_url( $arg );
     }
@@ -165,6 +45,7 @@ sub run2 {
     }
 }
 
+=pod
 sub run {
     my ( $self, $arg ) = @_; 
     # XXX: check if we've installed this package
@@ -302,6 +183,7 @@ END
     }
 
 }
+=cut
 
 1;
 __END__
