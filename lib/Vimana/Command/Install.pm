@@ -32,16 +32,16 @@ use Vimana::Installer;
 sub run {
     my ($cmd,$arg) = @_;
     if( $arg =~ m{^https?://} ) {
-        Vimana::Installer->install_from_url( $arg );
+        Vimana::Installer->install_from_url( $arg , $cmd );
     }
     elsif( $arg =~ m{^(?:git|svn):} ) {
-        Vimana::Installer->install_from_vcs( $arg );
+        Vimana::Installer->install_from_vcs( $arg , $cmd );
     }
     elsif( $arg =~ m{^[a-zA-Z0-9._-]+$} ) {
-        Vimana::Installer->install(  $arg ); # from vim.org
+        Vimana::Installer->install(  $arg , $cmd ); # from vim.org
     }
     elsif( $arg eq '.' or $arg =~ m{file://} ) {
-        Vimana::Installer->install_from_path( $arg );
+        Vimana::Installer->install_from_path( $arg , $cmd );
     }
 }
 
