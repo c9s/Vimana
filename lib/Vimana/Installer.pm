@@ -27,7 +27,7 @@ has cleanup =>
 
 has runtime_path =>
     is => 'rw',
-    isa => 'String';
+    isa => 'Str';
 
 # Command Object
 has cmd =>
@@ -235,7 +235,7 @@ sub install {
 
     # Write the data to the filehandle $cbargs
     my $savetofile = sub {
-        my ( $self, $phase, $dataref, $cbargs ) = @_;
+        my ( $self, $dataref, $cbargs ) = @_;
         print STDERR ".";
         print $cbargs $$dataref;
         return undef;
@@ -245,9 +245,9 @@ sub install {
     print "Downloading plugin from $url\n" if $verbose;
 
     my $http = new HTTP::Lite;
-    open DL, ">" , $target;
-    my $res = $http->request($url, $savetofile, \*DL );
-    close DL;
+    open my $dl, ">" , $target or die $!;
+    my $res = $http->request($url, $savetofile, $dl );
+    close $dl;
     print "\n";
 
     my $filetype = File::Type->new->checktype_filename( $target );
@@ -272,11 +272,15 @@ sub install {
         chdir $install_temp;
 
         my $ret = $self->install_by_strategy( $pkg , $install_temp,
-            { cleanup => 1, 
+            { 
+                package => $pkg,
+                cleanup => 1, 
                 runtime_path => $rtp } , $verbose );
 
         chdir $cwd;
     }
+
+    print "Done";
 }
 
 1;
