@@ -24,7 +24,8 @@ requires
     'YAML'           => 0,
     'Digest::MD5'    => 0,
     'JSON'           => 0,
-    ;
+    'HTTP::Lite'     => 0,
+    'Mouse'          => 0;
 
 include('ExtUtils::AutoInstall');
 auto_install();
