@@ -9,7 +9,7 @@ version_from 'lib/Vimana.pm';
 install_script 'bin/vimana';
 requires
     'App::CLI'       => 0.08,
-    'Archive::Any'   => 0,
+    'Archive::Extract'   => 0,
     'DateTime'       => 0,
     'Exporter::Lite' => 0,
     'File::Path'     => 2.07,
