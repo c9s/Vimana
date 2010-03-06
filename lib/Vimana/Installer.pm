@@ -4,11 +4,165 @@ use warnings;
 use strict;
 use Vimana::Logger;
 use File::Temp 'tempdir';
+use File::Type;
 use constant _continue => 0;
+use Cwd;
+use Mouse;
+use HTTP::Lite;
+use Archive::Extract;
+use Vimana::Installer::Meta;
+use Vimana::Installer::Makefile;
+use Vimana::Installer::Rakefile;
+use Vimana::Installer::Auto;
+use Vimana::Installer::Text;
+
+
+has package =>
+    is => 'rw',
+    isa => 'HashRef';
+
+has cleanup =>
+    is => 'rw',
+    isa => 'Bool';
+
+has runtime_path =>
+    is => 'rw',
+    isa => 'String';
+
+# Command Object
+has cmd =>
+    is => 'rw';
 
 __PACKAGE__->mk_accessors( qw(package cleanup runtime_path) );
 
-sub run { }
+=pod
+
+    Vimana::Installer->install( 'package name' );
+    Vimana::Installer->install_from_url( 'url' );
+    Vimana::Installer->install_from_rcs( 'git:......' );
+    Vimana::Installer->install_from_dir( '/path/to/plugin' );
+
+    " Script type: plugin
+    " Script dependency:
+    "   foo1 > 0.1
+    "   bar2 > 0.2
+    " 
+    " Description:
+    "   ....
+
+=cut
+
+sub get_installer {
+    my ( $self, $type, @args ) = @_;
+    my $class = qq{Vimana::Installer::} . ucfirst($type);
+    return $class->new( @args );
+}
+
+sub install_by_strategy {
+    my ( $self, $pkgfile, $tmpdir, $args , $verbose ) = @_;
+
+    my $prev_dir = getcwd();
+    chdir($tmpdir);
+    my $ret;
+    my @ins_type = $self->check_strategies( 
+        {
+            name => 'Makefile',
+            desc => q{Check if makefile exists.},
+            installer => 'Makefile',
+            deps => [qw(makefile Makefile)],
+        },
+        # because Meta file would overwrite "Makefile" file. so put Meta file
+        # after Makefile strategy
+        {
+            name => 'Meta',
+            desc => q{Check if 'META' or 'VIMMETA' file exists. support for VIM::Packager.},
+            installer => 'Meta',
+            deps =>  [qw(VIMMETA META)],
+            bin =>  [qw(vim-packager)],
+        },
+        {
+            name => 'Rakefile',
+            desc => q{Check if rakefile exists.},
+            installer => 'Rakefile',
+            deps => [qw(rakefile Rakefile)],
+        });
+
+    if( @ins_type == 0 ) {
+        print "Package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file\n";
+        print "No availiable strategy, try to auto-install.\n" if $verbose;
+        push @ins_type,'auto';
+    }
+    
+DONE:
+    for my $ins_type ( @ins_type ) {
+        # $args: (hashref)
+        #   is used for Vimana::Installer::*->new( { args => $args } );
+        #   
+        #       cleanup (boolean)
+        #       runtime_path (string)
+        #
+        my $installer = $self->get_installer( $ins_type, $args );
+        $ret = $installer->run( $pkgfile, $tmpdir , $verbose );
+
+        last DONE if $ret;  # succeed
+        last DONE if ! $installer->_continue;  # not succeed, but we should continue other installation.
+    }
+
+    unless( $ret ) {
+        print "Installation failed.\n";
+        print "Vimana does not know how to install this package\n";
+        # XXX: provide more usable help message.
+        return $ret;
+    }
+
+    chdir($prev_dir);
+    if( $args->{cleanup} ) {
+        print "Cleaning up temporary directory.\n" if $verbose;
+        rmtree [ $tmpdir ] if -e $tmpdir;
+    }
+
+    return $ret;
+}
+
+sub check_strategies {
+    my ($self,@sts) = @_;
+    my @ins_type;
+
+    NEXT_ST:
+    for my $st ( @sts ) {
+        print $st->{name} . ' : ' . $st->{desc} . ' ...';
+        if( defined $st->{bin} ) {
+            for my $bin ( @{  $st->{bin} } ){
+                my $binpath = qx{which $bin};
+                chomp $binpath;
+                next NEXT_ST unless $binpath;
+            }
+        }
+
+        my $deps = $st->{deps};
+        my $found;
+    NEXT_DEP_FILE:
+        for ( @$deps ) {
+            next unless -e $_;
+            
+            
+
+            push @ins_type , $st->{installer};
+            $found = 1;
+            last NEXT_DEP_FILE;
+        }
+        print $found ? "ok\n" : "not ok\n";
+    }
+    return @ins_type;
+}
+
+# sub stdlize_uri {
+#     my $uri = shift;
+#     if( $uri =~ s{^(git|svn):}{} )  { 
+#         return $1,$uri;
+#     }
+#     return undef;
+# }
 
 
 sub runtime_path_warn {
@@ -28,6 +182,10 @@ END
 }
 
 use Vimana::Record;
+
+sub install_from_url { }
+sub install_from_vcs { }
+sub install_from_path { }
 
 sub install {
     my ( $self, $arg, $cmd ) = @_;
@@ -64,32 +222,65 @@ sub install {
     }
     my $page = Vimana::VimOnline::ScriptPage->fetch( $info->{script_id} );
 
-    my $dir = tempdir( CLEANUP => 1 );
+    my $dir = tempdir( CLEANUP => 0 ); # download temp dir
 
     my $url = $page->{download};
     my $filename = $page->{filename};
     my $target = File::Spec->join( $dir , $filename );
 
-    # Download File
+    my $pkg =  {
+        package_name => $package,
+        file => $target,
+        url => $url,
+        info => $info,
+        page_fino => $page,
+    };
 
+    # Write the data to the filehandle $cbargs
+    my $savetofile = sub {
+        my ( $self, $phase, $dataref, $cbargs ) = @_;
+        print STDERR ".";
+        print $cbargs $$dataref;
+        return undef;
+    }
+
+    # Download File
+    print "Downloading from $url\n" if $verbose;
+    my $http = new HTTP::Lite;
+    open DL, ">" , $target;
+    my $res = $http->request($url, $savetofile, DL );
+    close DL;
+    print "\n";
+
+    my $filetype = File::Type->new->checktype_filename( $target );
+
+    # text filetype
+    if( $filetype =~ m{octet-stream} } ) {
+
+        # XXX: need to record.
+        my $installer = $self->get_installer('text' , { 
+            package => $pkg , 
+            runtime_path => $rtp,
+        });
+        $installer->run();
+    }
+    elsif ( $filetype =~ m{(?:x-bzip2|x-gzip|x-gtar|zip|rar|tar)} ) {
+        my $install_temp = tempdir( CLEANUP => 1 );  # extract temp dir
+        my $ae = Archive::Extract->new( archive => $target );
+        my $ok = $ae->extract(  to => $install_temp )
+            or die( $ae->error );
+
+        my $cwd = getcwd();
+        chdir $install_temp;
+
+        my $ret = $self->install_by_strategy( $pkgfile, $tmpdir,
+            { cleanup => 1, 
+                runtime_path => $rtp } , $verbose );
+
+        chdir $cwd;
+    }
 }
 
-=pod
-
-    Vimana::Installer->install( 'package name' );
-    Vimana::Installer->install_from_url( 'url' );
-    Vimana::Installer->install_from_rcs( 'git:......' );
-    Vimana::Installer->install_from_dir( '/path/to/plugin' );
-
-    " Script type: plugin
-    " Script dependency:
-    "   foo1 > 0.1
-    "   bar2 > 0.2
-    " 
-    " Description:
-    "   ....
-
-=cut
 
 1;
 
