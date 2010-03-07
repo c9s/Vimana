@@ -8,7 +8,6 @@ use LWP::Simple qw();
 require Vimana::VimOnline;
 require Vimana::VimOnline::ScriptPage;
 use Vimana::Logger;
-use Vimana::PackageFile;
 
 sub options { (
     'v|verbose'           => 'verbose',
@@ -34,6 +33,7 @@ sub run {
 
     $logger->info("Download from: $url");;
 
+    # XXX
     my $pkgfile = Vimana::PackageFile->new( {
         file      => $filename,
         url       => $url,

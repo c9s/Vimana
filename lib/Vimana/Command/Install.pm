@@ -13,7 +13,6 @@ use Vimana::Util;
 use Vimana::Record;
 use Vimana::VimballInstall;
 use Vimana::Logger;
-use Vimana::PackageFile;
 
 sub options { (
         'd|dry-run'           => 'dry_run',

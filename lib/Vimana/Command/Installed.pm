@@ -5,7 +5,6 @@ use base qw(App::CLI::Command);
 use YAML;
 use Vimana::Logger;
 use Vimana::Record;
-use Vimana::PackageFile;
 use File::Find;
 
 =head2 run
