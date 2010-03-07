@@ -286,13 +286,14 @@ sub install_from_path {
 
 sub _install_from_path {
     my ( $self, $path, $cmd , $rtp , $pkg_prefix ) = @_;
+    my $verbose = $cmd->{verbose};
     my $cwd = getcwd();
     chdir $path;
     use Cwd;
     use File::Basename;
 
     # XXX: try to find package name from Meta file.
-    my $package_name =  $vcs . '-' .  ( $cmd->{package_name} || dirname( getcwd( ) ) );
+    my $package_name =  $pkg_prefix . '-' .  ( $cmd->{package_name} || dirname( getcwd( ) ) );
 
     $self->prompt_for_removing_record( $package_name , $cmd->{assume_yes} , $verbose  );
 
