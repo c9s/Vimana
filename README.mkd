@@ -117,6 +117,10 @@ to list installed package content:
 
     $ vimana installed snipmate
 
+to rate plugin:
+
+    $ vimana rate snipmate 2  # rate life changing
+
 COMMAND ALIAS
 =============
 
