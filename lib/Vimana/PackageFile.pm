@@ -7,17 +7,29 @@ use LWP::Simple qw();
 use File::Spec;
 use File::Path;
 use File::Copy;
-use base qw(Vimana::Accessor);
-__PACKAGE__->mk_accessors( qw(
-    cname
-    file 
-    url 
-    filetype 
-    info 
-    page_info 
-    archive
-) );
+# use base qw(Vimana::Accessor);
+use Moose;
 
+has package_name => 
+    is => 'rw';
+
+has saved_file => 
+    is => 'rw';
+
+has url => 
+    is => 'rw';
+
+has filetype => 
+    is => 'rw';
+
+has info => 
+    is => 'rw';
+
+has page_info =>
+    is => 'rw';
+
+has archive => 
+    is => 'rw';
 
 =head1 FUNCTIONS
 
@@ -186,9 +198,11 @@ sub copy_to_rtp {
 
 use Vimana::Util;
 
+
+
+
 sub extract_to {
     my ( $self, $path ) = @_;
-    # my $path ||= Vimana::Util::tempdir();
     rmtree [ $path ] if -e $path;
     mkpath [ $path ];
     return $self->archive->extract($path);

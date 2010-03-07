@@ -4,6 +4,10 @@ use Vimana::Logger;
 use warnings;
 use strict;
 
+=head2 run( $path, $verbose )
+
+=cut
+
 sub run {
     my ($self,$path,$verbose)=@_;
 

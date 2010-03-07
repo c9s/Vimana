@@ -14,6 +14,10 @@ use Vimana::Logger;
 use Vimana::Util;
 use DateTime;
 
+=head2 run( $path , $verbose )
+
+=cut
+
 sub run {
     my ( $self, $out , $verbose ) = @_;
 
@@ -75,7 +79,7 @@ sub run {
                 version => 0.2,    # record spec version
                 generated_by => 'Vimana-' . $Vimana::VERSION,
                 install_type => 'auto',    # auto , make , rake ... etc
-                package => $self->package->{package_name},
+                package => $self->package->package_name,
                 files => \@e,
         });
     }

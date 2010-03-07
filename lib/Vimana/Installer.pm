@@ -5,6 +5,7 @@ use strict;
 use Vimana::Logger;
 use File::Temp 'tempdir';
 use File::Type;
+use File::Path qw(rmtree);
 use Cwd;
 use Mouse;
 use HTTP::Lite;
@@ -88,7 +89,7 @@ sub get_installer {
 
 sub install_by_strategy {
     my ( $self, %args ) = @_;
-
+    my $verbose = $args{verbose};
     my $ret;
     my @ins_type = $self->check_strategies( 
         {
@@ -266,8 +267,7 @@ sub install {
         }
     }
     elsif ( $filetype =~ m{(?:x-bzip2|x-gzip|x-gtar|zip|rar|tar)} ) {
-        # my $install_temp = tempdir( CLEANUP => 1 );  # extract temp dir
-        my $install_temp = tempdir( );  # extract temp dir
+        my $install_temp = tempdir( CLEANUP => 0 );  # extract temp dir
         my $ae = Archive::Extract->new( archive => $target );
         my $ok = $ae->extract(  to => $install_temp )
             or die( $ae->error );

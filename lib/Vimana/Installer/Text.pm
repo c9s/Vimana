@@ -6,11 +6,17 @@ use Vimana::Logger;
 use Vimana::Record;
 use Vimana::VimballInstall;
 
-sub run {
-    my ( $self, $pkgfile ) = @_;
 
-    if( $pkgfile->is_vimball ) {
-        $logger->info("Found Vimball File");
+=head2 run( $path, $verbose )
+
+=cut
+
+sub run {
+    my ($self,$path,$verbose);
+
+    my $pkgfile = $self->package;
+    if( $pkgfile->{saved_file} =~ m/\.vba/ ) {
+        print "Found Vimball File\n";
         my $install = Vimana::VimballInstall->new({ package => $pkgfile });
         $install->run();
         return 1;
@@ -26,7 +32,7 @@ sub run {
         # inspect text filetype here.  (colorscheme, ftplugin ...etc)
         $logger->info( "Inspecting file content for script type." );
 
-        my $arg = $self->inspect_text_content2( $self->package->content );
+        my $arg = $self->inspect_text_content( $self->package->content );
         $type = $arg->{type};
 
         if ($type) {
@@ -46,7 +52,7 @@ sub run {
                 version => 0.2,    # record spec version
                 generated_by => 'Vimana-' . $Vimana::VERSION,
                 install_type => 'text',    # auto , make , rake ... etc
-                package => $pkgfile->cname,
+                package => $pkgfile->package_name,
                 files => \@e } );
     }
     return $target;
