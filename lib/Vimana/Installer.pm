@@ -343,7 +343,10 @@ sub install {
     my $target = File::Spec->join( $dir , $filename );
 
     # Download File
-    print "Downloading plugin from $url to $target\n" if $verbose;
+    print "Downloading plugin\n";
+    print "\tfrom $url\n"  if $verbose;
+    print "\tto $target\n" if $verbose;
+
     $self->download(  $url , $target );
 
     my $filetype = File::Type->new->checktype_filename( $target );
