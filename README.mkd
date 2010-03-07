@@ -37,7 +37,8 @@ INSTALLATION
 
 For First Time CPAN Users:
 
-Install miyagawa's cpanminus , which doesnt require any complex configurations. it's easy , clean and faster than the old CPAN shell:
+Install miyagawa's cpanminus , which doesnt require any complex configurations. 
+It's easy, clean and faster than the old CPAN shell:
 
     $ git clone git://github.com/miyagawa/cpanminus.git
     $ cd cpanminus
@@ -46,8 +47,7 @@ Install miyagawa's cpanminus , which doesnt require any complex configurations. 
 
 Or if dont have permission, you can try this way:
 
-    $ cd ~/bin
-    $ wget http://xrl.us/cpanm
+    $ wget http://xrl.us/cpanm -O ~/bin/cpanm
     $ chmod +x cpanm
 
 Run cpanminus to install 

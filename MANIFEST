@@ -1,9 +1,7 @@
 .cvsignore
-_deps_cache
+bin/vim_record
 bin/vimana
 Changes
-cpan-setup.sh
-dist_par_binary.sh
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm
 inc/Module/Install/AutoInstall.pm
@@ -11,7 +9,6 @@ inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
 inc/Module/Install/Fetch.pm
 inc/Module/Install/Include.pm
-inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
 inc/Module/Install/Scripts.pm
 inc/Module/Install/Win32.pm
@@ -26,6 +23,7 @@ lib/Vimana/Command/Help.pm.org
 lib/Vimana/Command/Info.pm
 lib/Vimana/Command/Install.pm
 lib/Vimana/Command/Installed.pm
+lib/Vimana/Command/Rate.pm
 lib/Vimana/Command/Remove.pm
 lib/Vimana/Command/Search.pm
 lib/Vimana/Command/Update.pm
@@ -34,10 +32,10 @@ lib/Vimana/GitInstall.pm
 lib/Vimana/Index.pm
 lib/Vimana/Installer.pm
 lib/Vimana/Installer/Auto.pm
-lib/Vimana/Installer/Makefile.pm
 lib/Vimana/Installer/Meta.pm
 lib/Vimana/Installer/Rakefile.pm
 lib/Vimana/Installer/Text.pm
+lib/Vimana/Installer/Vimball.pm
 lib/Vimana/Logger.pm
 lib/Vimana/Manual.pm
 lib/Vimana/PackageFile.pm
@@ -48,7 +46,6 @@ lib/Vimana/VimballInstall.pm
 lib/Vimana/VimOnline.pm
 lib/Vimana/VimOnline/ScriptPage.pm
 lib/Vimana/VimOnline/Search.pm
-Makefile.PL
 MANIFEST			This list of files
 MANIFEST.bak
 MANIFEST.SKIP
@@ -59,6 +56,7 @@ t/00-install.t
 t/00-load.t
 t/00-path.t
 t/00-update.t
+t/01-installer.t
 t/01-package.t
 t/01-record.t
 t/accessor.t
@@ -67,10 +65,9 @@ t/data/rails.zip
 t/installer-makefile-2.t
 t/installer-makefile-3.t
 t/installer-makefile.t
+t/script-content-inspecting.t
 t/text.t
-todo
 utils/build_shipwright.sh
 xt/installer-makefile-2.t
 xt/installer-makefile-3.t
 xt/installer-makefile.t
-t/script-content-inspecting.t
