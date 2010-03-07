@@ -1,0 +1,19 @@
+#!/usr/bin/env perl
+
+=head1 synopsis
+
+    $ vim_record install ohlala --dir=path/to/dir \
+                --rtp=~/.vim  \
+                --files=foo.vim,bar.vim
+
+    $ vim_record uninstall ohlala 
+
+    $ vim_record deps ohlala    # list dependency
+
+=cut
+
+
+# XXX:
+#
+# Ahhhhhhhhhhhhhhhhhhhhhhhhhhh....
+# Please fix me
