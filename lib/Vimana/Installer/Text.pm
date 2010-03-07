@@ -80,7 +80,7 @@ sub run {
         # inspect text filetype here.  (colorscheme, ftplugin ...etc)
         print "Inspecting file content for script type.\n";
 
-        my $arg = $self->inspect_text_content( $self->package->content );
+        my $arg = $self->inspect_text_content( $text_content );
         $type = $arg->{type};
 
         if ($type) {
