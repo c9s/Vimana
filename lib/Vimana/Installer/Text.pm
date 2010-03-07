@@ -32,8 +32,10 @@ use File::Path qw(rmtree mkpath);
 sub copy_to {
     my ( $self , $path ) = @_;
     my $src = $self->target;
+
     my ( $v, $dir, $file ) = File::Spec->splitpath($path);
     File::Path::mkpath [ $dir ];
+
     my $ret = File::Copy::copy( $src => $path );
     if( $ret ) {
         my (@parts)= File::Spec->splitpath( $src );
@@ -48,9 +50,9 @@ sub copy_to_rtp {
     return $self->copy_to($to);
 }
 
-
 sub run {
     my $self = shift;
+    my $verbose = $self->verbose;
     my $text_content = $self->read_text();
 
     # XXX: try to use rebless.
@@ -65,11 +67,13 @@ sub run {
         return 1;
     }
 
-    my $type = $self->script_info();
+    my $type = $self->script_type();
+    
     my $target;
     if( $type ) {
         $target = $self->copy_to_rtp( 
                 File::Spec->join( $self->runtime_path , $type ));
+        print "Installing script to " . File::Spec->join( $self->runtime_path , $type ) . "\n";
     }
     else {
         # Can't found script ype,
