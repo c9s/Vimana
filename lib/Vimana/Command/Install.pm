@@ -37,11 +37,11 @@ sub run {
     elsif( $arg =~ m{^(?:git|svn):} ) {
         Vimana::Installer->install_from_vcs( $arg , $cmd );
     }
-    elsif( $arg =~ m{^[a-zA-Z0-9._-]+$} ) {
-        Vimana::Installer->install(  $arg , $cmd ); # from vim.org
-    }
-    elsif( $arg eq '.' or $arg =~ m{file://} ) {
+    elsif( -f $arg or -d $arg ) {  # is a file or directory
         Vimana::Installer->install_from_path( $arg , $cmd );
+    }
+    else {
+        Vimana::Installer->install(  $arg , $cmd ); # from vim.org
     }
 }
 

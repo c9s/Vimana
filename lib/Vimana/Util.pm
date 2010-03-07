@@ -11,6 +11,7 @@ sub canonical_script_name {
     $name = lc $name;
     $name =~ s/\s+/-/g;
     $name =~ s/-?\(.*\)$//;
+    $name =~ s{[!]}{}g;
     $name =~ tr/_<>[],{/-/;
     $name =~ s/-+/-/g;
     $name;

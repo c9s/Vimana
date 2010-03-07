@@ -71,7 +71,6 @@ sub run {
     # pre-append vim runtime path
     @filelist = map { File::Spec->join( $rtps[0], $_ )  } @filelist ;
 
-
     my @e = Vimana::Record->mk_file_digests( @filelist );
     Vimana::Record->add( {
             version => 0.3,    # record spec version

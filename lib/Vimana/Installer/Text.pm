@@ -53,10 +53,14 @@ sub run {
     my $self = shift;
     my $text_content = $self->read_text();
 
-    if( $self->target =~ m/\.vba/ ) {
+    # XXX: try to use rebless.
+    if( $self->target =~ m/\.vba$/ ) {
         print "Found Vimball File\n";
-        my $installer = $self->get_installer( 'vimball' , 
-                target => $self->target , verbose => $self->verbose );
+        my $installer = $self->get_installer( 'vimball',
+            package_name => $self->package_name,
+            target       => $self->target,
+            verbose      => $self->verbose
+        );
         $installer->run();
         return 1;
     }

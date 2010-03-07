@@ -1,5 +1,4 @@
 package Vimana::Installer;
-use base qw(Vimana::Accessor);
 use warnings;
 use strict;
 use Vimana::Logger;
@@ -10,6 +9,8 @@ use Cwd;
 use Mouse;
 use HTTP::Lite;
 use Archive::Extract;
+
+use Vimana::Installer::Vimball;
 use Vimana::Installer::Meta;
 use Vimana::Installer::Makefile;
 use Vimana::Installer::Rakefile;
@@ -17,6 +18,10 @@ use Vimana::Installer::Auto;
 use Vimana::Installer::Text;
 
 use constant _continue => 0;
+
+has package_name =>
+    is => 'rw',
+    isa => 'Str';
 
 # For text type installer , target is a file path.
 # For other type installer , target is a directory path.
@@ -67,17 +72,19 @@ For Text type installer, inspect content like this:
 
 sub download {
     my ( $self, $url, $target ) = @_;
-    my $savetofile = sub {
-        my ( $self, $dataref, $cbargs ) = @_;
-        print STDERR ".";
-        print $cbargs $$dataref;
-        return undef;
-    };
-    my $http = new HTTP::Lite;
-    open my $dl, ">", $target or die $!;
-    my $res = $http->request( $url, $savetofile, $dl );
-    close $dl;
-    print "\n";
+    use LWP::Simple qw(getstore);
+    getstore( $url , $target );
+#     my $savetofile = sub {
+#         my ( $self, $dataref, $cbargs ) = @_;
+#         print STDERR ".";
+#         print $cbargs $$dataref;
+#         return undef;
+#     };
+#     my $http = new HTTP::Lite;
+#     open my $dl, ">", $target or die $!;
+#     my $res = $http->request( $url, $savetofile, $dl );
+#     close $dl;
+#     print "\n";
 }
 
 sub get_installer {
@@ -245,7 +252,7 @@ sub install {
     my $target = File::Spec->join( $dir , $filename );
 
     # Download File
-    print "Downloading plugin from $url\n" if $verbose;
+    print "Downloading plugin from $url to $target\n" if $verbose;
     $self->download(  $url , $target );
 
     my $filetype = File::Type->new->checktype_filename( $target );
@@ -269,23 +276,40 @@ sub install {
     elsif ( $filetype =~ m{(?:x-bzip2|x-gzip|x-gtar|zip|rar|tar)} ) {
         my $install_temp = tempdir( CLEANUP => 0 );  # extract temp dir
         my $ae = Archive::Extract->new( archive => $target );
+
         my $ok = $ae->extract(  to => $install_temp )
             or die( $ae->error );
 
-        my $cwd = getcwd();
-        chdir $install_temp;
+        my $files = $ae->files;
 
-        my $ret = $self->install_by_strategy(
-            package_name => $package,
-            target       => $install_temp,
-            runtime_path => $rtp,
-            verbose      => $verbose,
-        );
+        # some script is archived with only one file.
+        # just treat them as text file to install. 
+        if ( scalar(@$files) == 1 ) {
+            my $extract_file = File::Spec->join( $install_temp , $files->[0] );
+            my $installer = $self->get_installer('text',
+                package_name => $package,
+                target       => $extract_file, 
+                runtime_path => $rtp,
+                script_info  => $info,
+                script_page  => $page,
+            )->run();
+        }
+        else {
+            my $cwd = getcwd();
+            chdir $install_temp;
 
-        chdir $cwd;
-        if( $cmd->{cleanup} ) {
-            print "Cleaning up.\n" if $verbose;
-            $self->cleanup( $install_temp );
+            my $ret = $self->install_by_strategy(
+                package_name => $package,
+                target       => $install_temp,
+                runtime_path => $rtp,
+                verbose      => $verbose,
+            );
+
+            chdir $cwd;
+            if( $cmd->{cleanup} ) {
+                print "Cleaning up.\n" if $verbose;
+                $self->cleanup( $install_temp );
+            }
         }
     }
 
