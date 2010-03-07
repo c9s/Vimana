@@ -298,5 +298,13 @@ sub cleanup {
     rmtree [ $path ] if -e $path;
 }
 
+
+sub installer_type {
+    my $self = shift;
+    if( ref($self) =~ m/(\w+)$/ ) {
+        return lc($1);
+    }
+}
+
 1;
 

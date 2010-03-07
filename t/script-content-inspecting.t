@@ -12,7 +12,7 @@ require Vimana::Installer::Text;
 " script type:  plugin
 END
 
-    my $arg = Vimana::Installer::Text->inspect_text_content2($content);
+    my $arg = Vimana::Installer::Text->inspect_text_content($content);
     is_deeply(
         $arg,
         {
@@ -29,7 +29,7 @@ END
 " scripttype:  plugin
 END
 
-    my $arg = Vimana::Installer::Text->inspect_text_content2($content);
+    my $arg = Vimana::Installer::Text->inspect_text_content($content);
     is_deeply(
         $arg,
         {
@@ -46,7 +46,7 @@ END
 " Script Type:  plugin
 END
 
-    my $arg = Vimana::Installer::Text->inspect_text_content2($content);
+    my $arg = Vimana::Installer::Text->inspect_text_content($content);
     is_deeply(
         $arg,
         {

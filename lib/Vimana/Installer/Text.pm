@@ -6,26 +6,72 @@ use Vimana::Logger;
 use Vimana::Record;
 use Vimana::VimballInstall;
 
-
 =head2 run( $path, $verbose )
 
 =cut
 
-sub run {
-    my ($self,$path,$verbose);
 
-    my $pkgfile = $self->package;
-    if( $pkgfile->{saved_file} =~ m/\.vba/ ) {
+sub read_text {
+    my $self =shift;
+    my $text = "";
+    local $/;
+    open IN , "<" , $self->target;
+    $text = <IN>;
+    close IN;
+    return $text;
+}
+
+sub script_type {
+    my $self = shift;
+    if( $self->script_info->{type} ) {
+        return 'colors' if $self->script_info->{type} eq 'color scheme' ;
+        return undef if $self->script_info->{type} =~ m/(?:utility|patch)/;
+        return $self->script_info->{type};
+    }
+    else {
+        return undef;
+    }
+}
+
+
+use File::Path qw(rmtree mkpath);
+
+sub copy_to {
+    my ( $self , $path ) = @_;
+    my $src = $self->target;
+    my ( $v, $dir, $file ) = File::Spec->splitpath($path);
+    File::Path::mkpath [ $dir ];
+    my $ret = File::Copy::copy( $src => $path );
+    if( $ret ) {
+        my (@parts)= File::Spec->splitpath( $src );
+        return File::Spec->join($path,$parts[2]);
+    }
+    print STDERR $! if $!;
+    return;
+}
+
+sub copy_to_rtp {
+    my ( $self, $to ) = @_ ;
+    return $self->copy_to($to);
+}
+
+
+sub run {
+    my $self = shift;
+    my $text_content = $self->read_text();
+
+    if( $self->target =~ m/\.vba/ ) {
         print "Found Vimball File\n";
-        my $install = Vimana::VimballInstall->new({ package => $pkgfile });
-        $install->run();
+        # my $install = Vimana::VimballInstall->new({ package => $pkgfile });
+        # $install->run();
         return 1;
     }
 
+    my $type = $self->script_info();
     my $target;
-    my $type = $pkgfile->script_type();
     if( $type ) {
-        $target = $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path , $type ));
+        $target = $self->copy_to_rtp( 
+                File::Spec->join( $self->runtime_path , $type ));
     }
     else {
         # Can't found script ype,
@@ -38,7 +84,8 @@ sub run {
         if ($type) {
             $logger->info("Script type found: $type.");
             $logger->info("Installing..");
-            $target = $pkgfile->copy_to_rtp( File::Spec->join( $self->runtime_path, $type ));
+            $target = $self->copy_to_rtp( 
+                    File::Spec->join( $self->runtime_path, $type ));
         }
         else {
             $logger->info("Can't guess script type.");
@@ -49,15 +96,17 @@ sub run {
         # make record:
         my @e = Vimana::Record->mk_file_digests( $target );
         Vimana::Record->add( {
-                version => 0.2,    # record spec version
+                version => 0.3,    # record spec version
+                package => $self->package_name, 
                 generated_by => 'Vimana-' . $Vimana::VERSION,
-                install_type => 'text',    # auto , make , rake ... etc
-                package => $pkgfile->package_name,
-                files => \@e } );
+                # Installer type:
+                #   auto , make , rake, text ... etc
+                installer_type =>  $self->installer_type ,
+                files => \@e 
+        } );
     }
     return $target;
 }
-
 
 =head2 inspect_text_content
 
@@ -65,30 +114,15 @@ you can add something like this to your vim script file:
 
     " script type: plugin
 
+    " ScriptType: plugin
+
+    " Script Type: plugin
+
 then the file will be installed into ~/.vim/plugin/
 
 =cut
 
 sub inspect_text_content {
-    my ($self,$content) = @_;
-    if( $content =~ m{^"\s*script\s*type:\s*(\w+)}im  ){
-        my $type = $1;
-        return $type;
-    }
-
-    warn 'inspect_text_content deprecated.';
-
-    return 'colors'   if $content =~ m/^let\s+(g:)?colors_name\s*=/;
-    return 'syntax'   if $content =~ m/^syn[tax]* (?:match|region|keyword)/;
-    return 'compiler' if $content =~ m/^let\s+current_compiler\s*=/;
-    return 'indent'   if $content =~ m/^let\s+b:did_indent/;
-
-    # XXX: inspect more types.
-    return 0;
-}
-
-
-sub inspect_text_content2 {
     my ($self,$content) = @_;
     my $arg =  {};
     if( $content =~ m{^"\s*script\s*type:\s*(\w+)}im  ){
