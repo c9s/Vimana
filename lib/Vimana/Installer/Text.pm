@@ -67,7 +67,24 @@ sub run {
         return 1;
     }
 
+
+    print "Inspecting script content.\n";
+    my $arg = $self->inspect_text_content( $text_content );
     my $type = $self->script_type();
+
+    if ( $type->{version} ) {
+        # XXX: check version from record.
+
+    }
+
+
+    if ( $type->{deps} ) {
+        print "Script dependency tag found. Installing script dependencies.\n";
+        for my $dep ( @{ $type->{deps} } ) {
+            print "Installing $dep\n";
+            Vimana::Installer->install( $dep );
+        }
+    }
     
     my $target;
     if( $type ) {
@@ -78,9 +95,6 @@ sub run {
     else {
         # Can't found script ype,
         # inspect text filetype here.  (colorscheme, ftplugin ...etc)
-        print "Inspecting file content for script type.\n";
-
-        my $arg = $self->inspect_text_content( $text_content );
         $type = $arg->{type};
 
         if ($type) {
