@@ -19,15 +19,9 @@ use DateTime;
 =cut
 
 sub run {
-    my ( $self, $out , $verbose ) = @_;
-
-    # XXX: try to fill the record spec.
-    my $record = {
-        install_type => 'auto',
-        meta => {} ,
-        files => [ ],
-    };
-
+    my ( $self ) = @_;
+    my $out = $self->target;
+    my $verbose = $self->verbose;
     my @files = $self->find_files( '.' );
     if ( $verbose ) {
         print "Archive content:\n";
@@ -79,7 +73,7 @@ sub run {
                 version => 0.2,    # record spec version
                 generated_by => 'Vimana-' . $Vimana::VERSION,
                 install_type => 'auto',    # auto , make , rake ... etc
-                package => $self->package->package_name,
+                package => $self->package_name,
                 files => \@e,
         });
     }
