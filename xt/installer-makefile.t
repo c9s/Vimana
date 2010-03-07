@@ -3,9 +3,11 @@ use warnings;
 use strict;
 use Test::More tests => 2;
 use File::Path qw(mkpath rmtree);
+use File::Temp qw(tempdir);
 
-mkpath [ '/tmp/test' ];
-chdir '/tmp/test';
+my $dir = tempdir(  CLEANUP => 1 );
+mkpath [ $dir ];
+chdir $dir;
 
 open FH, ">" , "Makefile";
 print FH "install:\n";
@@ -14,9 +16,7 @@ print FH "\t\t\@echo 1\n";
 ok( -e 'Makefile' );
 
 use Vimana::Installer::Makefile;
-my $installer = Vimana::Installer::Makefile->new();
+my $installer = Vimana::Installer::Makefile->new( target => $dir );
 
-my $ret = $installer->run( undef, '/tmp/test' );
+my $ret = $installer->run();
 ok( $ret );
-
-rmtree [ '/tmp/test' ];

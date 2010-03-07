@@ -3,10 +3,12 @@ use warnings;
 use strict;
 use Test::More tests => 2;
 
+use File::Temp qw(tempdir);
 use File::Path qw(mkpath rmtree);
 
-mkpath [ '/tmp/test' ];
-chdir '/tmp/test';
+my $dir = tempdir( CLEANUP => 1 );
+mkpath [  $dir ];
+chdir $dir;
 
 open FH, ">" , "makefile";
 print FH "no_install:\n";
@@ -17,8 +19,7 @@ ok( -e 'makefile' );
 use Vimana::Installer::Makefile;
 my $installer = Vimana::Installer::Makefile->new();
 
-my $ret = $installer->run( '/tmp/test' );
+my $ret = $installer->run( $dir );
 ok( ! $ret );
 
 
-rmtree [ '/tmp/test' ];
