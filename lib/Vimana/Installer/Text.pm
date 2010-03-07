@@ -8,10 +8,9 @@ use Vimana::VimballInstall;
 
 sub read_text {
     my $self =shift;
-    my $text = "";
     local $/;
     open IN , "<" , $self->target;
-    $text = <IN>;
+    my $text = <IN>;
     close IN;
     return $text;
 }
@@ -57,8 +56,8 @@ sub run {
 
     if( $self->target =~ m/\.vba/ ) {
         print "Found Vimball File\n";
-        my $installer = $self->get_installer( 
-                    'vimball' , target => $self->target );
+        my $installer = $self->get_installer( 'vimball' , 
+                target => $self->target , verbose => $self->verbose );
         $installer->run();
         return 1;
     }
