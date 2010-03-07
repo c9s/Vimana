@@ -23,18 +23,6 @@ sub scan_vimball {
 }
 
 
-sub get_vim_rtp {
-    my $file = 'rtp.tmp';
-    system(qq{vim -c "redir > $file" -c "echo &rtp" -c "q" });
-    open FILE, "<" , $file;
-    local $/;
-    my $content = <FILE>;
-    close FILE;
-    $content =~ s{[\n\r]}{}g;
-    unlink $file;
-    return split /,/,$content;
-}
-
 sub run {
     my $self = shift;
     my $verbose = $self->verbose;
