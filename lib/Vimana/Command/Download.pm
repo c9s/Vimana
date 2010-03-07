@@ -28,21 +28,14 @@ sub run {
 
     my $dir = '/tmp' || tempdir( DIR => '/tmp' );
 
-    my $url = $page->{download};
+    my $url      = $page->{download};
     my $filename = $page->{filename};
+    my $dir      = tempdir( CLEANUP => 0 );               # download temp dir
+    my $target   = File::Spec->join( $dir, $filename );
 
-    $logger->info("Download from: $url");;
-
-    # XXX
-    my $pkgfile = Vimana::PackageFile->new( {
-        file      => $filename,
-        url       => $url,
-        info      => $info,
-        page_info => $page,
-    } );
-
-    return unless $pkgfile->download();
-    $logger->info("Stored at: $filename");
+    print "Downloading from: $url\n";
+    Vimana::Installer->download( $url , $target );
+    print "Stored at : $target\n";
     print "Done\n";
 }
 

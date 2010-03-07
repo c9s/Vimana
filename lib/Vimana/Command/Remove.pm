@@ -2,7 +2,6 @@ package Vimana::Command::Remove;
 use base qw(App::CLI::Command);
 use Vimana::Logger;
 use Vimana::Record;
-use Vimana::PackageFile;
 
 sub options { 
     ( 
