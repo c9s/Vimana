@@ -17,12 +17,6 @@ use Vimana::Installer::Text;
 
 use constant _continue => 0;
 
-
-# should clean up after installing.
-has cleanup =>
-    is => 'rw',
-    isa => 'Bool';
-
 # For text type installer , target is a file path.
 # For other type installer , target is a directory path.
 has target =>
@@ -127,12 +121,6 @@ sub install_by_strategy {
     
 DONE:
     for my $ins_type ( @ins_type ) {
-        # $args: (hashref)
-        #   is used for Vimana::Installer::*->new( { args => $args } );
-        #   
-        #       cleanup (boolean)
-        #       runtime_path (string)
-        #
         my $installer = $self->get_installer( $ins_type, %args );
         $ret = $installer->run();
 
@@ -147,10 +135,6 @@ DONE:
         return $ret;
     }
 
-#     if( $args->{cleanup} ) {
-#         print "Cleaning up temporary directory.\n" if $verbose;
-#         rmtree [ $tmpdir ] if -e $tmpdir;
-#     }
 
     return $ret;
 }
@@ -274,11 +258,16 @@ sub install {
             runtime_path => $rtp,
             script_info  => $info,
             script_page  => $page,
-            cleanup      => 0,
         )->run();
+
+        if( $cmd->{cleanup} ) {
+            print "Cleaning up.\n" if $verbose;
+            $self->cleanup( $target );
+        }
     }
     elsif ( $filetype =~ m{(?:x-bzip2|x-gzip|x-gtar|zip|rar|tar)} ) {
-        my $install_temp = tempdir( CLEANUP => 1 );  # extract temp dir
+        # my $install_temp = tempdir( CLEANUP => 1 );  # extract temp dir
+        my $install_temp = tempdir( );  # extract temp dir
         my $ae = Archive::Extract->new( archive => $target );
         my $ok = $ae->extract(  to => $install_temp )
             or die( $ae->error );
@@ -289,15 +278,24 @@ sub install {
         my $ret = $self->install_by_strategy(
             package_name => $package,
             target       => $install_temp,
-            cleanup      => 1,
             runtime_path => $rtp,
             verbose      => $verbose,
         );
 
         chdir $cwd;
+        if( $cmd->{cleanup} ) {
+            print "Cleaning up.\n" if $verbose;
+            $self->cleanup( $install_temp );
+        }
     }
 
     print "Done";
+}
+
+
+sub cleanup {
+    my ($self,$path) = @_;
+    rmtree [ $path ] if -e $path;
 }
 
 1;
