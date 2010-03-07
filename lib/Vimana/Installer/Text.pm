@@ -2,7 +2,6 @@ package Vimana::Installer::Text;
 use warnings;
 use strict;
 use base qw(Vimana::Installer);
-use Vimana::Logger;
 use Vimana::Record;
 use Vimana::VimballInstall;
 
@@ -71,14 +70,14 @@ sub run {
     else {
         # Can't found script ype,
         # inspect text filetype here.  (colorscheme, ftplugin ...etc)
-        $logger->info( "Inspecting file content for script type." );
+        print "Inspecting file content for script type.\n";
 
         my $arg = $self->inspect_text_content( $self->package->content );
         $type = $arg->{type};
 
         if ($type) {
-            $logger->info("Script type found: $type.");
-            $logger->info("Installing..");
+            print "Script type found: $type.\n";
+            print "Installing..\n";
             $target = $self->copy_to_rtp( 
                     File::Spec->join( $self->runtime_path, $type ));
         }
