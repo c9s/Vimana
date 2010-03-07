@@ -62,8 +62,9 @@ sub run {
 
     if( $self->target =~ m/\.vba/ ) {
         print "Found Vimball File\n";
-        # my $install = Vimana::VimballInstall->new({ package => $pkgfile });
-        # $install->run();
+        my $installer = $self->get_installer( 
+                    'vimball' , target => $self->target );
+        $installer->run();
         return 1;
     }
 
@@ -88,7 +89,8 @@ sub run {
                     File::Spec->join( $self->runtime_path, $type ));
         }
         else {
-            $logger->info("Can't guess script type.");
+            die "Can't script type not found.";
+            # XXX: more useful message.
         }
     }
 
