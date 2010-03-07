@@ -20,7 +20,7 @@ sub run {
     my $info = $index->find_package( $package );
 
     unless( $info ) {
-        $logger->error("Can not found package: $package");
+        print "Can not found package: $package\n";
         return 0;
     }
 
