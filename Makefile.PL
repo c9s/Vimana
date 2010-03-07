@@ -10,7 +10,6 @@ install_script 'bin/vimana';
 requires
     'App::CLI'         => 0.08,
     'Archive::Extract' => 0,
-    'Archive::Any'     => 0,
     'DateTime'         => 0,
     'Exporter::Lite'   => 0,
     'File::Basename'   => 0,

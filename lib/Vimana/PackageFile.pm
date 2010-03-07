@@ -2,7 +2,6 @@ package Vimana::PackageFile;
 use warnings;
 use strict;
 use Vimana::Util;
-use Archive::Any;
 use LWP::Simple qw();
 use File::Spec;
 use File::Path;
