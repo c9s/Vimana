@@ -29,8 +29,7 @@ sub find_package {
     my ($self, $findname ) = @_;
     my $index = $self->read_index();
     my $cname = canonical_script_name( $findname );
-    $logger->info( "Canonical name: $cname" );
-    return defined $index->{ $cname }  ? $index->{ $cname } : undef;
+    return defined $index->{ $cname } ? $index->{ $cname } : undef;
 }
 
 use File::Path;
