@@ -226,7 +226,14 @@ sub prompt_for_removing_record {
 #########################################
 
 
-sub install_from_url { }
+sub install_from_url {
+    my ($self,$url,$cmd) = @_;
+
+
+
+
+
+}
 
 sub install_from_vcs {
     my ($self,$vcs_path,$cmd) = @_;
@@ -243,26 +250,44 @@ sub install_from_vcs {
 
     return if $vcs_path !~ m{^(svn|git|hg):} ;
 
-    my $cwd = getcwd();
     my $vcs = $1;
     $vcs_path =~ s{^(svn|git|hg):}{};
     my $dir = tempdir( CLEANUP => 0 );
     if( $vcs eq 'git' ) {
         system( qq{$vcs clone $vcs_path $dir} );
-        chdir $dir;
     }
     elsif ( $vcs eq 'svn' ) {
         system( qq{$vcs checkout $vcs_path $dir} );
-        chdir $dir;
     }
     elsif ( $vcs eq 'hg' ) {
         system( qq{$vcs checkout $vcs_path $dir} );
-        chdir $dir;
     }
     else {
         die;
     }
 
+    $self->_install_from_path( $dir , $cmd , $rtp , $vcs );
+}
+
+sub install_from_path {
+    my ($self,$path,$cmd) = @_;
+    $cmd ||= {};
+    my $verbose = $cmd->{verbose};
+    if( $cmd->{runtime_path} ) {
+        $self->runtime_path_warn( $cmd );
+    }
+    my $rtp = $cmd->{runtime_path} 
+                || Vimana::Util::runtime_path();
+
+    print STDERR "Plugin will be installed to vim runtime path: " . 
+                    $rtp . "\n" if $cmd->{runtime_path};
+    $self->_install_from_path( $path , $cmd , $rtp , 'file' );
+}
+
+sub _install_from_path {
+    my ( $self, $path, $cmd , $rtp , $pkg_prefix ) = @_;
+    my $cwd = getcwd();
+    chdir $path;
     use Cwd;
     use File::Basename;
 
@@ -273,7 +298,7 @@ sub install_from_vcs {
 
     my $ret = $self->install_by_strategy(
         package_name => $package_name,
-        target       => $dir,
+        target       => $path,
         runtime_path => $rtp,
         verbose      => $verbose,
     );
@@ -281,14 +306,11 @@ sub install_from_vcs {
     chdir $cwd;
     if( $cmd->{cleanup} ) {
         print "Cleaning up.\n" if $verbose;
-        $self->cleanup( $dir );
+        $self->cleanup( $path );
     }
 
     print "Done\n";
-
 }
-
-sub install_from_path { }
 
 sub install {
     my ( $self, $package , $cmd ) = @_;
