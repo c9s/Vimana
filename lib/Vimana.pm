@@ -2,8 +2,8 @@ package Vimana;
 use warnings;
 use strict;
 use Vimana::Index;
-
 use vars qw($INDEX);
+
 our $VERSION = 2010.06618 ;
 
 sub index {

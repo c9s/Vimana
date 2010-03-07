@@ -7,6 +7,7 @@ abstract 'Vim script port manager';
 license 'perl';
 version_from 'lib/Vimana.pm';
 install_script 'bin/vimana';
+install_script 'bin/vim_record';
 requires
     'App::CLI'         => 0.08,
     'Archive::Extract' => 0,
