@@ -39,19 +39,26 @@ sub run {
     my $self = shift;
     my $verbose = $self->verbose;
     my $file = $self->target;
-    my $vim = find_vim();
+    # my $vim = find_vim();
+
+    # The first runtime path will be the location that vimball install to. 
+    # vim -c "redir > rtp" -c "echo &rtp" -c "q"
+    # /Users/c9s/.vim,/opt/local/share/vim/vimfiles,/opt/local/share/vim/vim72,/opt/local/share/vim/vimfiles/after,/Users/c9s/.vim/after
+    my @rtps = get_vim_rtp();
+
+
+    my @filelist = $self->scan_vimball( $file );
+
+    # XXX: check file conflicts.
+    #
+    #
 
     my $fh = File::Temp->new( TEMPLATE => 'tempXXXXXX', 
                 SUFFIX => '.log' , UNLINK => 0 );
     # my $logfile = $fh->filename;
-
     my $logfile = "vimana-@{[ $self->package_name ]}-log";
-
     print "Installing Vimball File: $file\n";
-    system( qq|$vim $file -c "redir > $logfile" -c ":so %" -c 'sleep 1' -c q|);
-
-    # XXX: get vimball files and translate to record.
-    my @filelist = $self->scan_vimball( $file );
+    system( qq|vim $file -c "redir > $logfile" -c ":so %" -c 'sleep 500ms' -c q|);
 
     print "Vimball Installation Log: $logfile\n";
     if( $verbose ) {
@@ -63,10 +70,6 @@ sub run {
         print "======== VimBall Installation Log End ========";
     }
 
-    # The first runtime path will be the location that vimball install to. 
-    # vim -c "redir > rtp" -c "echo &rtp" -c "q"
-    # /Users/c9s/.vim,/opt/local/share/vim/vimfiles,/opt/local/share/vim/vim72,/opt/local/share/vim/vimfiles/after,/Users/c9s/.vim/after
-    my @rtps = get_vim_rtp();
 
     # pre-append vim runtime path
     @filelist = map { File::Spec->join( $rtps[0], $_ )  } @filelist ;
@@ -76,8 +79,6 @@ sub run {
             version => 0.3,    # record spec version
             package => $self->package_name, 
             generated_by => 'Vimana-' . $Vimana::VERSION,
-            # Installer type:
-            #   auto , make , rake, text ... etc
             installer_type =>  $self->installer_type ,
             files => \@e 
     } );
