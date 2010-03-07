@@ -50,11 +50,11 @@ Or if dont have permission, you can try this way:
     $ wget http://xrl.us/cpanm
     $ chmod +x cpanm
 
-Run cpanmius to install 
+Run cpanminus to install 
 
     $ cpanm Vimana
 
-    Or 
+Or 
 
     $ cpanm http://github.com/c9s/Vimana/tarball/master
 
