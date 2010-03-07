@@ -7,7 +7,6 @@ use File::Type;
 use File::Path qw(rmtree);
 use Cwd;
 use Mouse;
-use HTTP::Lite;
 use Archive::Extract;
 
 use Vimana::Installer::Vimball;
@@ -72,19 +71,18 @@ For Text type installer, inspect content like this:
 
 sub download {
     my ( $self, $url, $target ) = @_;
-    use LWP::Simple qw(getstore);
-    getstore( $url , $target );
-#     my $savetofile = sub {
-#         my ( $self, $dataref, $cbargs ) = @_;
-#         print STDERR ".";
-#         print $cbargs $$dataref;
-#         return undef;
-#     };
-#     my $http = new HTTP::Lite;
-#     open my $dl, ">", $target or die $!;
-#     my $res = $http->request( $url, $savetofile, $dl );
-#     close $dl;
-#     print "\n";
+    use HTTP::Lite;
+    my $savetofile = sub {
+        my ( $self, $dataref, $cbargs ) = @_;
+        print STDERR ".";
+        print $cbargs $$dataref;
+        return undef;
+    };
+    my $http = new HTTP::Lite;
+    open my $dl, ">", $target or die $!;
+    my $res = $http->request( $url, $savetofile, $dl );
+    close $dl;
+    print "\n";
 }
 
 sub get_installer {
