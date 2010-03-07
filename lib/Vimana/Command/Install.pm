@@ -43,7 +43,7 @@ sub run {
         Vimana::Installer->install_from_path( $arg , $cmd );
     }
     else {
-        Vimana::Installer->install(  $arg , $cmd ); # from vim.org
+        Vimana::Installer->install( $arg , $cmd ); # from vim.org
     }
 }
 

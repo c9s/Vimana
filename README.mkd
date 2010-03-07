@@ -153,17 +153,16 @@ TESTED CASES
     $ vimana i jslint.vim
     $ vimana i fakeclip
 
-
     $ vimana remove fakeclip
 
     $ cd snipmate.git
-    $ vimana i .    # install from current path.
-
+    $ vimana install .    # install from current path.
 
     $ vimana installed   # list installed scripts
 
     $ vimana installed gist.vim  # list installed content of gist.vim
 
+    $ vimana upgrade gist.vim
 
 MAKE YOUR PLUGIN INSTALLABLE
 ============================
