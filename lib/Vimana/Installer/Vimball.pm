@@ -13,7 +13,6 @@ sub scan_vimball {
     open IN, "<" , $file;
     my @lines = <IN>;
     close IN;
-
     my @filelist = ();
     for my $line ( @lines ) {
         if( $line =~ m{^(.*?)\s\[\[\[\d} ) {
@@ -32,6 +31,7 @@ sub get_vim_rtp {
     my $content = <FILE>;
     close FILE;
     $content =~ s{[\n\r]}{}g;
+    unlink $file;
     return split /,/,$content;
 }
 
@@ -43,7 +43,7 @@ sub run {
 
     my $fh = File::Temp->new( TEMPLATE => 'tempXXXXXX', 
                 SUFFIX => '.log' , UNLINK => 0 );
-            # my $logfile = $fh->filename;
+    # my $logfile = $fh->filename;
 
     my $logfile = "vimana-@{[ $self->package_name ]}-log";
 
