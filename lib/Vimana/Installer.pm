@@ -296,9 +296,6 @@ sub _install_from_path {
     use Cwd;
     use File::Basename;
 
-
-    warn 'cwd' . getcwd();
-
     # XXX: try to find package name from Meta file.
     # my $basename = dirname( getcwd() );
     # $basename =~ tr{/\.!}{};
