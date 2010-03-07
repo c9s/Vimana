@@ -96,6 +96,8 @@ sub install_by_strategy {
     my ( $self, %args ) = @_;
     my $verbose = $args{verbose};
     my $ret;
+
+    # XXX: migrate this to Installer::*
     my @ins_type = $self->check_strategies( 
         {
             name => 'Makefile',
@@ -165,8 +167,6 @@ sub check_strategies {
     NEXT_DEP_FILE:
         for ( @$deps ) {
             next unless -e $_;
-            
-            
 
             push @ins_type , $st->{installer};
             $found = 1;
@@ -253,10 +253,13 @@ sub install_from_vcs {
     my $vcs = $1;
     $vcs_path =~ s{^(svn|git|hg):}{};
     my $dir = tempdir( CLEANUP => 0 );
+
     if( $vcs eq 'git' ) {
+        print "Git clone to $dir\n";
         system( qq{$vcs clone $vcs_path $dir} );
     }
     elsif ( $vcs eq 'svn' ) {
+        print "SVN checkout to $dir\n";
         system( qq{$vcs checkout $vcs_path $dir} );
     }
     elsif ( $vcs eq 'hg' ) {
@@ -288,12 +291,23 @@ sub _install_from_path {
     my ( $self, $path, $cmd , $rtp , $pkg_prefix ) = @_;
     my $verbose = $cmd->{verbose};
     my $cwd = getcwd();
+
     chdir $path;
     use Cwd;
     use File::Basename;
 
+
+    warn 'cwd' . getcwd();
+
     # XXX: try to find package name from Meta file.
-    my $package_name =  $pkg_prefix . '-' .  ( $cmd->{package_name} || dirname( getcwd( ) ) );
+    # my $basename = dirname( getcwd() );
+    # $basename =~ tr{/\.!}{};
+
+    unless( $cmd->{package_name} ) {
+        die "please specify package name.\n";
+    }
+
+    my $package_name =  $pkg_prefix . '-' . $cmd->{package_name};
 
     $self->prompt_for_removing_record( $package_name , $cmd->{assume_yes} , $verbose  );
 
