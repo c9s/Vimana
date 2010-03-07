@@ -12,12 +12,9 @@ sub run {
     my $file = $self->target;
     my $vim = find_vim();
     print "Installing Vimball File: $file\n";
-    system( qq|$vim $vimball -c ":so %" -c q|);
+    system( qq|$vim $file -c ":so %" -c q|);
 
     # XXX: get vimball files and translate to record.
-
-
-
 }
 
 1;
