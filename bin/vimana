@@ -5,8 +5,10 @@ use Vimana;
 use Vimana::Command;
 require Vimana::Record;
 require Vimana::Command::Search;
+require Vimana::Command::Rate;
 require Vimana::Command::Install;
 require Vimana::Command::Update;
+require Vimana::Command::Remove;
 require JSON::XS;
 
 use Getopt::Long;
