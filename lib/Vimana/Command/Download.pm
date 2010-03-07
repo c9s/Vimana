@@ -4,10 +4,8 @@ package Vimana::Command::Download;
 use base qw(App::CLI::Command);
 use URI;
 use LWP::Simple qw();
-
 require Vimana::VimOnline;
 require Vimana::VimOnline::ScriptPage;
-use Vimana::Logger;
 
 sub options { (
     'v|verbose'           => 'verbose',
