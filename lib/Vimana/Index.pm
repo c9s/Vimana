@@ -1,10 +1,12 @@
 package Vimana::Index;
 use warnings;
 use strict;
+use File::Path;
+use Vimana::Util;
+use Mouse;
 
-use Vimana::Logger;
-use base qw(Vimana::Accessor);
-__PACKAGE__->mk_accessors( qw(cache) );
+has cache =>
+    is => 'rw';
 
 sub init {
     my $self = shift;
@@ -24,7 +26,6 @@ sub find_package_like {
     return undef;
 }
 
-use Vimana::Util;
 sub find_package {
     my ($self, $findname ) = @_;
     my $index = $self->read_index();
@@ -32,7 +33,6 @@ sub find_package {
     return defined $index->{ $cname } ? $index->{ $cname } : undef;
 }
 
-use File::Path;
 
 sub index_file {
     my $dir = $ENV{HOME} . "/.vimana";

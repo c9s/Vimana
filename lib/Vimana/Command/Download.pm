@@ -14,6 +14,7 @@ sub options { (
 sub run {
     my ( $self, $package ) = @_;
 
+    my $verbose = $self->{verbose};
     my $index = Vimana->index();
     my $info = $index->find_package( $package );
 
@@ -22,7 +23,11 @@ sub run {
         return 0;
     }
 
+    print "Script ID:" . $info->{script_id} . "\n" if $verbose;
+
     my $page = Vimana::VimOnline::ScriptPage->fetch( $info->{script_id} );
+    
+
     my $url      = $page->{download};
     my $filename = $page->{filename};
     my $dir      = tempdir( CLEANUP => 0 );               # download temp dir
