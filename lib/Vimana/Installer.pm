@@ -151,7 +151,7 @@ sub check_strategies {
 
     NEXT_ST:
     for my $st ( @sts ) {
-        print $st->{name} . ' : ' . $st->{desc} . ' ...';
+        print ' - ' . $st->{name} . ' : ' . $st->{desc} . ' ...';
         if( defined $st->{bin} ) {
             for my $bin ( @{  $st->{bin} } ){
                 my $binpath = qx{which $bin};
