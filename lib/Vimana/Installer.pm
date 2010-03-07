@@ -5,7 +5,6 @@ use strict;
 use Vimana::Logger;
 use File::Temp 'tempdir';
 use File::Type;
-use constant _continue => 0;
 use Cwd;
 use Mouse;
 use HTTP::Lite;
@@ -16,24 +15,40 @@ use Vimana::Installer::Rakefile;
 use Vimana::Installer::Auto;
 use Vimana::Installer::Text;
 
+use constant _continue => 0;
 
-has package =>
-    is => 'rw',
-    isa => 'HashRef';
 
+# should clean up after installing.
 has cleanup =>
     is => 'rw',
     isa => 'Bool';
 
+# For text type installer , target is a file path.
+# For other type installer , target is a directory path.
+has target =>
+    is => 'rw',
+    isa => 'Str';
+
+# runtime path to install to.
 has runtime_path =>
     is => 'rw',
     isa => 'Str';
 
-# Command Object
+# Command Object (command options)
 has cmd =>
     is => 'rw';
 
-# __PACKAGE__->mk_accessors( qw(package cleanup runtime_path) );
+# verbose 
+has verbose =>
+    is => 'rw';
+
+# script info from vim.org (optional)
+has script_info =>
+    is => 'rw';
+
+# script page info from vim.org (optional)
+has script_page =>
+    is => 'rw';
 
 =pod
 
@@ -41,6 +56,9 @@ has cmd =>
     Vimana::Installer->install_from_url( 'url' );
     Vimana::Installer->install_from_rcs( 'git:......' );
     Vimana::Installer->install_from_dir( '/path/to/plugin' );
+
+
+For Text type installer, inspect content like this:
 
     " Script type: plugin
     " Script dependency:
@@ -52,14 +70,30 @@ has cmd =>
 
 =cut
 
+sub download {
+    my ( $self, $url, $target ) = @_;
+    my $savetofile = sub {
+        my ( $self, $dataref, $cbargs ) = @_;
+        print STDERR ".";
+        print $cbargs $$dataref;
+        return undef;
+    };
+    my $http = new HTTP::Lite;
+    open my $dl, ">", $target or die $!;
+    my $res = $http->request( $url, $savetofile, $dl );
+    close $dl;
+    print "\n";
+}
+
 sub get_installer {
-    my ( $self, $type, @args ) = @_;
+    my $self = shift;
+    my $type = shift;
     my $class = qq{Vimana::Installer::} . ucfirst($type);
-    return $class->new( @args );
+    return $class->new( @_ );
 }
 
 sub install_by_strategy {
-    my ( $self, $pkg, $tmpdir, $args , $verbose ) = @_;
+    my ( $self, %args ) = @_;
 
     my $ret;
     my @ins_type = $self->check_strategies( 
@@ -99,8 +133,8 @@ DONE:
         #       cleanup (boolean)
         #       runtime_path (string)
         #
-        my $installer = $self->get_installer( $ins_type, $args );
-        $ret = $installer->run( $tmpdir , $verbose );
+        my $installer = $self->get_installer( $ins_type, %args );
+        $ret = $installer->run();
 
         last DONE if $ret;  # succeed
         last DONE if ! $installer->_continue;  # not succeed, but we should continue other installation.
@@ -225,42 +259,23 @@ sub install {
     my $filename = $page->{filename};
     my $target = File::Spec->join( $dir , $filename );
 
-    my $pkg =  {
-        package_name => $package,
-        file => $target,
-        url => $url,
-        info => $info,
-        page_fino => $page,
-    };
-
-    # Write the data to the filehandle $cbargs
-    my $savetofile = sub {
-        my ( $self, $dataref, $cbargs ) = @_;
-        print STDERR ".";
-        print $cbargs $$dataref;
-        return undef;
-    };
-
     # Download File
     print "Downloading plugin from $url\n" if $verbose;
-
-    my $http = new HTTP::Lite;
-    open my $dl, ">" , $target or die $!;
-    my $res = $http->request($url, $savetofile, $dl );
-    close $dl;
-    print "\n";
+    $self->download(  $url , $target );
 
     my $filetype = File::Type->new->checktype_filename( $target );
 
     # text filetype
     if( $filetype =~ m{octet-stream} ) {
-
         # XXX: need to record.
-        my $installer = $self->get_installer('text' , { 
-            package => $pkg , 
+        my $installer = $self->get_installer('text',
+            package_name => $package,
+            target       => $target, 
             runtime_path => $rtp,
-        });
-        $installer->run();
+            script_info  => $info,
+            script_page  => $page,
+            cleanup      => 0,
+        )->run();
     }
     elsif ( $filetype =~ m{(?:x-bzip2|x-gzip|x-gtar|zip|rar|tar)} ) {
         my $install_temp = tempdir( CLEANUP => 1 );  # extract temp dir
@@ -271,11 +286,13 @@ sub install {
         my $cwd = getcwd();
         chdir $install_temp;
 
-        my $ret = $self->install_by_strategy( $pkg , $install_temp,
-            { 
-                package => $pkg,
-                cleanup => 1, 
-                runtime_path => $rtp } , $verbose );
+        my $ret = $self->install_by_strategy(
+            package_name => $package,
+            target       => $install_temp,
+            cleanup      => 1,
+            runtime_path => $rtp,
+            verbose      => $verbose,
+        );
 
         chdir $cwd;
     }
