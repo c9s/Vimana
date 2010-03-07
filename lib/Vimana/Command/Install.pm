@@ -19,7 +19,7 @@ sub options { (
         'd|dry-run'           => 'dry_run',
         'v|verbose'           => 'verbose',
         'y|yes'               => 'assume_yes',
-        'f|force'             => 'force_install',
+        'c|cleanup'           => 'cleanup',
 
         # XXX: auto-install should optional and not by default.
         'ai|auto-install'     => 'auto_install', 
