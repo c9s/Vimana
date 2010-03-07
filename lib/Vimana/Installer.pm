@@ -203,14 +203,96 @@ END
 
 use Vimana::Record;
 
+sub prompt_for_removing_record {
+    my ( $self, $package_name, $yes , $verbose ) = @_;
+    my $record = Vimana::Record->load( $package_name );
+    if( $record ) {
+        if( $yes ) {
+            print STDERR "Package $package_name is installed. removing...\n";
+        }
+        else {
+            print STDERR "Package $package_name is installed. reinstall (upgrade) ? (Y/n) ";
+            my $ans; $ans = <STDIN>;
+            chomp( $ans );
+            return if $ans =~ /n/i;
+        }
+        Vimana::Record->remove( $package_name , undef , $verbose );
+    }
+}
+
+
+#########################################
+#         Command Interface
+#########################################
+
+
 sub install_from_url { }
-sub install_from_vcs { }
+
+sub install_from_vcs {
+    my ($self,$vcs_path,$cmd) = @_;
+    $cmd ||= {};
+    my $verbose = $cmd->{verbose};
+    if( $cmd->{runtime_path} ) {
+        $self->runtime_path_warn( $cmd );
+    }
+    my $rtp = $cmd->{runtime_path} 
+                || Vimana::Util::runtime_path();
+
+    print STDERR "Plugin will be installed to vim runtime path: " . 
+                    $rtp . "\n" if $cmd->{runtime_path};
+
+    return if $vcs_path !~ m{^(svn|git|hg):} ;
+
+    my $cwd = getcwd();
+    my $vcs = $1;
+    $vcs_path =~ s{^(svn|git|hg):}{};
+    my $dir = tempdir( CLEANUP => 0 );
+    if( $vcs eq 'git' ) {
+        system( qq{$vcs clone $vcs_path $dir} );
+        chdir $dir;
+    }
+    elsif ( $vcs eq 'svn' ) {
+        system( qq{$vcs checkout $vcs_path $dir} );
+        chdir $dir;
+    }
+    elsif ( $vcs eq 'hg' ) {
+        system( qq{$vcs checkout $vcs_path $dir} );
+        chdir $dir;
+    }
+    else {
+        die;
+    }
+
+    use Cwd;
+    use File::Basename;
+
+    # XXX: try to find package name from Meta file.
+    my $package_name =  $vcs . '-' .  ( $cmd->{package_name} || dirname( getcwd( ) ) );
+
+    $self->prompt_for_removing_record( $package_name , $cmd->{assume_yes} , $verbose  );
+
+    my $ret = $self->install_by_strategy(
+        package_name => $package_name,
+        target       => $dir,
+        runtime_path => $rtp,
+        verbose      => $verbose,
+    );
+
+    chdir $cwd;
+    if( $cmd->{cleanup} ) {
+        print "Cleaning up.\n" if $verbose;
+        $self->cleanup( $dir );
+    }
+
+    print "Done\n";
+
+}
+
 sub install_from_path { }
 
 sub install {
     my ( $self, $package , $cmd ) = @_;
     $cmd ||= {};
-
     my $verbose = $cmd->{verbose};
     if( $cmd->{runtime_path} ) {
         $self->runtime_path_warn( $cmd );
@@ -222,19 +304,7 @@ sub install {
     print STDERR "Plugin will be installed to vim runtime path: " . 
                     $rtp . "\n" if $cmd->{runtime_path};
 
-    my $record = Vimana::Record->load( $package );
-    if( $record ) {
-        if( $cmd->{assume_yes} ) {
-            print STDERR "Package $package is installed. removing...\n";
-        }
-        else {
-            print STDERR "Package $package is installed. reinstall (upgrade) ? (Y/n) ";
-            my $ans; $ans = <STDIN>;
-            chomp( $ans );
-            return if $ans =~ /n/i;
-        }
-        Vimana::Record->remove( $package , undef , $verbose );
-    }
+    $self->prompt_for_removing_record( $package , $cmd->{assume_yes} , $verbose  );
 
     my $info = Vimana->index->find_package( $package );
     unless( $info ) {
@@ -311,7 +381,7 @@ sub install {
         }
     }
 
-    print "Done";
+    print "Done\n";
 }
 
 

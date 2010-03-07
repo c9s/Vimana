@@ -21,6 +21,9 @@ sub options { (
         'y|yes'               => 'assume_yes',
         'c|cleanup'           => 'cleanup',
 
+        # when not installing plugin from vim.org. (eg, from git or svn or local filepath)
+        'n|name'              => 'package_name',
+
         # XXX: auto-install should optional and not by default.
         'ai|auto-install'     => 'auto_install', 
         'mi|makefile-install' => 'makefile_install',

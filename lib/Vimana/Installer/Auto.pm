@@ -63,7 +63,7 @@ sub run {
 
         my @installed_files = $self->install_from_nodes( $nodes , $self->runtime_path );
 
-        print "Updating helptags\n" if $verbose;
+        print "Updating helptags\n";
         $self->update_vim_doc_tags( $verbose );
 
         # record installed file checksum
@@ -122,8 +122,7 @@ sub find_base_path {
 }
 
 sub update_vim_doc_tags {
-    my $self = shift;
-    my $verbose = shift;
+    my ($self,$verbose) = @_;
     my $vim = find_vim();
     my $dir = File::Spec->join( $self->runtime_path , 'doc' );
     my $cmd = qq{vim -e -s -c ":helptags $dir" -c ":q"};
