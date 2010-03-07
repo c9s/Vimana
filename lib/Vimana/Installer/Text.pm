@@ -6,11 +6,6 @@ use Vimana::Logger;
 use Vimana::Record;
 use Vimana::VimballInstall;
 
-=head2 run( $path, $verbose )
-
-=cut
-
-
 sub read_text {
     my $self =shift;
     my $text = "";
