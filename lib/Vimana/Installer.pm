@@ -324,6 +324,11 @@ sub _install_from_path {
     print "Done\n";
 }
 
+# XXX: some checking method for file-based or dir-based install for
+# install_from_path function.
+sub _file_install { }
+sub _dir_install {  }
+
 sub install {
     my ( $self, $package , $cmd ) = @_;
     $cmd ||= {};
