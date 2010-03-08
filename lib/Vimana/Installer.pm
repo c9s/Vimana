@@ -324,8 +324,17 @@ sub _install_from_path {
     print "Done\n";
 }
 
-# XXX: some checking method for file-based or dir-based install for
-# install_from_path function.
+=head1 todo
+
+XXX: some checking method for file-based or dir-based install for
+install_from_path function.  to let this work:
+
+      vimana install path/to/zencoding.vim --name zencoding  
+              # package name could be parsed from script file content
+      vimana install path/to/dir   --name zencoding
+
+=cut
+
 sub _file_install { }
 sub _dir_install {  }
 
