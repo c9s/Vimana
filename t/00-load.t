@@ -1,7 +1,7 @@
 #!perl
 use lib 'lib';
 
-use Test::More tests => 6;
+use Test::More tests => 5;
 
 BEGIN {
 	use_ok( 'Vimana' );
