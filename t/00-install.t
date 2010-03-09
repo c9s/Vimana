@@ -9,7 +9,6 @@ BEGIN {
     $ENV{VIMANA_RUNTIME_PATH} = '/tmp/vimana-test';
 	use_ok( 'Vimana' );
     use_ok( 'Vimana::VimOnline');
-    use_ok( 'Vimana::PackageFile');
     use_ok( 'Vimana::Index');
     use_ok( 'Vimana::Logger');
     use_ok( 'Vimana::Command::Install');
