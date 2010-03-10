@@ -103,7 +103,21 @@ sub run {
                     File::Spec->join( $self->runtime_path, $type ));
         }
         else {
-            die "Can't script type not found.";
+            print <<END;
+Error: Script type not found.
+File Stored at: @{[  $self->target ]}
+
+We can't get the script type of this plugin "@{[ $self->package ]}".
+If infom plugin author to add a script type tag like this:
+
+    " ScriptType: [script type]
+
+For example:
+    
+    " ScriptType: ftplugin/perl
+
+END
+            exit;
             # XXX: more useful message.
         }
     }
