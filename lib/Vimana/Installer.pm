@@ -15,6 +15,7 @@ use Vimana::Installer::Makefile;
 use Vimana::Installer::Rakefile;
 use Vimana::Installer::Auto;
 use Vimana::Installer::Text;
+use Vimana::Util;
 
 use constant _continue => 0;
 
