@@ -60,7 +60,7 @@ use File::Spec;
 use File::Path qw'mkpath rmtree';
 sub init_vim_runtime {
     my $runtime_path = shift || runtime_path();
-    map { mkpath File::Spec->join( $runtime_path , $_ )  }
+    map { File::Path::mkpath([ File::Spec->join( $runtime_path , $_ )])  }
         (qw(after autoload colors
                 compiler doc ftplugin indent
                 keymap lang plugin print
