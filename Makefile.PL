@@ -28,6 +28,9 @@ requires
     'HTTP::Lite'       => 0,
     'Mouse'            => 0;
 
+test_requires 
+    'Test::More' => 0;
+
 include('ExtUtils::AutoInstall');
 auto_install();
 auto_provides();
