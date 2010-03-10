@@ -71,15 +71,15 @@ sub run {
     my $arg = $self->inspect_text_content( $text_content );
     my $type = $self->script_type();
 
-    if ( $type->{version} ) {
+
+    if ( $arg->{version} ) {
         # XXX: check version from record.
 
     }
 
-
-    if ( $type->{deps} ) {
+    if ( $arg->{deps} ) {
         print "Script dependency tag found. Installing script dependencies.\n";
-        for my $dep ( @{ $type->{deps} } ) {
+        for my $dep ( @{ $arg->{deps} } ) {
             print "Installing $dep\n";
             Vimana::Installer->install( $dep );
         }
