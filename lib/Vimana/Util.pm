@@ -4,7 +4,7 @@ use strict;
 use base qw(Exporter::Lite);
 use File::Type;
 our @EXPORT = qw(canonical_script_name find_vim get_vim_rtp);
-our @EXPORT_OK = qw(findbin find_vim runtime_path tempdir);
+our @EXPORT_OK = qw(findbin find_vim runtime_path);
 
 sub canonical_script_name {
     my $name = shift;
@@ -15,10 +15,6 @@ sub canonical_script_name {
     $name =~ tr/_<>[],{/-/;
     $name =~ s/-+/-/g;
     $name;
-}
-
-sub tempdir {
-    return  "/tmp/vimana-" . join '',map { [ 'a' .. 'z' ]->[ int rand(26) ] }  1 .. 6;
 }
 
 sub get_mine_type {
@@ -41,54 +37,6 @@ sub find_vim {
     return $ENV{VIMPATH} || findbin('vim');
 }
 
-
-=head2 runtime_path
-
-You can export enviroment variable VIMANA_RUNTIME_PATH to override default
-runtime path.
-
-=cut
-
-sub runtime_path {
-    # return File::Spec->join( $ENV{HOME} , 'vim-test' );
-    return $ENV{VIMANA_RUNTIME_PATH} || File::Spec->join( $ENV{HOME} , '.vim' );
-}
-
-=head2 init_vim_runtime 
-
-=cut
-
-use File::Spec;
-use File::Path qw'mkpath rmtree';
-sub init_vim_runtime {
-    my $runtime_path = shift || runtime_path() ;
-    my $paths = [ ];
-
-#   filetype.vim
-#   scripts.vim
-#   menu.vim
-    push @$paths , File::Spec->join( $runtime_path , $_ )
-        for ( qw(
-                after
-                autoload
-                colors
-                compiler
-                doc
-                ftplugin
-                indent
-                keymap
-                lang
-                plugin
-                print
-                spell
-                syntax
-                tutor    ) );
-
-	for my $path ( @$paths ) {
-		mkpath $path unless -e $path;
-	}
-}
-
 sub get_vim_rtp {
     my $file = 'rtp.tmp';
     system(qq{vim -c "redir > $file" -c "echo &rtp" -c "q" });
@@ -100,5 +48,31 @@ sub get_vim_rtp {
     unlink $file;
     return split /,/,$content;
 }
+
+sub runtime_path {
+    my @rtps = get_vim_rtp();
+    return $ENV{VIMANA_RUNTIME_PATH} || $rtps[0];
+}
+
+use File::Spec;
+use File::Path qw'mkpath rmtree';
+sub init_vim_runtime {
+    my $runtime_path = shift || runtime_path();
+    map { mkpath File::Spec->join( $runtime_path , $_ )  }
+        (qw(after autoload colors
+                compiler doc ftplugin indent
+                keymap lang plugin print
+                spell syntax tutor)); 
+}
+
+
+=head2 runtime_path
+
+You can export enviroment variable VIMANA_RUNTIME_PATH to override default
+runtime path.
+
+=head2 init_vim_runtime 
+
+=cut
 
 1;
