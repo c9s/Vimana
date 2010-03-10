@@ -346,6 +346,8 @@ sub install {
         $self->runtime_path_warn( $cmd );
     }
 
+    use Vimana::Utils;
+    my @rtps = get_vim_rtp();
     my $rtp = $cmd->{runtime_path} 
                 || Vimana::Util::runtime_path();
 

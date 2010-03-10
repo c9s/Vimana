@@ -39,6 +39,8 @@ sub find_vim {
 
 sub get_vim_rtp {
     my $file = 'rtp.tmp';
+    # XXX: check vim binary
+
     system(qq{vim -c "redir > $file" -c "echo &rtp" -c "q" });
     open FILE, "<" , $file;
     local $/;
