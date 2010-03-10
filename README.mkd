@@ -58,6 +58,14 @@ Or
 
     $ cpanm http://github.com/c9s/Vimana/tarball/master
 
+You can also skip tests:
+
+    $ cpanm -n http://github.com/c9s/Vimana/tarball/master
+
+To see other cpanm options:
+
+    $ cpanm --help
+
 USAGE
 ========
 
