@@ -32,9 +32,7 @@ sub run {
     my @vba = grep /\.vba/,@files;
     if( @vba ) {
         $logger->info( "Found vimball files, try to install vimball files");
-        use Vimana::VimballInstall;
         # my @vimballs = find_vimball_files $out;
-        Vimana::VimballInstall->install_vimballs( @vba );
     }
 
     # check directory structure

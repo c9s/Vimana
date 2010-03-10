@@ -11,7 +11,6 @@ require Vimana::VimOnline;
 require Vimana::VimOnline::ScriptPage;
 use Vimana::Util;
 use Vimana::Record;
-use Vimana::VimballInstall;
 use Vimana::Logger;
 
 sub options { (

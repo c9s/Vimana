@@ -6,7 +6,6 @@ use File::Temp qw(tempfile);
 use Vimana::Util;
 use Vimana::Logger;
 use Vimana::Record;
-use Vimana::VimballInstall;
 
 sub scan_vimball {
     my ($self,$file) = @_;

@@ -3,7 +3,6 @@ use warnings;
 use strict;
 use base qw(Vimana::Installer);
 use Vimana::Record;
-use Vimana::VimballInstall;
 
 sub read_text {
     my $self =shift;
