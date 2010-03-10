@@ -20,7 +20,6 @@ requires
     'Getopt::Long'     => 0,
     'LWP::Simple'      => 0,
     'LWP::UserAgent'   => 0,
-    'Test::More'       => 0,
     'URI'              => 1.37,
     'YAML'             => 0,
     'Digest::MD5'      => 0,
