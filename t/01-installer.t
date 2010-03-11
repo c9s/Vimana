@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use warnings;
 use strict;
-use Test::More;
+use Test::More tests => 4;
 
 sub inst {
     my $type = shift;
@@ -10,4 +10,4 @@ sub inst {
 }
 
 inst( $_ ) for qw(text makefile rakefile vimball);
-done_testing();
+
