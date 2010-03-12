@@ -20,7 +20,7 @@ sub options { (
         'c|cleanup'           => 'cleanup',
 
         # when not installing plugin from vim.org. (eg, from git or svn or local filepath)
-        'n|name'              => 'package_name',
+        'n|name=s'              => 'package_name',
 
         # XXX: auto-install should optional and not by default.
         'ai|auto-install'     => 'auto_install', 
