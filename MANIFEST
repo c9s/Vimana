@@ -197,3 +197,4 @@ vimana-specky-log
 xt/installer-makefile-2.t
 xt/installer-makefile-3.t
 xt/installer-makefile.t
+Makefile.PL
