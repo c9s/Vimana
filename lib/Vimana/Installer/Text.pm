@@ -174,6 +174,14 @@ sub inspect_text_content {
         $arg->{deps} = \@deps;
     }
 
+    if( $content =~ m{^"\s*tutorial:\s*(.*)}im ) {
+        $arg->{tutorial} = $1;  # URL
+    }
+
+    if( $content =~ m{^"\s*repository:\s*(.*)}im ) {
+        $arg->{repository} = $1;
+    }
+
     if( $content =~ m{^"\s*(?:script\s*)?version:\s*([.0-9]+)}im ) {
         $arg->{version} = $1;
     }
