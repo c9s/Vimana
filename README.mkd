@@ -50,13 +50,19 @@ Or if dont have permission, you can try this way:
     $ wget http://xrl.us/cpanm -O ~/bin/cpanm
     $ chmod +x cpanm
 
-Run cpanminus to install 
+Run cpanminus to install Vimana from CPAN:
 
     $ cpanm Vimana
 
-Or 
+Or from github tarball:
 
     $ cpanm http://github.com/c9s/Vimana/tarball/master
+
+Or git clone from github:
+
+    $ git clone git://github.com/c9s/Vimana.git
+    $ cd Vimana
+    $ cpanm .
 
 You can also skip tests:
 
