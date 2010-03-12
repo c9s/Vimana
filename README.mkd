@@ -66,6 +66,11 @@ To see other cpanm options:
 
     $ cpanm --help
 
+For non-root permission users, cpanm will install modules into `~/perl5` directory.
+so you will need to export PERL5LIB, add below line in your `.bashrc` or `.zshrc`:
+
+    export PERL5LIB=~/perl5/lib/perl5;$PERL5LIB
+
 USAGE
 ========
 
