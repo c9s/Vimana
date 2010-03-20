@@ -2,11 +2,15 @@ package Vimana::Record;
 use warnings;
 use strict;
 use Vimana;
-use JSON::XS;
+use JSON;
+use JSON::PP;
 use File::Path;
 use Digest::MD5 qw(md5_hex);
 use YAML;
 
+sub new_json {
+    return JSON::PP->new->allow_singlequote(1);
+}
 
 sub record_dir {
     return (  $ENV{VIM_RECORD_DIR} || File::Spec->join($ENV{HOME},'.vim','record')  );
@@ -49,6 +53,7 @@ spec:
 
 =cut
 
+
 sub load {
     my ( $class, $pkgname ) = @_;
     my $record_file =  $class->record_path( $pkgname );
@@ -64,7 +69,7 @@ sub load {
     close FH;
 
     my $record;
-    eval { $record = decode_json( $json ) };
+    eval { $record = new_json()->decode( $json ) };
     if( $@ ) {
         # try to load YAML. (old record file)
         print STDERR $@;
@@ -117,7 +122,7 @@ sub add {
     return 0 if -f $record_file;
 
     open FH , ">" , $record_file;
-    print FH encode_json( $record );
+    print FH new_json()->encode( $record );
     close FH;
     
     #return YAML::DumpFile( $record_file , $record  );

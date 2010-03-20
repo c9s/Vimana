@@ -24,7 +24,7 @@ requires
     'YAML'             => 0,
     'Digest::MD5'      => 0,
     'JSON'             => 0,
-    'JSON::XS' => 0,
+    'JSON::PP'         => 0,
     'HTTP::Lite'       => 0,
     'Mouse'            => 0;
 
