@@ -2,7 +2,6 @@ package Vimana::Record;
 use warnings;
 use strict;
 use Vimana;
-use JSON;
 use JSON::PP;
 use File::Path;
 use Digest::MD5 qw(md5_hex);
