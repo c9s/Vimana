@@ -4,6 +4,7 @@ package Vimana::Command::Download;
 use base qw(App::CLI::Command);
 use URI;
 use LWP::Simple qw();
+use File::Temp qw(tempdir);
 require Vimana::VimOnline;
 require Vimana::VimOnline::ScriptPage;
 
