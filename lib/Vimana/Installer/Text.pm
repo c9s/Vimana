@@ -107,7 +107,7 @@ sub run {
 Error: Script type not found.
 File Stored at: @{[ $self->target ]}
 
-We can't get the script type of this plugin "@{[ $self->package ]}".
+We can't get the script type of this plugin "@{[ $self->package_name ]}".
 Please infom the plugin author to add a script type tag like this:
 
     " ScriptType: [script type]
