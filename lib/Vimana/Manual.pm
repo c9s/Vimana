@@ -95,7 +95,7 @@ To install from current directory:
 =head1 Environment Variables
 
     VIMANA_TEMP
-    VIMANA_RUNTIMEPATH
+    VIMANA_RUNTIME_PATH
 
 =head1 AUTHOR
 
