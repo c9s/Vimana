@@ -23,8 +23,8 @@ sub run {
             return unless -f $_;
             my $pkgname = $_;
             my $data = Vimana::Record->load( $pkgname );
-            $data->{install_type} ||= 'unknown';
-            print $data->{package} . ' [' . $data->{install_type} . "]\n";
+            $data->{installer_type} ||= 'unknown';
+            print $data->{package} . ' [' . $data->{installer_type} . "]\n";
         }, $record_dir );
     }
     else {

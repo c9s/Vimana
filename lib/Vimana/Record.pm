@@ -33,7 +33,7 @@ spec:
     {
         version => 0.1,
         generated_by => 'Vimana [Version]'
-        install_type => 'auto',  # auto , make , rake ... etc
+        installer_type => 'auto',  # auto , make , rake ... etc
         meta => {
             author: Cornelius
             email: cornelius.howl@gmail.com

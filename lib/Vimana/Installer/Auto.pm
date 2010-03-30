@@ -69,7 +69,7 @@ sub run {
         Vimana::Record->add( {
                 version => 0.2,    # record spec version
                 generated_by => 'Vimana-' . $Vimana::VERSION,
-                install_type => 'auto',    # auto , make , rake ... etc
+                installer_type => 'auto',    # auto , make , rake ... etc
                 package => $self->package_name,
                 files => \@e,
         });
