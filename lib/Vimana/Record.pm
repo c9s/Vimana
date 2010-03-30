@@ -2,6 +2,7 @@ package Vimana::Record;
 use warnings;
 use strict;
 use Vimana;
+use Vimana::Util;
 use JSON::PP;
 use File::Path;
 use Digest::MD5 qw(md5_hex);
@@ -12,7 +13,11 @@ sub new_json {
 }
 
 sub record_dir {
-    return (  $ENV{VIM_RECORD_DIR} || File::Spec->join($ENV{HOME},'.vim','record')  );
+    return (  $ENV{VIM_RECORD_DIR} ||
+        do {
+            my @rtps = get_vim_rtp();
+            File::Spec->join($rtps[0],'record');
+        }  );
 }
 
 sub record_path  {

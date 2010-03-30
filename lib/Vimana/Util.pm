@@ -52,7 +52,11 @@ sub get_vim_rtp {
     my $file = 'rtp.tmp';
     # XXX: check vim binary
 
-    system(qq{vim -c "redir > $file" -c "echo &rtp" -c "q" });
+    if ($^O eq 'MSWin32') {
+        system(qq{vim -c "redir > $file" -c "echo &rtp" -c "silent! q" 2> NUL });
+    } else {
+        system(qq{vim -c "redir > $file" -c "echo &rtp" -c "q" });
+	}
     open FILE, "<" , $file;
     local $/;
     my $content = <FILE>;
@@ -63,8 +67,11 @@ sub get_vim_rtp {
 }
 
 sub runtime_path {
-    my @rtps = get_vim_rtp();
-    return $ENV{VIMANA_RUNTIME_PATH} || $rtps[0];
+    return $ENV{VIMANA_RUNTIME_PATH} ||
+        do {
+            my @rtps = get_vim_rtp();
+            $rtps[0]
+        };
 }
 
 use File::Spec;
