@@ -232,6 +232,12 @@ You can also look for information at:
     Search CPAN
         http://search.cpan.org/dist/Vimana
 
+AUTHORS
+=======
+
+**c9s (Cornelius)  <cornelius.howl@gmail.com>**
+
+**Mattn Yasuhiro Matsumoto <mattn.jp@gmail.com>**
 
 COPYRIGHT AND LICENCE
 =========================
