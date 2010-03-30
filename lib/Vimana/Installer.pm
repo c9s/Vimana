@@ -80,6 +80,7 @@ sub download {
         return undef;
     };
     my $http = new HTTP::Lite;
+    $http->proxy( $ENV{HTTP_PROXY} ) if $ENV{HTTP_PROXY};
     open my $dl, ">", $target or die $!;
     my $res = $http->request( $url, $savetofile, $dl );
     close $dl;
