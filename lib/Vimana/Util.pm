@@ -26,10 +26,21 @@ sub get_mine_type {
 sub findbin {
     my $which = shift;
     my $path = $ENV{PATH};
-    my @paths = split /:/,$path;
-    for ( @paths ) {
-        my $bin = $_ . '/' . $which;
-        return $bin if( -x $bin ) ;
+    if ($^O eq 'MSWin32') {
+        my @exts = split /;/,$ENV{PATHEXT};
+        my @paths = split /;/,$path;
+        for my $p ( @paths ) {
+            for my $e ( @exts ) {
+                my $bin = $p . '/' . $which . $e;
+                return $bin if( -x $bin ) ;
+            }
+        }
+    } else {
+        my @paths = split /:/,$path;
+        for ( @paths ) {
+            my $bin = $_ . '/' . $which;
+            return $bin if( -x $bin ) ;
+        }
     }
 }
 
