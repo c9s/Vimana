@@ -43,6 +43,15 @@ my $base_uri = 'http://www.vim.org';
 sub display {
     my ( $class, $info ) = @_;
 
+    if ($^O eq 'MSWin32') {
+        eval { require "Win32/API.pm" };
+        unless ($@) {
+            Win32::API->Import('kernel32', 'UINT GetACP()');
+            my $cp = "cp".GetACP();
+            binmode STDOUT, ":encoding($cp)";
+        }
+    }
+
     print <<INFO;
 
  @{[ $info->{title} ]}              
