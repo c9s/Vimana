@@ -44,15 +44,16 @@ sub run {
     @result = map { $_->{type} =~ /@{[ $self->{script_type} ]}/i ? $_ : ()  } @result if $self->{script_type};
 
     my $max_width = 6;
-    map { $max_width = length $_->{plugin_name} if length $_->{plugin_name} > $max_width }  @result;
+    map { $max_width = length($_->{plugin_name}) if length($_->{plugin_name}) > $max_width }  @result;
     $max_width += 1;
 
     for ( @result ) {
         print $_->{plugin_name};
-        print ' ' x ( $max_width - length $_->{plugin_name} );
-        print " - " . $_->{description} . "\n";
+        print ' ' x ( $max_width - length($_->{plugin_name}));
+        print ' [' . $_->{type} . ']';
+        print ' ' x (12 - length($_->{type}));
+        print " @{[ $_->{description} ]}\n";
     }
-
 
     # XXX: Search from Index
 #    my $results = Vimana::VimOnline::Search->fetch(
