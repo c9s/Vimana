@@ -14,6 +14,7 @@ sub parse_columns {
         while ( $column_html =~ m{<th.*?>(.*?)</th>}g ) {
             my $name = $1;
             $name = decode_entities( $name );
+            utf8::encode $name;
             push @$columns,lc $name;
         }
     }
@@ -42,6 +43,7 @@ ROW_END:
             my $td = $1;
             if( my ( $link, $text ) = ( $td =~ m{<a href="(.+?)">(.+?)</a>}i )  ) {
                 $text = decode_entities( $text );
+                utf8::encode $text;
                 ($script_id) = ( $link =~ /script_id=(\d+)/ );
                 $cols->{ $column_names->[ $col_index ] } = { text => $text, link => $link };
             }

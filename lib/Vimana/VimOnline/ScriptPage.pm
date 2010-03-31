@@ -58,11 +58,11 @@ sub display {
 
  DESCRIPTION:
 
- @{ [ wrap( ' ' x 4, '  ', $info->{description} ) ] }
+ @{ [ wrap( ' ', '  ', $info->{description} ) ] }
 
  INSTALL DETAILS:
 
- @{ [ wrap( ' ' x 4, '  ', $info->{install_details} ) ] }
+ @{ [ wrap( ' ', '  ', $info->{install_details} ) ] }
 
  FILENAME:   @{ [ $info->{filename} ] }
 
@@ -81,7 +81,7 @@ sub parse {
     my ( $class , $content ) = @_;
 
     use Encode qw(decode);
-    $content = decode('iso-8859-1' , $content );
+    $content = decode('utf-8' , $content );
     # map { $info{$_} = decode( 'iso-8859-1' ,  $info{$_} )  }  keys %info;
 
     my %info = ();
@@ -115,6 +115,7 @@ sub parse {
             $info{$_} =~ s{</?.+?>}{}g;
             $info{$_} =~ s{\s*$}{}g;
             $info{$_} =~ s{^\s*}{}g;
+            $info{$_} =~ s{&nbsp;}{ }g; # windows don't have 0xA0.
     }  keys %info;
 
 
