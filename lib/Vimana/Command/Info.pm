@@ -15,6 +15,7 @@ sub run {
     unless ( $info->{script_id} ) {
         warn "No script named $package. Trying $package.vim ..";
         $info = $index->find_package( "$package.vim" );
+        die "Unknown script named $package" unless $info;
     }
     require Vimana::VimOnline::ScriptPage;
 
