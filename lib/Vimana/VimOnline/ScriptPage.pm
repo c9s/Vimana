@@ -116,10 +116,10 @@ sub parse {
             $info{$_} =~ s{\s*$}{}g;
             $info{$_} =~ s{^\s*}{}g;
             $info{$_} =~ s{&nbsp;}{ }g; # windows don't have 0xA0.
+            $info{$_} =~ s{\r}{}g;
     }  keys %info;
 
-
-    map { $info{$_} = decode_entities( $info{$_} )  }  keys %info;
+    map { $info{$_} = decode_entities( $info{$_} ) }  keys %info;
 
     $info{author_url} = $base_uri . $info{author_url};
     $info{download}   = $base_uri . '/scripts/' . $info{download};
