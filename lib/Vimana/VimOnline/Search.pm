@@ -42,6 +42,7 @@ ROW_END:
         while ( $tr =~ m{<td.*?>(.*?)</td>}gsi ) {
             my $td = $1;
             if( my ( $link, $text ) = ( $td =~ m{<a href="(.+?)">(.+?)</a>}i )  ) {
+                $text =~ s{&nbsp;}{ }g; # windows don't have 0xA0.
                 $text = decode_entities( $text );
                 utf8::encode $text;
                 ($script_id) = ( $link =~ /script_id=(\d+)/ );
