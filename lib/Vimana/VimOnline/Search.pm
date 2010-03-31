@@ -3,22 +3,8 @@ use strict;
 use warnings;
 use utf8;
 require LWP::UserAgent;
+use HTML::Entities;
 my $last_pos;
-
-sub decode_entity_reference {
-    my $str = shift;
-    $$str =~ s{</?.+?>}{}g;
-    $$str =~ s/&gt;/>/g;
-    $$str =~ s/&lt;/</g;
-    $$str =~ s/&quot;/"/g;
-    $$str =~ s/&apos;/'/g;
-    $$str =~ s/&nbsp;/ /g;
-    $$str =~ s/&yen;/\\/g;
-    $$str =~ s/&#([0-9]+);/chr($1)/ge;
-    $$str =~ s/&#[xX]([0-9A-Fa-f]+);/chr(hex $1)/ge;
-    $$str =~ s/&amp;/\&/g;
-    utf8::encode( $$str );
-}
 
 sub parse_columns {
     my $c       = ${ $_[0] };
@@ -27,7 +13,7 @@ sub parse_columns {
         my $column_html = $1;
         while ( $column_html =~ m{<th.*?>(.*?)</th>}g ) {
             my $name = $1;
-            decode_entity_reference( \$name );
+            $name = decode_entities( $name );
             push @$columns,lc $name;
         }
     }
@@ -55,7 +41,7 @@ ROW_END:
         while ( $tr =~ m{<td.*?>(.*?)</td>}gsi ) {
             my $td = $1;
             if( my ( $link, $text ) = ( $td =~ m{<a href="(.+?)">(.+?)</a>}i )  ) {
-                decode_entity_reference( \$text );
+                $text = decode_entities( $text );
                 ($script_id) = ( $link =~ /script_id=(\d+)/ );
                 $cols->{ $column_names->[ $col_index ] } = { text => $text, link => $link };
             }
