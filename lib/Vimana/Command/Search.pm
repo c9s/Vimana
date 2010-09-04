@@ -4,7 +4,6 @@ use strict;
 use URI;
 require LWP::UserAgent;
 require Vimana::VimOnline;
-require Vimana::VimOnline::Search;
 use base qw(App::CLI::Command);
 
 sub options {

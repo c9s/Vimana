@@ -25,7 +25,9 @@ requires
     'Digest::MD5'      => 0,
     'JSON::PP'         => 0,
     'HTTP::Lite'       => 0,
-    'Mouse'            => 0;
+    'Mouse'            => 0,
+    'Regexp::Common'   => 0,
+    'Web::Scraper'     => 0;
 
 test_requires 
     'Test::More' => 0.92;

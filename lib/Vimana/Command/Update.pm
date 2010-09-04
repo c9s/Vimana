@@ -14,8 +14,6 @@ sub options {
 
 
 require Vimana::VimOnline;
-require Vimana::VimOnline::Search;
-require Vimana::VimOnline::ScriptPage;
 
 sub fetch_index {
     return Vimana::VimOnline::Search->fetch(
