@@ -4,6 +4,7 @@ use strict;
 use URI;
 require LWP::UserAgent;
 require Vimana::VimOnline;
+require Vimana::VimOnline::Search;
 use base qw(App::CLI::Command);
 
 sub options {
@@ -25,7 +26,7 @@ sub run {
         print "Updating index..\n";
         my $result = Vimana::VimOnline::Search->fetch(
                 keyword => '',
-                show_me => 5000,
+                show_me => Vimana::VimOnline::Search->all_vim_plugins,
                 order_by => 'creation_date',
                 direction => 'ascending'
         );
