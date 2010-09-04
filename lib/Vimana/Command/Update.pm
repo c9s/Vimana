@@ -20,7 +20,7 @@ require Vimana::VimOnline::ScriptPage;
 sub fetch_index {
     return Vimana::VimOnline::Search->fetch(
         keyword => '',
-        show_me => 3000,
+        show_me => Vimana::VimOnline::Search->all_vim_plugins,
         order_by => 'creation_date',
         direction => 'ascending'
     );

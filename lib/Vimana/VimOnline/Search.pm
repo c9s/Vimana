@@ -4,7 +4,11 @@ use warnings;
 use utf8;
 require LWP::UserAgent;
 use HTML::Entities;
+use Web::Scraper;
+use URI;
+
 my $last_pos;
+my $vimonline_search_url = "http://www.vim.org/scripts/script_search_results.php";
 
 sub parse_columns {
     my $c       = ${ $_[0] };
@@ -106,16 +110,21 @@ sub build_search_uri {
     my %args = (
         keywords    => '',
         order_by    => 'rating',
-        #show_me     => 1000,
-        #result_ptr  => 0,
         %param ,
     );
 
-    my $uri = URI->new("http://www.vim.org/scripts/script_search_results.php");
+    my $uri = URI->new($vimonline_search_url);
     $uri->query_form( %args ); 
     return $uri;
 }
 
+sub all_vim_plugins {
+    my $class = shift;
+    my $scraper = scraper {
+        process '/html/body/table[2]/tr/td[3]/table/tr/td/table/tr/td[2]/b[3]', 'total' => 'TEXT';
+    };
+    return $scraper->scrape(URI->new($vimonline_search_url))->{total};
+}
 
 
 1;
