@@ -4,6 +4,10 @@ use strict;
 use URI;
 use LWP::Simple qw();
 use HTML::Entities;
+use Regexp::Common qw(URI);
+
+use Web::Scraper;
+
 use utf8;
 # use Lingua::ZH::Wrap qw(wrap $columns $overflow);
 use Text::Wrap qw(wrap $columns $huge);
@@ -15,30 +19,25 @@ $huge = 'overflow';
 sub fetch {
     my ( $class, $id ) = @_;
     my $uri  = page_uri($id);
-    my $html = LWP::Simple::get($uri);
-    unless( $html ) {
+    my $info = scrape($uri);
+    unless( $info ) {
         die "Can't retrieve vim.org content.\n";
     }
-    return $class->parse($html);
+    return $info;
 }
 
 sub page_uri {
     my $id = shift;
     my $uri = URI->new("http://www.vim.org/scripts/script.php");
     $uri->query_form( script_id => $id );
-    $uri;
+    return $uri;
 }
 
 sub find_urls {
     my $content = shift;
-    my @urls = ();
-    while ( my ( $url ) = ($content  =~ m{([htf]tps?://\S.*)}g ) ) {
-        push @urls , $url;
-    }
+    my @urls = ($content =~ /$RE{URI}{HTTP}{-scheme => '(https|http)'}|$RE{URI}{FTP}/g);
     return @urls;
 }
-
-my $base_uri = 'http://www.vim.org';
 
 sub display {
     my ( $class, $info ) = @_;
@@ -78,63 +77,38 @@ sub display {
  DOWNLOAD:   @{ [ $info->{download} ] }
 
 INFO
-    
 }
 
 #
-# vimonline website sucks , i can't found any elemetn class or to scraper by
-# Web::Scraper.
+# We can use Web::Scraper with XPath.
 #
-# so.. it's very dirty
-sub parse {
-    my ( $class , $content ) = @_;
+sub scrape {
+    my $uri = shift;
 
-    use Encode qw(decode);
-    $content = decode('utf-8' , $content );
-    # map { $info{$_} = decode( 'iso-8859-1' ,  $info{$_} )  }  keys %info;
+    my $scraper = scraper {
+        process "/html/body/table[2]/tr/td[3]/table/tr/td", info => scraper {
+            process "//span[1]", title => sub {
+                if ( $_->as_text =~ /(.+) : / ) {
+                    return $1;
+                }
+            };
+            process "//p/table/tr[2]/td/a[1]", author_name => 'TEXT', author_url => '@href';
 
-    my %info = ();
-    ( $info{title} ) = 
-        $content =~ m{<title>(.*?)\s:\svim online</title>}gsi;
+            process "//p/table/tr[5]/td[1]", type => 'TEXT';
+            process "//p/table/tr[8]/td[1]", description => 'TEXT';
+            process "//p/table/tr[11]/td[1]", install_details => 'TEXT';
 
-    ( $info{author_url} , $info{author_name} ) = 
-        $content =~ m{<tr><td class="prompt">created by</td></tr>\s*<tr><td><a href="(.*?)">(.*?)</a></td></tr>}gsi;
+            process "//p[3]/table/tr[2]/td[1]/a", download => '@href', filename => 'TEXT';
+            process "//p[3]/table/tr[2]/td[2]", version => 'TEXT';
+            process "//p[3]/table/tr[2]/td[3]", date => 'TEXT';
+            process "//p[3]/table/tr[2]/td[4]", vimver => 'TEXT';
+        };
+        result 'info';
+    };
 
-    ( $info{type} ) = 
-        $content =~ m{<tr><td class="prompt">script type</td></tr>\s*<tr><td>(.*?)</td></tr>}gsi;
+    my $info = $scraper->scrape($uri);
+    $info->{author_url} = $info->{author_url}->as_string;
+    $info->{download} = $info->{download}->as_string;
 
-    ( $info{description} ) = 
-        $content =~ m{<tr><td class="prompt">description</td></tr>
-.*?<tr><td>(.*?)</td></tr>}gsi;
-
-    ( $info{install_details} ) = 
-        $content =~ m{<tr><td class="prompt">install details</td></tr>.*?
-<tr><td>(.*?)</td></tr>}gsi;
-
-    ( $info{download} , $info{filename} , $info{version} , $info{date} , $info{vimver} , $info{author_url} , $info{author_name} ) =
-        $content =~ m{\s*<td class="rowodd" valign="top" nowrap><a href="(.*?)">(.*?)</a></td>
-\s*<td class="rowodd" valign="top" nowrap><b>(.*?)</b></td>
-\s*<td class="rowodd" valign="top" nowrap><i>(.*?)</i></td>
-\s*<td class="rowodd" valign="top" nowrap>(.*?)</td>
-\s*<td class="rowodd" valign="top"><i><a href="(.*?)">(.*?)</a></i></td>}gsi;
-
-
-    map {
-            $info{$_} =~ s{<br/?>}{\n}g;
-            $info{$_} =~ s{</?.+?>}{}g;
-            $info{$_} =~ s{\s*$}{}g;
-            $info{$_} =~ s{^\s*}{}g;
-            $info{$_} =~ s{&nbsp;}{ }g; # windows don't have 0xA0.
-            $info{$_} =~ s{\r}{}g;
-    }  keys %info;
-
-    map { $info{$_} = decode_entities( $info{$_} ) }  keys %info;
-
-    $info{author_url} = $base_uri . $info{author_url};
-    $info{download}   = $base_uri . '/scripts/' . $info{download};
-
-    return \%info;
-
+    return $info;
 }
-
-1;
