@@ -79,9 +79,6 @@ sub display {
 INFO
 }
 
-#
-# We can use Web::Scraper with XPath.
-#
 sub scrape {
     my $uri = shift;
 
