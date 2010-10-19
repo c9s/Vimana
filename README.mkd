@@ -15,7 +15,7 @@ should be installed to ~/.vim/ directory. if it is a vim color scheme, then it
 should be put into ~/.vim/colors/ and prompt for setting the installed
 colorscheme as default.
 
-Rakefile, makefile, vim meta and vimball installation are supported.
+Rakefile, makefile, vimball installation are supported.
 
 For scripts have their own docs, Vimana will try to update helptags after the
 installations.
@@ -104,6 +104,14 @@ to install snipmate.vim package:
 
     $ vimana install snipmate
 
+to install plugin from a git repository:
+
+    $ vimana i git:git://github.com/c9s/hypergit.vim.git -n plugin_name
+
+to install plugin from a svn repository:
+
+    $ vimana i svn:http://path/to/svnblahblah -n plugin_name
+
 to install snipmate.vim package to the other runtime path:
 
     $ vimana i snipmate -r ~/.vim-other-rtp
@@ -165,8 +173,8 @@ TESTED CASES
     $ vimana i gist.vim
     $ vimana i googlereader.vim
 
-    $ vimana i git:git://github.com/c9s/fastgit.vim.git
-    $ vimana i git:git@github.com:c9s/fastgit.vim.git
+    $ vimana i git:git://github.com/c9s/hypergit.vim.git
+    $ vimana i git:git@github.com:c9s/hypgergit.vim.git
     $ vimana i svn:svn+ssh://path/to/your/repo
 
     $ vimana i jslint.vim
