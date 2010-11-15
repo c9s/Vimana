@@ -1,7 +1,7 @@
 Vimana
 ======
 
-Vimana is an easy to use system for searching, installing, and downloading vim
+Vimana is an easy-to-use system for searching, installing, and downloading vim
 script.
 
 Vimana provides a command-line interface such like aptitude program on
