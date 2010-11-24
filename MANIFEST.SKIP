@@ -3,3 +3,4 @@ blib
 Vimana.*.tar.gz
 Vimana.*.tar
 extlib
+.*.sh

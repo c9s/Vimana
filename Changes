@@ -1,18 +1,4 @@
 Revision history for Vimana
 
-0.1
-        * support install record
-
-0.075   
-        * remove Moose dependency
-
-0.07
-        * supports Vimball install.
-        * provide download command.
-
-
-0.06
-        supports auto-install (smart install) for packages
-
-0.01    
-        first version, released on an unsuspecting world.
+2.1     
+        * Remove meta strategy.
