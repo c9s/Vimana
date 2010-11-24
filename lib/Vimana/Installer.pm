@@ -10,7 +10,7 @@ use Mouse;
 use Archive::Extract;
 
 use Vimana::Installer::Vimball;
-use Vimana::Installer::Meta;
+# use Vimana::Installer::Meta;
 use Vimana::Installer::Makefile;
 use Vimana::Installer::Rakefile;
 use Vimana::Installer::Auto;
@@ -107,15 +107,6 @@ sub install_by_strategy {
             installer => 'Makefile',
             deps => [qw(makefile Makefile)],
         },
-        # because Meta file would overwrite "Makefile" file. so put Meta file
-        # after Makefile strategy
-        {
-            name => 'Meta',
-            desc => q{Check if 'META' or 'VIMMETA' file exists. support for VIM::Packager.},
-            installer => 'Meta',
-            deps =>  [qw(VIMMETA META)],
-            bin =>  [qw(vim-packager)],
-        },
         {
             name => 'Rakefile',
             desc => q{Check if rakefile exists.},
@@ -124,9 +115,9 @@ sub install_by_strategy {
         });
 
     if( @ins_type == 0 ) {
-        print "Package doesn't contain META,VIMMETA,VIMMETA.yml or Makefile file\n";
-        print "No availiable strategy, try to auto-install.\n" if $verbose;
-        push @ins_type,'auto';
+        print "Package doesn't contain Rakefile or Makefile file\n" if $verbose;
+        print "No availiable strategy, Try to auto-install.\n" if $verbose;
+        push @ins_type, 'auto';
     }
     
 DONE:
