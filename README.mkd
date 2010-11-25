@@ -20,17 +20,7 @@ Rakefile, makefile, vimball installation are supported.
 For scripts have their own docs, Vimana will try to update helptags after the
 installations.
 
-You can also write your own vim meta file (by VIM::Packager) or Makefile,
-Rakefile for installer. if you use either Makefile or Rakefile, you should 
-make the installatino record by yourself, to support uninstallation.
-
-(In some modern Indian languages, vimāna or vimān means "aircraft".)
-
 NOTE: Vimana only provides search, info, and install commmands currently.
-
-SCREENSHOT
-===============
-![img](http://cloud.github.com/downloads/c9s/Vimana/Screen_shot_2009-12-14_at_9.13.10_AM.png)
 
 INSTALLATION
 ===============
@@ -40,15 +30,9 @@ For First Time CPAN Users:
 Install miyagawa's cpanminus , which doesnt require any complex configurations. 
 It's easy, clean and faster than the old CPAN shell:
 
-    $ git clone git://github.com/miyagawa/cpanminus.git
-    $ cd cpanminus
-    $ perl Makefile.PL
-    $ make install
-
-Or if dont have permission, you can try this way:
-
+    $ mkdir ~/bin
     $ wget http://xrl.us/cpanm -O ~/bin/cpanm
-    $ chmod +x cpanm
+    $ chmod +x ~/bin/cpanm
 
 Run cpanminus to install Vimana from CPAN:
 
@@ -68,11 +52,7 @@ You can also skip tests:
 
     $ cpanm -n http://github.com/c9s/Vimana/tarball/master
 
-To see other cpanm options:
-
-    $ cpanm --help
-
-For non-root permission users, cpanm will install modules into `~/perl5` directory.
+**For non-root permission users**, cpanm will install modules into `~/perl5` directory.
 so you will need to export PERL5LIB, add below line in your `.bashrc` or `.zshrc`:
 
     export PERL5LIB=~/perl5/lib/perl5;$PERL5LIB
