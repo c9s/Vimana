@@ -4,7 +4,7 @@ use strict;
 use Vimana::Index;
 use vars qw($INDEX);
 
-our $VERSION = '2.1';
+our $VERSION = '2.2';
 
 sub index {
     return $INDEX if $INDEX;
