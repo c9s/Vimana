@@ -22,6 +22,8 @@ sub options { (
         # when not installing plugin from vim.org. (eg, from git or svn or local filepath)
         'n|name=s'              => 'package_name',
 
+        't|type=s'            => 'script_type',
+
         # XXX: auto-install should optional and not by default.
         'ai|auto-install'     => 'auto_install', 
         'mi|makefile-install' => 'makefile_install',
@@ -66,6 +68,14 @@ Vimana::Command::Install - install a vim plugin package.
 
     -r    : runtime path
 
-=head1 DESCRIPTION
+    -t , --type    : script type (plugin,ftplugin,syntax ...)
 
+=head1 USAGE
 
+Normally, script type will be detected by script detector.
+
+But you can also specify the script type to a script:
+
+    $ vimana install calendar.vim --type plugin
+
+=cut

@@ -1,8 +1,12 @@
 package Vimana::Installer::Text;
 use warnings;
 use strict;
-use base qw(Vimana::Installer);
+use Mouse;
+extends qw(Vimana::Installer);
 use Vimana::Record;
+
+has script_type => 
+    is => 'rw';
 
 sub read_text {
     my $self =shift;
@@ -13,7 +17,7 @@ sub read_text {
     return $text;
 }
 
-sub script_type {
+sub get_script_type {
     my $self = shift;
     if( $self->script_info->{type} ) {
         return 'colors' if $self->script_info->{type} eq 'color scheme' ;
@@ -66,11 +70,9 @@ sub run {
         return 1;
     }
 
-
     print "Inspecting script content.\n";
     my $arg = $self->inspect_text_content( $text_content );
-    my $type = $self->script_type();
-
+    my $type = $self->script_type || $self->get_script_type();
 
     if ( $arg->{version} ) {
         # XXX: check version from record.

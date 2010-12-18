@@ -380,6 +380,7 @@ sub install {
             runtime_path => $rtp,
             script_info  => $info,
             script_page  => $page,
+            script_type  => $cmd->{script_type},  # pass script_type
         )->run();
 
         if( $cmd->{cleanup} ) {
