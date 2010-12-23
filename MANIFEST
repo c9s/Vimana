@@ -45,8 +45,6 @@ lib/Vimana/Util.pm
 lib/Vimana/VimOnline.pm
 lib/Vimana/VimOnline/ScriptPage.pm
 lib/Vimana/VimOnline/Search.pm
-Makefile
-Makefile.old
 Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
