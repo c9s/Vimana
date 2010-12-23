@@ -25,9 +25,14 @@ requires
     'Digest::MD5'      => 0,
     'JSON::PP'         => 0,
     'HTTP::Lite'       => 0,
+    'HTML::Entities'   => 0,
     'Mouse'            => 0,
+    'Text::Wrap'       => 0,
+    'Regexp::Common'   => 0,
+    'Web::Scraper'     => 0,
     'Regexp::Common'   => 0,
     'Web::Scraper'     => 0;
+
 
 test_requires 
     'Test::More' => 0.92;
@@ -47,5 +52,4 @@ print '-' x 10 . "\n";
 repository 'http://github.com/c9s/Vimana';
 
 WriteAll( sign => 0 );
-
 1;
