@@ -8,8 +8,8 @@ use base qw(App::CLI::Command);
 
 sub options {
     (
-        'v|verbose'     => 'verbose',
-        't|script-type=s' => 'script_type',
+        'v|verbose'       => 'verbose',
+        't|type=s'        => 'script_type',
         'o|order-by=s',   => 'order_by',
     );
 }
@@ -77,12 +77,12 @@ Vimana::Command::Search - search vim plugins.
 
 =head1 SYNOPSIS
 
-    $ vimana search [keyword]
+    $ vimana search [options] [keyword]
 
 =head1 OPTIONS
 
-=head1 DESCRIPTION
+-t,--type [type]
 
+    script type
 
-
-
+=cut
