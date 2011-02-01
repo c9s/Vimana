@@ -1,5 +1,5 @@
 package Vimana::Command::Remove;
-use base qw(App::CLI::Command);
+use parent qw(App::CLI::Command);
 use Vimana::Record;
 
 sub options { 

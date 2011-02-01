@@ -1,7 +1,7 @@
 package Vimana::Installer::Vimball;
 use warnings;
 use strict;
-use base qw(Vimana::Installer);
+use parent qw(Vimana::Installer);
 use File::Temp qw(tempfile);
 use Vimana::Util;
 use Vimana::Logger;

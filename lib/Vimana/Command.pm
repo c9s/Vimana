@@ -1,7 +1,7 @@
 package Vimana::Command;
 use warnings;
 use strict;
-use base qw(App::CLI App::CLI::Command);
+use parent qw(App::CLI App::CLI::Command);
 use Getopt::Long qw(:config no_ignore_case bundling);
 
 use constant alias => qw(

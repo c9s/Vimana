@@ -1,7 +1,7 @@
 package Vimana::Command::Upgrade;
 use warnings;
 use strict;
-use base qw(App::CLI::Command);
+use parent qw(App::CLI::Command);
 use Vimana::Record;
 use Vimana::Installer;
 

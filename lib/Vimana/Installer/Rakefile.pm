@@ -1,5 +1,5 @@
 package Vimana::Installer::Rakefile;
-use base qw(Vimana::Installer);
+use parent qw(Vimana::Installer);
 use warnings;
 use strict;
 

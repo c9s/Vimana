@@ -1,5 +1,5 @@
 package Vimana::Installer::Makefile;
-use base qw(Vimana::Installer);
+use parent qw(Vimana::Installer);
 use Vimana::Logger;
 use warnings;
 use strict;

@@ -3,7 +3,7 @@ use warnings;
 use strict;
 
 use URI;
-use base qw(App::CLI::Command);
+use parent qw(App::CLI::Command);
 use Vimana::Logger;
 
 sub options {

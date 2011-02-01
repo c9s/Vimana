@@ -31,6 +31,7 @@ requires
     'Regexp::Common'   => 0,
     'Web::Scraper'     => 0,
     'Regexp::Common'   => 0,
+	'parent'           => 0,
     'Web::Scraper'     => 0;
 
 

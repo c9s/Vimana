@@ -1,7 +1,7 @@
 use warnings;
 use strict;
 package Vimana::Command::Install;
-use base qw(App::CLI::Command);
+use parent qw(App::CLI::Command);
 use URI;
 use LWP::Simple qw();
 use File::Path qw(rmtree);
