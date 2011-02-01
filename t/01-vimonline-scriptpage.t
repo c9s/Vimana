@@ -2,8 +2,9 @@ use strict;
 use warnings;
 
 use Test::More;
+plan skip_all => "Data::Util is required for this test" unless eval "use Data::Util qw/:check/; 1";
+
 use Path::Class;
-use Data::Util qw(:check);
 use URI;
 use Regexp::Common qw(URI);
 
