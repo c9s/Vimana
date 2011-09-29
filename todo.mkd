@@ -1,5 +1,15 @@
 # vim:fdm=expr:fdl=1:foldexpr=getline(v\:lnum)=~'^=='?'>1'\:getline(v\:lnum)[0]=~'[*x(]'?'>2'\:getline(v\:lnum)=~'^--'?'<2'\:'='
 
+
+# 3.0 
+
+* Reduce dependencies
+* Support pathogen
+* More documentation
+* Github Support (with a plugin)
+* Improve package record
+
+# 2.0 Todos
 x support installing packages from git/svn/hg repository
 x support for vim::packager  
 x installation record
