@@ -223,9 +223,17 @@ You can also look for information at:
 AUTHORS
 =======
 
-**c9s (Cornelius)  <cornelius.howl@gmail.com>**
+c9s (Cornelius)  `<cornelius.howl@gmail.com>`
 
-**Mattn Yasuhiro Matsumoto <mattn.jp@gmail.com>**
+Contributors
+============
+
+* Mattn <mattn.jp@gmail.com>
+* Tokuhirom <tokuhirom@gmail.com>
+* Ujihisa <ujihisa@gmail.com>
+* Zentooo <ankerasoy@gmail.com>
+* Dr Bean <drbean@sac.nuu.edu.tw>
+* Alison Rowland <alisonrowland@fastmail.fm>
 
 COPYRIGHT AND LICENCE
 =========================
