@@ -62,6 +62,7 @@ sub get_vim_rtp {
     my $content = <FILE>;
     close FILE;
     $content =~ s{[\n\r]}{}g;
+    $content =~ s/^ *(.*?) *$/$1/;
     unlink $file;
     return split /,/,$content;
 }
