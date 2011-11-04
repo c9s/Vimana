@@ -36,19 +36,9 @@ It's easy, clean and faster than the old CPAN shell:
 
 Run cpanminus to install Vimana from CPAN:
 
-    $ cpanm Vimana
-
-Or from github tarball:
-
-    $ cpanm http://github.com/c9s/Vimana/tarball/master
+    $ cpanm -n Vimana
 
 Or git clone from github:
-
-    $ git clone git://github.com/c9s/Vimana.git
-    $ cd Vimana
-    $ cpanm .
-
-You can also skip tests:
 
     $ cpanm -n http://github.com/c9s/Vimana/tarball/master
 
@@ -56,6 +46,7 @@ You can also skip tests:
 so you will need to export PERL5LIB, add below line in your `.bashrc` or `.zshrc`:
 
     export PERL5LIB=~/perl5/lib/perl5;$PERL5LIB
+
 
 USAGE
 ========
