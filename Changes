@@ -1,7 +1,12 @@
 Revision history for Vimana
 
+2.23    日 11/ 6 13:14:50 2011
+
+- Support github prefix install, 
+  eg:  gh:Shougo/clang_complete github:c9s/perlomni.vim
+
 2.22    Fri 24 Dec 2010 01:43:43 AM CST
-        * update deps
+- update deps
     
 2.1     
-        * Remove meta strategy.
+- Remove meta strategy.
