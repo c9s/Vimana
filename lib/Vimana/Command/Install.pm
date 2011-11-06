@@ -38,7 +38,17 @@ sub run {
         Vimana::Installer->install_from_url( $arg , $cmd );
     }
     elsif( $arg =~ m{^(?:git|svn):} ) {
+        # parse repo name as package name:
+        my ($name) = ($arg =~ m{([^/]+)\.git$});
+        $cmd->{package_name} ||= $name;
         Vimana::Installer->install_from_vcs( $arg , $cmd );
+    }
+    elsif( $arg =~ m{^(?:github|gh):(\w+)/(\w+)} ) {
+        my ($id,$repo) = ($1,$2);
+        my $gh_uri = "git:https://github.com/$id/$repo.git";
+        my $name   = "$id-$repo";
+        $cmd->{package_name} ||= $name;
+        Vimana::Installer->install_from_vcs( $arg , $cmd , $name );
     }
     elsif( -f $arg or -d $arg ) {  # is a file or directory
         Vimana::Installer->install_from_path( $arg , $cmd );
