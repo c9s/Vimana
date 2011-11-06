@@ -51,11 +51,39 @@ so you will need to export PERL5LIB, add below line in your `.bashrc` or `.zshrc
 USAGE
 ========
 
-to update index
 
-    $ vimana update
+INSTALL
+-------
+To install snipmate.vim package:
 
-to search jifty script
+    $ vimana install snipmate
+
+To install from git or svn:
+
+    $ vimana install git:git://github.com/c9s/hypergit.vim.git
+    $ vimana install git:git@github.com:c9s/hypgergit.vim.git
+    $ vimana install svn:svn+ssh://path/to/your/repo
+
+To install from GitHub:
+
+    $ vimana install gh:c9s/perlomni.vim
+    $ vimana install gh:Shougo/vimfiler.vim
+
+To install snipmate.vim package to the other runtime path:
+
+    $ vimana i snipmate -r ~/.vim-other-rtp
+
+    # or
+
+    $ vimana install snipmate --runtime-path ~/.vim-other-rtp
+
+To install rails.vim package:
+
+    $ vimana install rails.vim
+
+SEARCH
+------
+to search rails
 
     $ vimana search rails
 
@@ -71,29 +99,16 @@ to search ftplugin and "abc" keyword:
 
     $ vimana search -t ftplugin abc
 
-to install snipmate.vim package:
+UPDATE
+------
 
-    $ vimana install snipmate
+to update index
 
-to install plugin from a git repository:
+    $ vimana update
 
-    $ vimana i git:git://github.com/c9s/hypergit.vim.git -n plugin_name
 
-to install plugin from a svn repository:
-
-    $ vimana i svn:http://path/to/svnblahblah -n plugin_name
-
-to install snipmate.vim package to the other runtime path:
-
-    $ vimana i snipmate -r ~/.vim-other-rtp
-
-    # or
-
-    $ vimana install snipmate --runtime-path ~/.vim-other-rtp
-
-to install rails.vim package:
-
-    $ vimana install rails.vim
+DOWNLOAD
+--------
 
 to download:
 
@@ -144,9 +159,6 @@ TESTED CASES
     $ vimana i gist.vim
     $ vimana i googlereader.vim
 
-    $ vimana i git:git://github.com/c9s/hypergit.vim.git
-    $ vimana i git:git@github.com:c9s/hypgergit.vim.git
-    $ vimana i svn:svn+ssh://path/to/your/repo
 
     $ vimana i jslint.vim
     $ vimana i fakeclip

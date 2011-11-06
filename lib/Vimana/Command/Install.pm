@@ -39,7 +39,7 @@ sub run {
     }
     elsif( $arg =~ m{^(?:git|svn):} ) {
         # parse repo name as package name:
-        my ($name) = ($arg =~ m{([^/]+)\.git$});
+        my ($name) = ($arg =~ m{([^/]+)$});
         $cmd->{package_name} ||= $name;
         Vimana::Installer->install_from_vcs( $arg , $cmd );
     }
