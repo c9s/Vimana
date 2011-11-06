@@ -43,7 +43,8 @@ sub run {
         $cmd->{package_name} ||= $name;
         Vimana::Installer->install_from_vcs( $arg , $cmd );
     }
-    elsif( $arg =~ m{^(?:github|gh):(\w+)/(\w+)} ) {
+    elsif( $arg =~ m{^(?:github|gh):([^/]+)/([^/]+)} ) {
+        print "Installing from GitHub...\n";
         my ($id,$repo) = ($1,$2);
         my $gh_uri = "git:https://github.com/$id/$repo.git";
         my $name   = "$id-$repo";
