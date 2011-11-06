@@ -2,7 +2,6 @@
 bin/vim_record
 bin/vimana
 Changes
-inc/ExtUtils/AutoInstall.pm
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm
 inc/Module/Install/AutoInstall.pm
