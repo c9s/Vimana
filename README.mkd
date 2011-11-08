@@ -226,9 +226,21 @@ You can also look for information at:
 AUTHORS
 =======
 
-**c9s (Cornelius)  <cornelius.howl@gmail.com>**
+- c9s (Cornelius)  <cornelius.howl@gmail.com>
 
-**Mattn Yasuhiro Matsumoto <mattn.jp@gmail.com>**
+
+Contributors
+============
+
+Ordered by alphabet (sort)
+
+- arowla
+- drbean
+- mattn
+- tokuhirom
+- ujihisa
+- zentooo
+
 
 COPYRIGHT AND LICENCE
 =========================
