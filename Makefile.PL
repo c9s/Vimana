@@ -11,10 +11,12 @@ install_script 'bin/vim_record';
 requires
     'App::CLI'         => 0.08,
     'Archive::Extract' => 0,
+    'Archive::Zip' => 0,
     'DateTime'         => 0,
     'Exporter::Lite'   => 0,
     'File::Path'       => 2.07,
     'File::Spec'       => 0,
+    'Path::Class'      => 0,
     'File::Type'       => 0,
     'File::Temp'       => 0,
     'Getopt::Long'     => 0,
