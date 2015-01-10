@@ -54,7 +54,7 @@ USAGE
 
 INSTALL
 -------
-To install snipmate.vim package:
+To install snipmate package:
 
     $ vimana install snipmate
 
@@ -69,7 +69,7 @@ To install from GitHub:
     $ vimana install gh:c9s/perlomni.vim
     $ vimana install gh:Shougo/vimfiler.vim
 
-To install snipmate.vim package to the other runtime path:
+To install snipmate.vim package to another runtime path:
 
     $ vimana i snipmate -r ~/.vim-other-rtp
 
@@ -106,13 +106,15 @@ to update index
 
     $ vimana update
 
-
 DOWNLOAD
 --------
 
 to download:
 
     $ vimana download markdown-syntax.vim
+
+REMOVE
+------
 
 to remove a package:
 
@@ -122,6 +124,9 @@ to force remove a package:
 
     $ vimana remove -f fuzzyfinder
 
+LIST INSTALLED PACKAGES
+-----------------------
+
 to list installed packages:
 
     $ vimana installed
@@ -129,6 +134,9 @@ to list installed packages:
 to list installed package content:
 
     $ vimana installed snipmate
+
+RATE
+----
 
 to rate plugin:
 

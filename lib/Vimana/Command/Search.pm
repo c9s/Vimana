@@ -81,8 +81,22 @@ Vimana::Command::Search - search vim plugins.
 
 =head1 OPTIONS
 
--t,--type [type]
+-t , --type [type]    : plugin type
 
     script type
+
+=head1 USAGE
+
+to search rails
+
+    $ vimana search rails
+
+to search for colorschemes:
+
+    $ vimana search -t color
+
+to search for a ftplugin under the "abc" keyword:
+
+    $ vimana search -t ftplugin abc
 
 =cut

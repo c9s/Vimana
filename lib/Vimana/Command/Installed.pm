@@ -41,3 +41,16 @@ sub run {
 
 
 1;
+__END__
+
+=head1 NAME
+
+Vimana::Command::Installed - List installed packages and contents
+
+=head1 SYNOPSIS
+
+    $ vimana installed
+
+    $ vimana installed [keyword]
+
+=cut

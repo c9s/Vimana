@@ -59,6 +59,5 @@ Vimana::Command::Download - download a vim plugin package.
 
 =head1 OPTIONS
 
-=head1 DESCRIPTION
-
+  -v , --verbose    : verbose
 

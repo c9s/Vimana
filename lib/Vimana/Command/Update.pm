@@ -39,3 +39,18 @@ sub run {
 
 
 1;
+__END__
+
+=head1 NAME
+
+Vimana::Command::Update - Update index for searching
+
+=head1 SYNOPSIS
+
+    $ vimana update [options]
+
+=head1 OPTIONS
+
+-v , --verbose    : verbose
+
+=cut

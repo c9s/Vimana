@@ -63,9 +63,6 @@ Avaliable Commands:
     help            - show this help
 
         help [command]
-        help [topic]
-
-Help Topics:
 
 END
     }

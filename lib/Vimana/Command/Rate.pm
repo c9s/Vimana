@@ -28,3 +28,18 @@ sub run {
 
 
 1;
+__END__
+
+=head1 NAME
+
+Vimana::Command::Rate - Rate a plugin
+
+=head1 SYNOPSIS
+
+    $ vimana rate [plugin] [rate]
+
+=head1 USAGE
+
+    $ vimana rate snipmate 2  # rate life changing
+
+=cut
