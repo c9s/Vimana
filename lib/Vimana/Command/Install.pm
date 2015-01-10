@@ -90,4 +90,26 @@ But you can also specify the script type to a script:
 
     $ vimana install calendar.vim --type plugin
 
+To install snipmate package:
+
+    $ vimana install snipmate
+
+To install rails.vim package:
+
+    $ vimana install rails.vim
+
+To install packages from git or svn:
+
+    $ vimana install git:git://github.com/c9s/hypergit.vim.git
+    $ vimana install git:git@github.com:c9s/hypgergit.vim.git
+    $ vimana install svn:svn+ssh://path/to/your/repo
+
+To install from GitHub:
+
+    $ vimana install gh:c9s/perlomni.vim
+
+To install snipmate package to another runtime path:
+
+    $ vimana i snipmate -r ~/.vim-other-rtp
+
 =cut

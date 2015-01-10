@@ -33,7 +33,7 @@ requires
     'Regexp::Common'   => 0,
     'Web::Scraper'     => 0,
     'Regexp::Common'   => 0,
-	'parent'           => 0,
+    'parent'           => 0,
     'Web::Scraper'     => 0;
 
 
@@ -45,7 +45,7 @@ auto_install();
 auto_provides();
 
 my $ret = qx( vim --version );
-die "Can not found Vim , Please install Vim on your system" unless $ret =~ /^VIM - Vi IMproved/ ;
+die "Could not find Vim, Please install Vim on your system" unless $ret =~ /^VIM - Vi IMproved/ ;
 
 print "Vim found:\n" . '-' x 10 . "\n";
 my @lines = split("\n", $ret );

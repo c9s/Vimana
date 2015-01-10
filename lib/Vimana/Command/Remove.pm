@@ -22,16 +22,16 @@ __END__
 
 =head1 NAME
 
-Vimana::Command::Remove - {Description}
+Vimana::Command::Remove - removes an previously installed package
 
 =head1 SYNOPSIS
 
-=head1 DESCRIPTION
+    $ vimana remove [options] [keyword]
 
-=head1 FUNCTION
+=head1 OPTIONS
 
-=head1 AUTHOR
+-f , --force    : force remove
 
+-v , --verbose    : verbose
 
-
-
+=cut
