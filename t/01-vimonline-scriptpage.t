@@ -2,7 +2,6 @@ use strict;
 use warnings;
 
 use Test::More;
-plan skip_all => "Data::Util is required for this test" unless eval "use Data::Util qw/:check/; 1";
 
 use Path::Class;
 use URI;
@@ -38,7 +37,8 @@ is(scalar @urls, 3, "find_urls scrape content to get urls");
 my $info = Vimana::VimOnline::ScriptPage::scrape(URI->new("http://www.vim.org/scripts/script.php?script_id=2620"));
 
 while ( my ($key, $value) = each %$info ) {
-  ok(is_string($value), "all values should be scraped as string");
+  # as in Data::Util::is_string()
+  ok(!ref($value) && ref($value) ne 'GLOB' && length($value) > 0, "all values should be scraped as string");
 
   if ( $key eq 'download' || $key eq 'author_url' ) {
     like($value, qr/$RE{URI}{HTTP}/, "$key should be url");
