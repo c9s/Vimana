@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 use warnings;
 use strict;
+use lib 'lib';
 use Test::More tests => 4;
 
 sub inst {

@@ -154,6 +154,7 @@ sub find_files {
 
 
 
+=encoding utf8
 
 =head1 AUTHOR
 
