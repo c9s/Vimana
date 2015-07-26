@@ -1,4 +1,4 @@
-=begin
+=begin MANUAL
 
 =encoding utf8
 
@@ -110,4 +110,4 @@ under the same terms as Perl itself.
 
 =cut
 
-=cut
+=end MANUAL

@@ -9,11 +9,11 @@ has script_type =>
     is => 'rw';
 
 sub read_text {
-    my $self =shift;
+    my $self = shift;
     local $/;
-    open IN , "<" , $self->target;
-    my $text = <IN>;
-    close IN;
+    open my $fh , "<" , $self->target;
+    my $text = <$fh>;
+    close $fh;
     return $text;
 }
 
@@ -36,8 +36,8 @@ sub copy_to {
     my ( $self , $path ) = @_;
     my $src = $self->target;
 
-    my ( $v, $dir, $file ) = File::Spec->splitpath($path);
-    File::Path::mkpath [ $dir ];
+    my @dirs = File::Spec->splitdir($path);
+    File::Path::make_path( File::Spec->join(@dirs) );
 
     my $ret = File::Copy::copy( $src => $path );
     if( $ret ) {
