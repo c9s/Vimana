@@ -12,7 +12,7 @@ sub run {
     # try to require VIM::Packager
     eval(q|require VIM::Packager;|);
     if( $@ ) {
-        $logger->info( "It seems you dont have VIM::Packager installed." );
+        $logger->info( "It seems you don't have VIM::Packager installed." );
         $logger->info( "meta file can't be translated to makefile." );
         return 0;
     }

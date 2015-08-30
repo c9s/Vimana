@@ -20,7 +20,7 @@ Usage:
 
     \$ vimana [command] [arguments]
 
-Avaliable Commands:
+Available Commands:
 
     update          - update index for searching.
 

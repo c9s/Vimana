@@ -89,7 +89,7 @@ sub init_vim_runtime {
 
 =head2 runtime_path
 
-You can export enviroment variable VIMANA_RUNTIME_PATH to override default
+You can export environment variable VIMANA_RUNTIME_PATH to override default
 runtime path.
 
 =head2 init_vim_runtime 

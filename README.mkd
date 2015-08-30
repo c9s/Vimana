@@ -27,7 +27,7 @@ INSTALLATION
 
 For First Time CPAN Users:
 
-Install miyagawa's cpanminus , which doesnt require any complex configurations. 
+Install miyagawa's cpanminus , which doesn't require any complex configurations. 
 It's easy, clean and faster than the old CPAN shell:
 
     $ mkdir ~/bin
