@@ -539,7 +539,7 @@ returns the same as File::Copy::copy() in scalar context and 1,0,0 in list conte
 =head2 dircopy()
 
 This function recursively traverses the $orig directory's structure and recursively copies it to the $new directory.
-$new is created if necessary (multiple non existant directories is ok (IE foo/bar/baz). The script logically and portably creates all of them if necessary).
+$new is created if necessary (multiple non existent directories is ok (IE foo/bar/baz). The script logically and portably creates all of them if necessary).
 It attempts to preserve the mode (see Preserving Mode below) and 
 by default it copies all the way down into the directory, (see Managing Depth) below.
 If a directory is not specified it croaks just like fcopy croaks if its not a file that is specified.
@@ -560,7 +560,7 @@ That way it will copy everythgingit can ina directory and won't stop because of 
 
 This function will allow you to specify a file *or* directory. It calls fcopy() if its a file and dircopy() if its a directory.
 If you call rcopy() (or fcopy() for that matter) on a file in list context, the values will be 1,0,0 since no directories and no depth are used. 
-This is important becasue if its a directory in list context and there is only the initial directory the return value is 1,1,1.
+This is important because if its a directory in list context and there is only the initial directory the return value is 1,1,1.
 
 =head2 rcopy_glob()
 
@@ -621,11 +621,11 @@ Any value you set it to should be suitable for oct()
 
 =head3 Path functions
 
-These functions exist soley because they were necessary for the move and copy functions to have the features they do and not because they are of themselves the purpose of this module. That being said, here is how they work so you can understand how the copy and move funtions work and use them by themselves if you wish.
+These functions exist solely because they were necessary for the move and copy functions to have the features they do and not because they are of themselves the purpose of this module. That being said, here is how they work so you can understand how the copy and move funtions work and use them by themselves if you wish.
 
 =head4 pathrm()
 
-Removes a given path recursively. It removes the *entire* path so be carefull!!!
+Removes a given path recursively. It removes the *entire* path so be careful!!!
 
 Returns 2 if the given path is not a directory.
 

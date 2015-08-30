@@ -116,7 +116,7 @@ sub install_by_strategy {
 
     if( @ins_type == 0 ) {
         print "Package doesn't contain Rakefile or Makefile file\n" if $verbose;
-        print "No availiable strategy, Try to auto-install.\n" if $verbose;
+        print "No available strategy, Try to auto-install.\n" if $verbose;
         push @ins_type, 'auto';
     }
     
