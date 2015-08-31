@@ -9,9 +9,9 @@ use Vimana::Record;
 
 sub scan_vimball {
     my ($self,$file) = @_;
-    open IN, "<" , $file;
-    my @lines = <IN>;
-    close IN;
+    open my $fh, '<' , $file;
+    my @lines = <$fh>;
+    close $fh;
     my @filelist = ();
     for my $line ( @lines ) {
         if( $line =~ m{^(.*?)\s\[\[\[\d} ) {
@@ -50,10 +50,10 @@ sub run {
     print "Vimball Installation Log: $logfile\n";
     if( $verbose ) {
         print "======== VimBall Installation Log Start ======";
-        open LOG, "<",$logfile;
+        open my $fh, '<',$logfile;
         local $/;
-        print <LOG>;
-        close LOG;
+        print <$fh>;
+        close $fh;
         print "======== VimBall Installation Log End ========";
     }
 

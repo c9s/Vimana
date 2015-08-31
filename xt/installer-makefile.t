@@ -9,9 +9,10 @@ my $dir = tempdir(  CLEANUP => 1 );
 mkpath [ $dir ];
 chdir $dir;
 
-open FH, ">" , "Makefile";
-print FH "install:\n";
-print FH "\t\t\@echo 1\n";
+open my $fh, ">" , "Makefile";
+print $fh "install:\n";
+print $fh "\t\t\@echo 1\n";
+close $fh;
 
 ok( -e 'Makefile' );
 
