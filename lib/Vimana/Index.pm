@@ -23,7 +23,7 @@ sub find_package_like {
             return $info ;
         }
     }
-    return undef;
+    return;
 }
 
 sub find_package {
@@ -115,7 +115,7 @@ sub read_index {
     my $self = shift;
     my $index_file = $self->index_file;
 
-    return undef unless -e $index_file;
+    return unless -e $index_file;
 
     my $result;
     open my $fh , "<" , $index_file or die $@;

@@ -21,11 +21,11 @@ sub get_script_type {
     my $self = shift;
     if( $self->script_info->{type} ) {
         return 'colors' if $self->script_info->{type} eq 'color scheme' ;
-        return undef if $self->script_info->{type} =~ m/(?:utility|patch)/;
+        return if $self->script_info->{type} =~ m/(?:utility|patch)/;
         return $self->script_info->{type};
     }
     else {
-        return undef;
+        return;
     }
 }
 

@@ -57,10 +57,10 @@ sub get_vim_rtp {
     } else {
         system(qq{vim -c "redir > $file" -c "echo &rtp" -c "q" });
 	}
-    open FILE, "<" , $file;
+    open my $fh, '<' , $file;
     local $/;
-    my $content = <FILE>;
-    close FILE;
+    my $content = <$fh>;
+    close $fh;
     $content =~ s{[\n\r]}{}g;
     $content =~ s/^ *(.*?) *$/$1/;
     unlink $file;

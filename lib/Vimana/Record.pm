@@ -67,10 +67,10 @@ sub load {
         return ;
     }
 
-    open FH , "<" , $record_file;
+    open my $fh , '<' , $record_file;
     local $/;
-    my $json = <FH>;
-    close FH;
+    my $json = <$fh>;
+    close $fh;
 
     my $record;
     eval { $record = new_json()->decode( $json ) };
@@ -125,9 +125,9 @@ sub add {
     my $record_file =  $class->record_path( $pkgname );
     return 0 if -f $record_file;
 
-    open FH , ">" , $record_file;
-    print FH new_json()->encode( $record );
-    close FH;
+    open my $fh , '>' , $record_file;
+    print $fh new_json()->encode( $record );
+    close $fh;
     
     #return YAML::DumpFile( $record_file , $record  );
 }

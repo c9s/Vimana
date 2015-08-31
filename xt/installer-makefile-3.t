@@ -10,9 +10,10 @@ my $dir = tempdir( CLEANUP => 1 );
 mkpath [  $dir ];
 chdir $dir;
 
-open FH, ">" , "makefile";
-print FH "no_install:\n";
-print FH "\t\t\@echo 1\n";
+open my $fh, ">" , "makefile";
+print $fh "no_install:\n";
+print $fh "\t\t\@echo 1\n";
+close $fh;
 
 ok( -e 'makefile' );
 
