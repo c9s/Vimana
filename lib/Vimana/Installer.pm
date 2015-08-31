@@ -77,7 +77,7 @@ sub download {
         my ( $self, $dataref, $cbargs ) = @_;
         print STDERR ".";
         print $cbargs $$dataref;
-        return undef;
+        return;
     };
     my $http = new HTTP::Lite;
     $http->proxy( $ENV{HTTP_PROXY} ) if $ENV{HTTP_PROXY};

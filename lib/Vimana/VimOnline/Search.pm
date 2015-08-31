@@ -100,7 +100,7 @@ sub parse {
         return parse_rows( \$c , $columns );
     }
     else {
-        return undef;
+        return;
     }
 }
 
