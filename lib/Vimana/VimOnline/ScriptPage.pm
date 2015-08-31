@@ -43,7 +43,7 @@ sub display {
     my ( $class, $info ) = @_;
 
     if ($^O eq 'MSWin32') {
-        eval { require "Win32/API.pm" };
+        eval { require Win32::API };
         unless ($@) {
             Win32::API->Import('kernel32', 'UINT GetACP()');
             my $cp = "cp".GetACP();
